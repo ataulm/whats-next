@@ -1,0 +1,76 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath libraries.build.androidApt
+        classpath libraries.build.androidGradle
+        classpath libraries.build.buildProperties
+    }
+}
+
+apply plugin: 'com.android.application'
+apply plugin: 'com.neenbedankt.android-apt'
+apply plugin: 'com.novoda.build-properties'
+
+buildProperties {
+    letterboxd {
+        file project.file('../letterboxd.properties')
+    }
+}
+
+android {
+    compileSdkVersion versions.androidSdk.compile
+    buildToolsVersion versions.androidSdk.buildTools
+
+    defaultConfig {
+        applicationId "com.ataulm.whatsnext"
+        minSdkVersion versions.androidSdk.min
+        targetSdkVersion versions.androidSdk.target
+        versionCode 1
+        versionName "1.0"
+
+        buildConfigString 'LETTERBOXD_KEY', buildProperties.letterboxd['apiKey'].string
+        buildConfigString 'LETTERBOXD_SECRET', buildProperties.letterboxd['apiSecret'].string
+        buildConfigString 'LETTERBOXD_USERNAME', buildProperties.letterboxd['username'].string
+        buildConfigString 'LETTERBOXD_PASSWORD', buildProperties.letterboxd['password'].string
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    compile project(":core")
+
+    compile libraries.supportAppCompatV7
+    compile libraries.supportDesign
+    compile libraries.supportRecyclerView
+    compile libraries.supportV13
+
+    compile libraries.butterknife
+    apt libraries.butterknifeCompiler
+
+    // Android runner and rules support
+    androidTestCompile(libraries.androidTestRunner) {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    }
+
+    androidTestCompile(libraries.androidTestRules) {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    }
+
+    // Espresso support
+    androidTestCompile(libraries.espressoCore) {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    }
+
+    testCompile libraries.jUnit
+    testCompile libraries.mockitoCore
+    testCompile libraries.festAssertCore
+}
