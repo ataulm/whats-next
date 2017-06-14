@@ -1,6 +1,7 @@
 apply plugin: 'java'
 
 dependencies {
+    compile libraries.gson
     compile libraries.jsr305
     compile libraries.okhttp
 
