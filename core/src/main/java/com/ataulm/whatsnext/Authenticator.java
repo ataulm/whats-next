@@ -68,7 +68,7 @@ class Authenticator {
             if (builder.length() > 0) {
                 builder.append('&');
             }
-            builder.append(urlEncode(entry.getKey())).append('=').append(entry.getValue());
+            builder.append(urlEncode(entry.getKey())).append('=').append(urlEncode(entry.getValue()));
         }
         return builder.toString();
     }
