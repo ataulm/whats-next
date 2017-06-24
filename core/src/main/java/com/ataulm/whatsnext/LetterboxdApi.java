@@ -7,7 +7,6 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Locale;
-import java.util.UUID;
 
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -17,7 +16,6 @@ import okhttp3.Response;
 
 class LetterboxdApi {
 
-    private static final String API_ENDPOINT = "https://api.letterboxd.com/api/v0";
     private static final String HTTP_METHOD_POST = "POST";
     private static final String HTTP_METHOD_GET = "GET";
 
@@ -36,7 +34,7 @@ class LetterboxdApi {
     }
 
     ApiAuthResponse fetchAccessToken(String username, String password) throws IOException {
-        String url = generateAuthUrl();
+        String url = new LetterboxdUrlBuilder(apiKey, clock).path("/auth/token").build();
         String urlEncodedBody = createUrlEncodedBody(
                 new Entry("grant_type", "password"),
                 new Entry("username", username),
@@ -47,7 +45,7 @@ class LetterboxdApi {
     }
 
     ApiAuthResponse refreshAccessToken(String refreshToken) throws IOException {
-        String url = generateAuthUrl();
+        String url = new LetterboxdUrlBuilder(apiKey, clock).path("/auth/token").build();
         String urlEncodedBody = createUrlEncodedBody(
                 new Entry("grant_type", "refresh_token"),
                 new Entry("refresh_token", refreshToken)
@@ -56,51 +54,22 @@ class LetterboxdApi {
         return gson.fromJson(response.body().string(), ApiAuthResponse.class);
     }
 
-    private String generateAuthUrl() {
-        return API_ENDPOINT + "/auth/token?"
-                + "apikey=" + apiKey
-                + "&nonce=" + generateNonce()
-                + "&timestamp=" + generateTimestamp();
-    }
-
     ApiSearchResponse search(String searchTerm) throws IOException {
-        String url = generateSearchUrl(searchTerm);
+        String url = new LetterboxdUrlBuilder(apiKey, clock).path("/search").addQueryParameter("input", searchTerm).build();
         Response response = createAndExecuteRequest(HTTP_METHOD_GET, url, "");
         return gson.fromJson(response.body().string(), ApiSearchResponse.class);
     }
 
-    private String generateSearchUrl(String searchTerm) {
-        return API_ENDPOINT + "/search?"
-                + "apikey=" + apiKey
-                + "&nonce=" + generateNonce()
-                + "&timestamp=" + generateTimestamp()
-                + "&input=" + searchTerm;
-    }
-
     ApiMemberAccountResponse me(String accessToken) throws IOException {
-        String url = generateMeUrl();
+        String url = new LetterboxdUrlBuilder(apiKey, clock).path("/me").build();
         Response response = createAndExecuteUserAuthedRequest(HTTP_METHOD_GET, url, accessToken);
         return gson.fromJson(response.body().string(), ApiMemberAccountResponse.class);
     }
 
-    private String generateMeUrl() {
-        return API_ENDPOINT + "/me?"
-                + "apikey=" + apiKey
-                + "&nonce=" + generateNonce()
-                + "&timestamp=" + generateTimestamp();
-    }
-
     ApiFilmsResponse watchlist(String accessToken, String userId) throws IOException {
-        String url = generateWatchListUrl(userId);
+        String url = new LetterboxdUrlBuilder(apiKey, clock).path("/member/" + userId + "/watchlist").build();
         Response response = createAndExecuteUserAuthedRequest(HTTP_METHOD_GET, url, accessToken);
         return gson.fromJson(response.body().string(), ApiFilmsResponse.class);
-    }
-
-    private String generateWatchListUrl(String userId) {
-        return API_ENDPOINT + "/member/" + userId + "/watchlist?"
-                + "apikey=" + apiKey
-                + "&nonce=" + generateNonce()
-                + "&timestamp=" + generateTimestamp();
     }
 
     private Response createAndExecuteUserAuthedRequest(String httpMethod, String url, String accessToken) throws IOException {
@@ -125,15 +94,6 @@ class LetterboxdApi {
 
         Request request = builder.build();
         return okHttpClient.newCall(request).execute();
-    }
-
-    private String generateNonce() {
-        return String.valueOf(UUID.randomUUID());
-    }
-
-    private String generateTimestamp() {
-        long currentTimeSecondsSinceEpoch = clock.getCurrentTimeMillis() / 1000;
-        return String.valueOf(currentTimeSecondsSinceEpoch);
     }
 
     private String createUrlEncodedBody(Entry... entries) {
@@ -161,6 +121,7 @@ class LetterboxdApi {
     }
 
     private static class Entry {
+        
         final String key;
         final String value;
 
