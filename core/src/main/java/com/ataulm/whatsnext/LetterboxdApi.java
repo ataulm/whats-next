@@ -56,6 +56,13 @@ class LetterboxdApi {
         return gson.fromJson(response.body().string(), ApiAuthResponse.class);
     }
 
+    private String generateAuthUrl() {
+        return API_ENDPOINT + "/auth/token?"
+                + "apikey=" + apiKey
+                + "&nonce=" + generateNonce()
+                + "&timestamp=" + generateTimestamp();
+    }
+
     ApiSearchResponse search(String searchTerm) throws IOException {
         String url = generateSearchUrl(searchTerm);
         Response response = createAndExecuteRequest(HTTP_METHOD_GET, url, "");
@@ -70,6 +77,42 @@ class LetterboxdApi {
                 + "&input=" + searchTerm;
     }
 
+    ApiMemberAccountResponse me(String accessToken) throws IOException {
+        String url = generateMeUrl();
+        Response response = createAndExecuteUserAuthedRequest(HTTP_METHOD_GET, url, accessToken);
+        return gson.fromJson(response.body().string(), ApiMemberAccountResponse.class);
+    }
+
+    private String generateMeUrl() {
+        return API_ENDPOINT + "/me?"
+                + "apikey=" + apiKey
+                + "&nonce=" + generateNonce()
+                + "&timestamp=" + generateTimestamp();
+    }
+
+    ApiFilmsResponse watchlist(String accessToken, String userId) throws IOException {
+        String url = generateWatchListUrl(userId);
+        Response response = createAndExecuteUserAuthedRequest(HTTP_METHOD_GET, url, accessToken);
+        return gson.fromJson(response.body().string(), ApiFilmsResponse.class);
+    }
+
+    private String generateWatchListUrl(String userId) {
+        return API_ENDPOINT + "/member/" + userId + "/watchlist?"
+                + "apikey=" + apiKey
+                + "&nonce=" + generateNonce()
+                + "&timestamp=" + generateTimestamp();
+    }
+
+    private Response createAndExecuteUserAuthedRequest(String httpMethod, String url, String accessToken) throws IOException {
+        Request.Builder builder = new Request.Builder()
+                .url(url + "&signature=" + generateSignature(httpMethod, url, ""))
+                .addHeader("accept", "application/json")
+                .addHeader("Authorization", "Bearer " + accessToken);
+
+        Request request = builder.build();
+        return okHttpClient.newCall(request).execute();
+    }
+
     private Response createAndExecuteRequest(String httpMethod, String url, String urlEncodedBody) throws IOException {
         Request.Builder builder = new Request.Builder()
                 .url(url)
@@ -82,13 +125,6 @@ class LetterboxdApi {
 
         Request request = builder.build();
         return okHttpClient.newCall(request).execute();
-    }
-
-    private String generateAuthUrl() {
-        return API_ENDPOINT + "/auth/token?"
-                + "apikey=" + apiKey
-                + "&nonce=" + generateNonce()
-                + "&timestamp=" + generateTimestamp();
     }
 
     private String generateNonce() {

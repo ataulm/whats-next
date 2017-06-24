@@ -47,4 +47,27 @@ public class ApiExamples {
             e.printStackTrace();
         }
     }
+
+    // requires valid (non-expired) access token
+    public void me() {
+        try {
+            ApiAuthResponse apiAuthResponse = letterboxdApi.fetchAccessToken(username, password);
+            ApiMemberAccountResponse apiMemberAccountResponse = letterboxdApi.me(apiAuthResponse.accessToken);
+            System.out.println("me: " + apiMemberAccountResponse.member.displayName + " (" + apiMemberAccountResponse.member.letterboxId + ")");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // requires valid (non-expired) access token
+    public void watchlist() {
+        try {
+            ApiAuthResponse apiAuthResponse = letterboxdApi.fetchAccessToken(username, password);
+            ApiMemberAccountResponse apiMemberAccountResponse = letterboxdApi.me(apiAuthResponse.accessToken);
+            ApiFilmsResponse apiFilmsResponse = letterboxdApi.watchlist(apiAuthResponse.accessToken, apiMemberAccountResponse.member.letterboxId);
+            System.out.println("watchlist " + apiFilmsResponse.filmSummaries);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
