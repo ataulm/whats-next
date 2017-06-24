@@ -3,9 +3,6 @@ package com.ataulm.whatsnext;
 import com.google.gson.Gson;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.util.Locale;
 
 import okhttp3.MediaType;
@@ -35,21 +32,19 @@ class LetterboxdApi {
 
     ApiAuthResponse fetchAccessToken(String username, String password) throws IOException {
         String url = new LetterboxdUrlBuilder(apiKey, clock).path("/auth/token").build();
-        String urlEncodedBody = createUrlEncodedBody(
-                new Entry("grant_type", "password"),
-                new Entry("username", username),
-                new Entry("password", password)
-        );
+        String urlEncodedBody = new LetterboxdBodyBuilder()
+                .add("grant_type", "password")
+                .add("username", username)
+                .add("password", password).build();
         Response response = createAndExecuteRequest(HTTP_METHOD_POST, url, urlEncodedBody);
         return gson.fromJson(response.body().string(), ApiAuthResponse.class);
     }
 
     ApiAuthResponse refreshAccessToken(String refreshToken) throws IOException {
         String url = new LetterboxdUrlBuilder(apiKey, clock).path("/auth/token").build();
-        String urlEncodedBody = createUrlEncodedBody(
-                new Entry("grant_type", "refresh_token"),
-                new Entry("refresh_token", refreshToken)
-        );
+        String urlEncodedBody = new LetterboxdBodyBuilder()
+                .add("grant_type", "refresh_token")
+                .add("refresh_token", refreshToken).build();
         Response response = createAndExecuteRequest(HTTP_METHOD_POST, url, urlEncodedBody);
         return gson.fromJson(response.body().string(), ApiAuthResponse.class);
     }
@@ -96,38 +91,8 @@ class LetterboxdApi {
         return okHttpClient.newCall(request).execute();
     }
 
-    private String createUrlEncodedBody(Entry... entries) {
-        StringBuilder builder = new StringBuilder();
-        for (Entry entry : entries) {
-            if (builder.length() > 0) {
-                builder.append('&');
-            }
-            builder.append(urlEncode(entry.key)).append('=').append(urlEncode(entry.value));
-        }
-        return builder.toString();
-    }
-
-    private String urlEncode(String value) {
-        try {
-            return URLEncoder.encode(value, StandardCharsets.UTF_8.name());
-        } catch (UnsupportedEncodingException e) {
-            return value;
-        }
-    }
-
     private String generateSignature(String httpMethod, String url, String body) {
         String preHashed = String.format(Locale.US, "%s\u0000%s\u0000%s", httpMethod.toUpperCase(Locale.US), url, body);
         return HmacSha256.generateHash(apiSecret, preHashed).toLowerCase(Locale.US);
-    }
-
-    private static class Entry {
-        
-        final String key;
-        final String value;
-
-        Entry(String key, String value) {
-            this.key = key;
-            this.value = value;
-        }
     }
 }
