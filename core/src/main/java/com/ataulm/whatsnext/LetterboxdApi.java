@@ -15,10 +15,11 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-class Authenticator {
+class LetterboxdApi {
 
     private static final String API_ENDPOINT = "https://api.letterboxd.com/api/v0";
-    private static final String HTTP_METHOD = "POST";
+    private static final String HTTP_METHOD_POST = "POST";
+    private static final String HTTP_METHOD_GET = "GET";
 
     private final String apiKey;
     private final String apiSecret;
@@ -26,7 +27,7 @@ class Authenticator {
     private final OkHttpClient okHttpClient;
     private final Gson gson;
 
-    Authenticator(String apiKey, String apiSecret, Clock clock, OkHttpClient okHttpClient, Gson gson) {
+    LetterboxdApi(String apiKey, String apiSecret, Clock clock, OkHttpClient okHttpClient, Gson gson) {
         this.apiKey = apiKey;
         this.apiSecret = apiSecret;
         this.clock = clock;
@@ -41,7 +42,8 @@ class Authenticator {
                 new Entry("username", username),
                 new Entry("password", password)
         );
-        return createAndExecuteRequest(url, urlEncodedBody);
+        Response response = createAndExecuteRequest(HTTP_METHOD_POST, url, urlEncodedBody);
+        return gson.fromJson(response.body().string(), ApiAuthResponse.class);
     }
 
     ApiAuthResponse refreshAccessToken(String refreshToken) throws IOException {
@@ -50,19 +52,36 @@ class Authenticator {
                 new Entry("grant_type", "refresh_token"),
                 new Entry("refresh_token", refreshToken)
         );
-        return createAndExecuteRequest(url, urlEncodedBody);
+        Response response = createAndExecuteRequest(HTTP_METHOD_POST, url, urlEncodedBody);
+        return gson.fromJson(response.body().string(), ApiAuthResponse.class);
     }
 
-    private ApiAuthResponse createAndExecuteRequest(String url, String urlEncodedBody) throws IOException {
-        Request request = new Request.Builder()
+    ApiSearchResponse search(String searchTerm) throws IOException {
+        String url = generateSearchUrl(searchTerm);
+        Response response = createAndExecuteRequest(HTTP_METHOD_GET, url, "");
+        return gson.fromJson(response.body().string(), ApiSearchResponse.class);
+    }
+
+    private String generateSearchUrl(String searchTerm) {
+        return API_ENDPOINT + "/search?"
+                + "apikey=" + apiKey
+                + "&nonce=" + generateNonce()
+                + "&timestamp=" + generateTimestamp()
+                + "&input=" + searchTerm;
+    }
+
+    private Response createAndExecuteRequest(String httpMethod, String url, String urlEncodedBody) throws IOException {
+        Request.Builder builder = new Request.Builder()
                 .url(url)
                 .addHeader("accept", "application/json")
-                .addHeader("Authorization", "Signature " + generateSignature(url, urlEncodedBody))
-                .post(RequestBody.create(MediaType.parse("application/x-www-form-urlencoded"), urlEncodedBody))
-                .build();
+                .addHeader("Authorization", "Signature " + generateSignature(httpMethod, url, urlEncodedBody));
 
-        Response response = okHttpClient.newCall(request).execute();
-        return gson.fromJson(response.body().string(), ApiAuthResponse.class);
+        if (HTTP_METHOD_POST.equals(httpMethod)) {
+            builder.post(RequestBody.create(MediaType.parse("application/x-www-form-urlencoded"), urlEncodedBody));
+        }
+
+        Request request = builder.build();
+        return okHttpClient.newCall(request).execute();
     }
 
     private String generateAuthUrl() {
@@ -100,8 +119,8 @@ class Authenticator {
         }
     }
 
-    private String generateSignature(String url, String body) {
-        String preHashed = String.format(Locale.US, "%s\u0000%s\u0000%s", HTTP_METHOD.toUpperCase(Locale.US), url, body);
+    private String generateSignature(String httpMethod, String url, String body) {
+        String preHashed = String.format(Locale.US, "%s\u0000%s\u0000%s", httpMethod.toUpperCase(Locale.US), url, body);
         return HmacSha256.generateHash(apiSecret, preHashed).toLowerCase(Locale.US);
     }
 
