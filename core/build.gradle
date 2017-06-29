@@ -1,13 +1,21 @@
+buildscript {
+    dependencies {
+        classpath libraries.build.kotlinGradle
+    }
+}
+
 apply plugin: 'java'
+apply plugin: 'kotlin'
 
 dependencies {
+    compile libraries.kotlinStdLib
     compile libraries.gson
-    compile libraries.jsr305
     compile libraries.okhttp
+    implementation libraries.jsr305
 
-    testCompile libraries.jUnit
-    testCompile libraries.festAssertCore
-    testCompile libraries.mockitoCore
+    testImplementation libraries.jUnit
+    testImplementation libraries.festAssertCore
+    testImplementation libraries.mockitoCore
 }
 
 sourceCompatibility = '1.7'
