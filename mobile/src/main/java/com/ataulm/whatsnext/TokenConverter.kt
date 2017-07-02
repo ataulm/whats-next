@@ -1,5 +1,6 @@
 package com.ataulm.whatsnext
 
+import com.ataulm.whatsnext.letterboxd.ApiAuthResponse
 import java.util.concurrent.TimeUnit
 
 internal class TokenConverter(private val clock: Clock) {

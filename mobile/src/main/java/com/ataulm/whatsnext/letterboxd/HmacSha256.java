@@ -1,4 +1,4 @@
-package com.ataulm.whatsnext;
+package com.ataulm.whatsnext.letterboxd;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;

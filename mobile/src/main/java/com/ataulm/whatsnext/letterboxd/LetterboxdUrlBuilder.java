@@ -1,4 +1,6 @@
-package com.ataulm.whatsnext;
+package com.ataulm.whatsnext.letterboxd;
+
+import com.ataulm.whatsnext.Clock;
 
 import java.util.HashMap;
 import java.util.Map;

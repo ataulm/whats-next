@@ -1,4 +1,4 @@
-package com.ataulm.whatsnext;
+package com.ataulm.whatsnext.letterboxd;
 
 import com.google.gson.annotations.SerializedName;
 

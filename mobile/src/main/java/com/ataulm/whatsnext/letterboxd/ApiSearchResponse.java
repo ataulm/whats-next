@@ -1,14 +1,14 @@
-package com.ataulm.whatsnext;
+package com.ataulm.whatsnext.letterboxd;
 
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-class ApiFilmsResponse {
+class ApiSearchResponse {
 
     @SerializedName("next")
     String cursorToNextPageOfResults;
 
     @SerializedName("items")
-    List<Object> filmSummaries;
+    List<Object> searchItems;
 }

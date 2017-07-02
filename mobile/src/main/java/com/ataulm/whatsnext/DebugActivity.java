@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
+import com.ataulm.whatsnext.letterboxd.LetterboxdApi;
 import com.google.gson.Gson;
 
 import java.io.IOException;
@@ -24,11 +25,10 @@ public class DebugActivity extends AppCompatActivity {
             @Override
             public void run() {
                 try {
-                    LetterboxdApi letterboxdApi = new LetterboxdApi(BuildConfig.LETTERBOXD_KEY, BuildConfig.LETTERBOXD_SECRET, new Clock(), new OkHttpClient(), new Gson());
+                    LetterboxdApi letterboxdApi = new LetterboxdApi(BuildConfig.LETTERBOXD_KEY, BuildConfig.LETTERBOXD_SECRET, new Clock(), tokenConverter, new OkHttpClient(), new Gson());
                     Token token = tokensStore.getToken();
                     if (token == null) {
-                        ApiAuthResponse apiAuthResponse = letterboxdApi.fetchAccessToken(BuildConfig.LETTERBOXD_USERNAME, BuildConfig.LETTERBOXD_PASSWORD);
-                        token = tokenConverter.convert(apiAuthResponse);
+                        token = letterboxdApi.fetchAccessToken(BuildConfig.LETTERBOXD_USERNAME, BuildConfig.LETTERBOXD_PASSWORD);
                         tokensStore.store(token);
                     }
                     String letterboxId = letterboxdApi.me(token.getAccessToken()).member.letterboxId;
