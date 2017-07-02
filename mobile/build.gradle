@@ -6,11 +6,13 @@ buildscript {
         classpath libraries.build.androidApt
         classpath libraries.build.androidGradle
         classpath libraries.build.buildProperties
+        classpath libraries.build.kotlinGradle
     }
 }
 
 apply plugin: 'com.android.application'
 apply plugin: 'com.novoda.build-properties'
+apply plugin: 'kotlin-android'
 
 buildProperties {
     letterboxd {
@@ -45,8 +47,9 @@ android {
 }
 
 dependencies {
-    implementation project(":core")
-
+    implementation libraries.kotlinStdLib
+    implementation libraries.gson
+    implementation libraries.okhttp
     implementation libraries.supportAppCompatV7
     implementation libraries.supportDesign
     implementation libraries.supportRecyclerView
