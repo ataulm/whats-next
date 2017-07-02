@@ -13,7 +13,7 @@ ext {
     libraries = [
             build              : [
                     androidApt     : 'com.neenbedankt.gradle.plugins:android-apt:1.8',
-                    androidGradle  : 'com.android.tools.build:gradle:3.0.0-alpha4',
+                    androidGradle  : 'com.android.tools.build:gradle:3.0.0-alpha5',
                     buildProperties: 'com.novoda:gradle-build-properties-plugin:0.3',
                     kotlinGradle   : "org.jetbrains.kotlin:kotlin-gradle-plugin:${versions.kotlin}"
             ],
