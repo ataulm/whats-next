@@ -8,7 +8,6 @@ import android.util.Log;
 import com.google.gson.Gson;
 
 import java.io.IOException;
-import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
 
@@ -40,19 +39,4 @@ public class DebugActivity extends AppCompatActivity {
             }
         }).start();
     }
-
-    private static class TokenConverter {
-
-        private final Clock clock;
-
-        private TokenConverter(Clock clock) {
-            this.clock = clock;
-        }
-
-        Token convert(ApiAuthResponse apiAuthResponse) {
-            long expiryTime = clock.getCurrentTimeMillis() + TimeUnit.SECONDS.toMillis(apiAuthResponse.secondsUntilExpiry);
-            return new Token(apiAuthResponse.accessToken, apiAuthResponse.refreshToken, expiryTime);
-        }
-    }
-
 }
