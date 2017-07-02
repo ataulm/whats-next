@@ -1,3 +1,3 @@
 package com.ataulm.whatsnext
 
-data class Token(val accessToken: String, val refreshToken: String, val expiryMillisSinceEpoch: Long)
+internal data class Token(val accessToken: String, val refreshToken: String, val expiryMillisSinceEpoch: Long)

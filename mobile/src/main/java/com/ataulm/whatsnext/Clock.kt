@@ -1,6 +1,6 @@
 package com.ataulm.whatsnext
 
-class Clock {
+internal class Clock {
 
     val currentTimeMillis: Long
         get() = System.currentTimeMillis()
