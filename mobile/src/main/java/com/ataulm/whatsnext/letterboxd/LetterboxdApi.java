@@ -1,11 +1,13 @@
 package com.ataulm.whatsnext.letterboxd;
 
 import com.ataulm.whatsnext.Clock;
+import com.ataulm.whatsnext.Film;
 import com.ataulm.whatsnext.Token;
-import com.ataulm.whatsnext.TokenConverter;
 import com.google.gson.Gson;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 import okhttp3.MediaType;
@@ -23,14 +25,16 @@ public class LetterboxdApi {
     private final String apiSecret;
     private final Clock clock;
     private final TokenConverter tokenConverter;
+    private final FilmConverter filmConverter;
     private final OkHttpClient okHttpClient;
     private final Gson gson;
 
-    public LetterboxdApi(String apiKey, String apiSecret, Clock clock, TokenConverter tokenConverter, OkHttpClient okHttpClient, Gson gson) {
+    public LetterboxdApi(String apiKey, String apiSecret, Clock clock, TokenConverter tokenConverter, FilmConverter filmConverter, OkHttpClient okHttpClient, Gson gson) {
         this.apiKey = apiKey;
         this.apiSecret = apiSecret;
         this.clock = clock;
         this.tokenConverter = tokenConverter;
+        this.filmConverter = filmConverter;
         this.okHttpClient = okHttpClient;
         this.gson = gson;
     }
@@ -69,13 +73,21 @@ public class LetterboxdApi {
     public ApiMemberAccountResponse me(String accessToken) throws IOException {
         String url = new LetterboxdUrlBuilder(apiKey, clock).path("/me").build();
         Response response = createAndExecuteUserAuthedRequest(HTTP_METHOD_GET, url, accessToken);
-        return gson.fromJson(response.body().string(), ApiMemberAccountResponse.class);
+        String responseString = response.body().string();
+        return gson.fromJson(responseString, ApiMemberAccountResponse.class);
     }
 
-    public ApiFilmsResponse watchlist(String accessToken, String userId) throws IOException {
+    public List<Film> watchlist(String accessToken, String userId) throws IOException {
         String url = new LetterboxdUrlBuilder(apiKey, clock).path("/member/" + userId + "/watchlist").build();
         Response response = createAndExecuteUserAuthedRequest(HTTP_METHOD_GET, url, accessToken);
-        return gson.fromJson(response.body().string(), ApiFilmsResponse.class);
+        String responseString = response.body().string();
+        ApiFilmsResponse apiFilmsResponse = gson.fromJson(responseString, ApiFilmsResponse.class);
+        List<Film> films = new ArrayList<>(apiFilmsResponse.filmSummaries.size());
+        for (ApiFilmSummary filmSummary : apiFilmsResponse.filmSummaries) {
+            Film film = filmConverter.convert(filmSummary);
+            films.add(film);
+        }
+        return films;
     }
 
     private Response createAndExecuteUserAuthedRequest(String httpMethod, String url, String accessToken) throws IOException {
