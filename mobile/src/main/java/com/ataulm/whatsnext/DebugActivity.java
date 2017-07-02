@@ -12,6 +12,11 @@ import com.google.gson.Gson;
 
 import java.util.List;
 
+import io.reactivex.Observer;
+import io.reactivex.Scheduler;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import okhttp3.OkHttpClient;
 
 public class DebugActivity extends AppCompatActivity {
@@ -27,14 +32,34 @@ public class DebugActivity extends AppCompatActivity {
         TokensStore tokensStore = TokensStore.Companion.create(this);
         LetterboxdApi letterboxdApi = new LetterboxdApi(BuildConfig.LETTERBOXD_KEY, BuildConfig.LETTERBOXD_SECRET, clock, tokenConverter, new FilmConverter(), new OkHttpClient(), new Gson());
         service = new WhatsNextService(letterboxdApi, tokensStore, clock);
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                List<Film> watchlist = service.watchlist();
-                Log.d("!!!", watchlist.toString());
-            }
-        }).start();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        service.watchlistObservable()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<List<Film>>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        Log.d("!!!", "onSubscribe " + d);
+                    }
+
+                    @Override
+                    public void onNext(List<Film> films) {
+                        Log.d("!!!", "onNext " + films.toString());
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.e("!!!", "onError", e);
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        Log.d("!!!", "onComplete");
+                    }
+                });
+    }
 }

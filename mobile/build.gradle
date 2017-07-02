@@ -50,6 +50,8 @@ dependencies {
     implementation libraries.kotlinStdLib
     implementation libraries.gson
     implementation libraries.okhttp
+    implementation libraries.rxandroid
+    implementation libraries.rxjava
     implementation libraries.supportAppCompatV7
     implementation libraries.supportDesign
     implementation libraries.supportRecyclerView
