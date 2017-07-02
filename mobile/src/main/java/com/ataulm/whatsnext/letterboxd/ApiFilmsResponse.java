@@ -11,5 +11,5 @@ public class ApiFilmsResponse {
     public String cursorToNextPageOfResults;
 
     @SerializedName("items")
-    public List<Object> filmSummaries;
+    public List<ApiFilmSummary> filmSummaries;
 }
