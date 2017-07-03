@@ -4,9 +4,9 @@ import android.util.Log;
 
 import java.util.List;
 
-import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 
 class Presenter {
@@ -20,16 +20,10 @@ class Presenter {
     }
 
     void startPresenting() {
-        whatsNextService.watchlistObservable()
+        disposable = whatsNextService.watchlistObservable()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<List<Film>>() {
-                    @Override
-                    public void onSubscribe(Disposable disposable) {
-                        Log.d("!!!", "onSubscribe " + disposable);
-                        Presenter.this.disposable = disposable;
-                    }
-
+                .subscribeWith(new DisposableObserver<List<Film>>() {
                     @Override
                     public void onNext(List<Film> films) {
                         Log.d("!!!", "onNext " + films.toString());
