@@ -3,12 +3,14 @@ package com.ataulm.whatsnext;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
 
 import com.ataulm.whatsnext.letterboxd.FilmConverter;
 import com.ataulm.whatsnext.letterboxd.LetterboxdApi;
 import com.ataulm.whatsnext.letterboxd.TokenConverter;
 import com.google.gson.Gson;
 
+import butterknife.ButterKnife;
 import okhttp3.OkHttpClient;
 
 public class DebugActivity extends AppCompatActivity {
@@ -18,9 +20,12 @@ public class DebugActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_debug);
 
         WhatsNextService service = createWhatsNextService();
-        presenter = new Presenter(service);
+        RecyclerView recyclerView = ButterKnife.findById(this, R.id.films_recycler_view);
+        Displayer displayer = new Displayer(recyclerView);
+        presenter = new Presenter(service, displayer);
     }
 
     private WhatsNextService createWhatsNextService() {
@@ -50,5 +55,4 @@ public class DebugActivity extends AppCompatActivity {
         presenter.stopPresenting();
         super.onStop();
     }
-
 }

@@ -12,11 +12,13 @@ import io.reactivex.schedulers.Schedulers;
 class Presenter {
 
     private final WhatsNextService whatsNextService;
+    private final Displayer displayer;
 
     private Disposable disposable;
 
-    Presenter(WhatsNextService whatsNextService) {
+    Presenter(WhatsNextService whatsNextService, Displayer displayer) {
         this.whatsNextService = whatsNextService;
+        this.displayer = displayer;
     }
 
     void startPresenting() {
@@ -27,6 +29,7 @@ class Presenter {
                     @Override
                     public void onNext(List<Film> films) {
                         Log.d("!!!", "onNext " + films.toString());
+                        displayer.display(films);
                     }
 
                     @Override
@@ -44,4 +47,5 @@ class Presenter {
     void stopPresenting() {
         disposable.dispose();
     }
+
 }

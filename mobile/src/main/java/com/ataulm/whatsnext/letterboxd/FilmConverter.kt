@@ -7,6 +7,6 @@ import java.util.concurrent.TimeUnit
 internal class FilmConverter() {
 
     fun convert(apiFilmSummary: ApiFilmSummary): Film {
-        return Film(apiFilmSummary.name, apiFilmSummary.releaseYear.toString());
+        return Film(apiFilmSummary.letterboxId, apiFilmSummary.name, apiFilmSummary.releaseYear.toString());
     }
 }
