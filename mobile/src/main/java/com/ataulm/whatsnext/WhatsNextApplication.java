@@ -1,0 +1,41 @@
+package com.ataulm.whatsnext;
+
+import android.app.Application;
+
+import com.ataulm.whatsnext.letterboxd.FilmConverter;
+import com.ataulm.whatsnext.letterboxd.LetterboxdApi;
+import com.ataulm.whatsnext.letterboxd.TokenConverter;
+import com.google.gson.Gson;
+
+import okhttp3.OkHttpClient;
+
+public class WhatsNextApplication extends Application {
+
+    private WhatsNextService whatsNextService;
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        whatsNextService = createWhatsNextService();
+    }
+
+    public WhatsNextService whatsNextService() {
+        return whatsNextService;
+    }
+
+    private WhatsNextService createWhatsNextService() {
+        Clock clock = new Clock();
+        TokenConverter tokenConverter = new TokenConverter(clock);
+        TokensStore tokensStore = TokensStore.Companion.create(this);
+        LetterboxdApi letterboxdApi = new LetterboxdApi(
+                BuildConfig.LETTERBOXD_KEY,
+                BuildConfig.LETTERBOXD_SECRET,
+                clock,
+                tokenConverter,
+                new FilmConverter(),
+                new OkHttpClient(),
+                new Gson()
+        );
+        return new WhatsNextService(letterboxdApi, tokensStore, clock);
+    }
+}
