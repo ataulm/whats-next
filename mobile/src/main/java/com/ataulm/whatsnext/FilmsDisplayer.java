@@ -12,12 +12,20 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-class Displayer {
+class FilmsDisplayer {
 
     private final RecyclerView recyclerView;
+    private final TextView errorTextView;
 
-    Displayer(RecyclerView recyclerView) {
+    FilmsDisplayer(RecyclerView recyclerView, TextView errorTextView) {
         this.recyclerView = recyclerView;
+        this.errorTextView = errorTextView;
+    }
+
+    void displayError(String message) {
+        errorTextView.setText(message);
+        errorTextView.setVisibility(View.VISIBLE);
+        recyclerView.setVisibility(View.GONE);
     }
 
     void display(List<Film> films) {
@@ -33,6 +41,9 @@ class Displayer {
             // TODO: diff utils?
             adapter.update(films);
         }
+
+        errorTextView.setVisibility(View.GONE);
+        recyclerView.setVisibility(View.VISIBLE);
     }
 
     static class FilmsAdapter extends RecyclerView.Adapter<FilmSummaryViewHolder> {

@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
+import android.widget.TextView;
 
 import com.ataulm.whatsnext.letterboxd.FilmConverter;
 import com.ataulm.whatsnext.letterboxd.LetterboxdApi;
@@ -24,8 +25,9 @@ public class DebugActivity extends AppCompatActivity {
 
         WhatsNextService service = createWhatsNextService();
         RecyclerView recyclerView = ButterKnife.findById(this, R.id.films_recycler_view);
-        Displayer displayer = new Displayer(recyclerView);
-        presenter = new Presenter(service, displayer);
+        TextView errorTextView = ButterKnife.findById(this, R.id.films_text_error);
+        FilmsDisplayer filmsDisplayer = new FilmsDisplayer(recyclerView, errorTextView);
+        presenter = new Presenter(service, filmsDisplayer);
     }
 
     private WhatsNextService createWhatsNextService() {
