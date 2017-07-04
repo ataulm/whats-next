@@ -32,4 +32,4 @@ proguard/
 *.log
 
 letterboxd.properties
-
+fabric.properties

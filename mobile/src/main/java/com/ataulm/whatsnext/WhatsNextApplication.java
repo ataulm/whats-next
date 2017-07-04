@@ -5,8 +5,11 @@ import android.app.Application;
 import com.ataulm.whatsnext.letterboxd.FilmConverter;
 import com.ataulm.whatsnext.letterboxd.LetterboxdApi;
 import com.ataulm.whatsnext.letterboxd.TokenConverter;
+import com.crashlytics.android.Crashlytics;
+import com.crashlytics.android.core.CrashlyticsCore;
 import com.google.gson.Gson;
 
+import io.fabric.sdk.android.Fabric;
 import okhttp3.OkHttpClient;
 
 public class WhatsNextApplication extends Application {
@@ -17,6 +20,14 @@ public class WhatsNextApplication extends Application {
     public void onCreate() {
         super.onCreate();
         whatsNextService = createWhatsNextService();
+
+        initializeFabric();
+    }
+
+    private void initializeFabric() {
+        CrashlyticsCore core = new CrashlyticsCore.Builder().build();
+        Crashlytics crashlytics = new Crashlytics.Builder().core(core).build();
+        Fabric.with(this, crashlytics);
     }
 
     public WhatsNextService whatsNextService() {

@@ -1,11 +1,9 @@
 buildscript {
-    repositories {
-        jcenter()
-    }
     dependencies {
         classpath libraries.build.androidApt
         classpath libraries.build.androidGradle
         classpath libraries.build.buildProperties
+        classpath libraries.build.fabric
         classpath libraries.build.kotlinGradle
     }
 }
@@ -13,10 +11,14 @@ buildscript {
 apply plugin: 'com.android.application'
 apply plugin: 'com.novoda.build-properties'
 apply plugin: 'kotlin-android'
+apply plugin: 'io.fabric'
 
 buildProperties {
     letterboxd {
         file project.file('../letterboxd.properties')
+    }
+    fabric {
+        file project.file('../fabric.properties')
     }
 }
 
@@ -30,6 +32,10 @@ android {
         targetSdkVersion versions.androidSdk.target
         versionCode 1
         versionName "1.0"
+
+        manifestPlaceholders = [
+                fabricApiKey: buildProperties.fabric['apiKey'].string
+        ]
 
         buildConfigString 'LETTERBOXD_KEY', buildProperties.letterboxd['apiKey'].string
         buildConfigString 'LETTERBOXD_SECRET', buildProperties.letterboxd['apiSecret'].string
@@ -47,6 +53,7 @@ android {
 }
 
 dependencies {
+    implementation(libraries.crashlytics) { transitive = true }
     implementation libraries.kotlinStdLib
     implementation libraries.gson
     implementation libraries.okhttp

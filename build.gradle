@@ -6,15 +6,13 @@ subprojects {
     buildscript {
         repositories {
             jcenter()
-            maven {
-                url "https://maven.google.com"
-            }
+            maven { url 'https://maven.fabric.io/public' }
+            maven { url "https://maven.google.com" }
         }
     }
     repositories {
         jcenter()
-        maven {
-            url "https://maven.google.com"
-        }
+        maven { url 'https://maven.fabric.io/public' }
+        maven { url "https://maven.google.com" }
     }
 }
