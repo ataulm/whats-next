@@ -87,9 +87,6 @@ class FilmsDisplayer {
         @BindView(R.id.film_summary_text_name)
         TextView nameTextView;
 
-        @BindView(R.id.film_summary_text_release_year)
-        TextView releaseYearTextView;
-
         static FilmSummaryViewHolder inflateView(ViewGroup parent) {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_film_summary, parent, false);
             return new FilmSummaryViewHolder(view);
@@ -101,8 +98,8 @@ class FilmsDisplayer {
         }
 
         void bind(Film film) {
-            nameTextView.setText(film.getName());
-            releaseYearTextView.setText(film.getYear());
+            itemView.setContentDescription(film.getName() + " (" + film.getYear() + ")");
+            nameTextView.setText(film.getName() + " (" + film.getYear() + ")");
         }
     }
 }
