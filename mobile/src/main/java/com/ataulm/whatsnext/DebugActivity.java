@@ -9,28 +9,28 @@ import butterknife.ButterKnife;
 
 public class DebugActivity extends BaseActivity {
 
-    private Presenter presenter;
+    private WatchlistPresenter watchlistPresenter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_debug);
 
-        RecyclerView recyclerView = ButterKnife.findById(this, R.id.films_recycler_view);
-        TextView errorTextView = ButterKnife.findById(this, R.id.films_text_error);
-        FilmsDisplayer filmsDisplayer = new FilmsDisplayer(recyclerView, errorTextView);
-        presenter = new Presenter(whatsNextService(), filmsDisplayer);
+        RecyclerView recyclerView = ButterKnife.findById(this, R.id.watchlist_recycler_view);
+        TextView errorTextView = ButterKnife.findById(this, R.id.watchlist_text_error);
+        WatchlistDisplayer watchlistDisplayer = new WatchlistDisplayer(recyclerView, errorTextView);
+        watchlistPresenter = new WatchlistPresenter(whatsNextService(), watchlistDisplayer);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        presenter.startPresenting();
+        watchlistPresenter.startPresenting();
     }
 
     @Override
     protected void onStop() {
-        presenter.stopPresenting();
+        watchlistPresenter.stopPresenting();
         super.onStop();
     }
 }

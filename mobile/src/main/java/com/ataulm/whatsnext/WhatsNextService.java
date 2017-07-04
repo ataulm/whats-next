@@ -20,7 +20,7 @@ class WhatsNextService {
         this.clock = clock;
     }
 
-    Observable<List<Film>> watchlistObservable() {
+    Observable<List<Film>> watchlist() {
         return Observable.fromCallable(new Callable<List<Film>>() {
             @Override
             public List<Film> call() throws Exception {

@@ -12,12 +12,12 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-class FilmsDisplayer {
+class WatchlistDisplayer {
 
     private final RecyclerView recyclerView;
     private final TextView errorTextView;
 
-    FilmsDisplayer(RecyclerView recyclerView, TextView errorTextView) {
+    WatchlistDisplayer(RecyclerView recyclerView, TextView errorTextView) {
         this.recyclerView = recyclerView;
         this.errorTextView = errorTextView;
     }
@@ -33,9 +33,9 @@ class FilmsDisplayer {
             recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
         }
 
-        FilmsAdapter adapter = (FilmsAdapter) recyclerView.getAdapter();
+        FilmSummariesAdapter adapter = (FilmSummariesAdapter) recyclerView.getAdapter();
         if (adapter == null) {
-            adapter = new FilmsAdapter(films);
+            adapter = new FilmSummariesAdapter(films);
             recyclerView.setAdapter(adapter);
         } else {
             // TODO: diff utils?
@@ -46,11 +46,11 @@ class FilmsDisplayer {
         recyclerView.setVisibility(View.VISIBLE);
     }
 
-    static class FilmsAdapter extends RecyclerView.Adapter<FilmSummaryViewHolder> {
+    static class FilmSummariesAdapter extends RecyclerView.Adapter<FilmSummaryViewHolder> {
 
         private List<Film> films;
 
-        FilmsAdapter(List<Film> films) {
+        FilmSummariesAdapter(List<Film> films) {
             super.setHasStableIds(true);
             this.films = films;
         }

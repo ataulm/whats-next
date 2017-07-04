@@ -9,33 +9,33 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 
-class Presenter {
+class WatchlistPresenter {
 
     private final WhatsNextService whatsNextService;
-    private final FilmsDisplayer filmsDisplayer;
+    private final WatchlistDisplayer watchlistDisplayer;
 
     private Disposable disposable;
 
-    Presenter(WhatsNextService whatsNextService, FilmsDisplayer filmsDisplayer) {
+    WatchlistPresenter(WhatsNextService whatsNextService, WatchlistDisplayer watchlistDisplayer) {
         this.whatsNextService = whatsNextService;
-        this.filmsDisplayer = filmsDisplayer;
+        this.watchlistDisplayer = watchlistDisplayer;
     }
 
     void startPresenting() {
-        disposable = whatsNextService.watchlistObservable()
+        disposable = whatsNextService.watchlist()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(new DisposableObserver<List<Film>>() {
                     @Override
                     public void onNext(List<Film> films) {
                         Log.d("!!!", "onNext " + films.toString());
-                        filmsDisplayer.display(films);
+                        watchlistDisplayer.display(films);
                     }
 
                     @Override
                     public void onError(Throwable e) {
                         Log.e("!!!", "onError", e);
-                        filmsDisplayer.displayError("error: " + e.getMessage());
+                        watchlistDisplayer.displayError("error: " + e.getMessage());
                     }
 
                     @Override
