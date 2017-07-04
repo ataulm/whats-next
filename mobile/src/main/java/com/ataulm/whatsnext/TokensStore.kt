@@ -35,7 +35,5 @@ internal class TokensStore private constructor(private val preferences: SharedPr
             val preferences = context.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE)
             return TokensStore(preferences)
         }
-
     }
-
 }

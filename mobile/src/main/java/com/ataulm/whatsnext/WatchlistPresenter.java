@@ -6,7 +6,6 @@ import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 
 class WatchlistPresenter {
@@ -25,7 +24,7 @@ class WatchlistPresenter {
         disposable = whatsNextService.watchlist()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(new DisposableObserver<List<Film>>() {
+                .subscribeWith(new ErrorTrackingDisposableObserver<List<Film>>() {
                     @Override
                     public void onNext(List<Film> films) {
                         Log.d("!!!", "onNext " + films.toString());
@@ -34,7 +33,7 @@ class WatchlistPresenter {
 
                     @Override
                     public void onError(Throwable e) {
-                        Log.e("!!!", "onError", e);
+                        super.onError(e);
                         watchlistDisplayer.displayError("error: " + e.getMessage());
                     }
 
@@ -48,5 +47,4 @@ class WatchlistPresenter {
     void stopPresenting() {
         disposable.dispose();
     }
-
 }
