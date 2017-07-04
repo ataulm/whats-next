@@ -2,6 +2,7 @@ package com.ataulm.whatsnext;
 
 import com.ataulm.whatsnext.letterboxd.LetterboxdApi;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.Callable;
 
@@ -23,14 +24,22 @@ class WhatsNextService {
         return Observable.fromCallable(new Callable<List<Film>>() {
             @Override
             public List<Film> call() throws Exception {
-                Token token = tokensStore.getToken();
-                if (token == null || token.getExpiryMillisSinceEpoch() < clock.getCurrentTimeMillis()) {
-                    token = letterboxdApi.fetchAccessToken(BuildConfig.LETTERBOXD_USERNAME, BuildConfig.LETTERBOXD_PASSWORD);
-                    tokensStore.store(token);
-                }
+                Token token = getToken();
                 String letterboxId = letterboxdApi.me(token.getAccessToken()).member.letterboxId;
                 return letterboxdApi.watchlist(token.getAccessToken(), letterboxId);
             }
         });
+    }
+
+    private Token getToken() throws IOException {
+        Token token = tokensStore.getToken();
+        if (token == null) {
+            token = letterboxdApi.fetchAccessToken(BuildConfig.LETTERBOXD_USERNAME, BuildConfig.LETTERBOXD_PASSWORD);
+            tokensStore.store(token);
+        } else if (token.getExpiryMillisSinceEpoch() < clock.getCurrentTimeMillis()) {
+            token = letterboxdApi.refreshAccessToken(token.getRefreshToken());
+            tokensStore.store(token);
+        }
+        return token;
     }
 }
