@@ -4,12 +4,11 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-// TODO: these should all be package
-public class ApiFilmsResponse {
+class ApiFilmsResponse {
 
     @SerializedName("next")
-    public String cursorToNextPageOfResults;
+    String cursorToNextPageOfResults;
 
     @SerializedName("items")
-    public List<ApiFilmSummary> filmSummaries;
+    List<ApiFilmSummary> filmSummaries;
 }

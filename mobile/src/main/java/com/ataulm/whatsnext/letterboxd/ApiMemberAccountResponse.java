@@ -2,17 +2,16 @@ package com.ataulm.whatsnext.letterboxd;
 
 import com.google.gson.annotations.SerializedName;
 
-// TODO: these should all be package
-public class ApiMemberAccountResponse {
+class ApiMemberAccountResponse {
 
     @SerializedName("member")
-    public Member member;
+    Member member;
 
-    public static class Member {
+    static class Member {
         @SerializedName("id")
-        public String letterboxId;
+        String letterboxId;
 
         @SerializedName("displayName")
-        public String displayName;
+        String displayName;
     }
 }
