@@ -10,5 +10,14 @@ class ApiSearchResponse {
     String cursorToNextPageOfResults;
 
     @SerializedName("items")
-    List<Object> searchItems;
+    List<Result> searchItems;
+
+    static class Result {
+
+        @SerializedName("type")
+        String type;
+
+        @SerializedName("film")
+        ApiFilmSummary filmSummary;
+    }
 }

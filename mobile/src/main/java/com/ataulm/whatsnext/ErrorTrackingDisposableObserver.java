@@ -6,7 +6,7 @@ import com.crashlytics.android.Crashlytics;
 
 import io.reactivex.observers.DisposableObserver;
 
-abstract class ErrorTrackingDisposableObserver<T> extends DisposableObserver<T> {
+public abstract class ErrorTrackingDisposableObserver<T> extends DisposableObserver<T> {
 
     @Override
     public void onError(Throwable e) {

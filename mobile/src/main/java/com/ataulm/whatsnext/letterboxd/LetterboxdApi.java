@@ -64,10 +64,19 @@ public class LetterboxdApi {
         return tokenConverter.convert(apiAuthResponse);
     }
 
-    public ApiSearchResponse search(String searchTerm) throws IOException {
+    public List<Film> search(String searchTerm) throws IOException {
         String url = new LetterboxdUrlBuilder(apiKey, clock).path("/search").addQueryParameter("input", searchTerm).build();
         Response response = createAndExecuteRequest(HTTP_METHOD_GET, url, "");
-        return gson.fromJson(response.body().string(), ApiSearchResponse.class);
+        ApiSearchResponse apiSearchResponse = gson.fromJson(response.body().string(), ApiSearchResponse.class);
+        List<Film> films = new ArrayList<>(apiSearchResponse.searchItems.size());
+        for (ApiSearchResponse.Result searchItem : apiSearchResponse.searchItems) {
+            if (!"FilmSearchItem".equals(searchItem.type)) {
+                continue;
+            }
+            Film film = filmConverter.convert(searchItem.filmSummary);
+            films.add(film);
+        }
+        return films;
     }
 
     public ApiMemberAccountResponse me(String accessToken) throws IOException {

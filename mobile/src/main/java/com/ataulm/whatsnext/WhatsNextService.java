@@ -8,7 +8,7 @@ import java.util.concurrent.Callable;
 
 import io.reactivex.Observable;
 
-class WhatsNextService {
+public class WhatsNextService {
 
     private final LetterboxdApi letterboxdApi;
     private final TokensStore tokensStore;
@@ -20,13 +20,11 @@ class WhatsNextService {
         this.clock = clock;
     }
 
-    Observable<List<Film>> watchlist() {
+    public Observable<List<Film>> search(final String searchTerm) {
         return Observable.fromCallable(new Callable<List<Film>>() {
             @Override
             public List<Film> call() throws Exception {
-                Token token = getToken();
-                String letterboxId = letterboxdApi.me(token.getAccessToken()).member.letterboxId;
-                return letterboxdApi.watchlist(token.getAccessToken(), letterboxId);
+                return letterboxdApi.search(searchTerm);
             }
         });
     }
