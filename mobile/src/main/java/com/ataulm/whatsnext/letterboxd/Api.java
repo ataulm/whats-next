@@ -16,7 +16,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public class LetterboxdApi {
+public class Api {
 
     private static final String HTTP_METHOD_POST = "POST";
     private static final String HTTP_METHOD_GET = "GET";
@@ -29,7 +29,7 @@ public class LetterboxdApi {
     private final OkHttpClient okHttpClient;
     private final Gson gson;
 
-    public LetterboxdApi(String apiKey, String apiSecret, Clock clock, TokenConverter tokenConverter, FilmConverter filmConverter, OkHttpClient okHttpClient, Gson gson) {
+    public Api(String apiKey, String apiSecret, Clock clock, TokenConverter tokenConverter, FilmConverter filmConverter, OkHttpClient okHttpClient, Gson gson) {
         this.apiKey = apiKey;
         this.apiSecret = apiSecret;
         this.clock = clock;
