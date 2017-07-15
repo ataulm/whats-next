@@ -2,6 +2,9 @@ package com.ataulm.whatsnext.letterboxd;
 
 import com.ataulm.whatsnext.Clock;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -45,8 +48,16 @@ class LetterboxdUrlBuilder {
             } else {
                 builder.append('&');
             }
-            builder.append(queryParam.getKey()).append('=').append(queryParam.getValue());
+            builder.append(urlEncode(queryParam.getKey())).append('=').append(urlEncode(queryParam.getValue()));
         }
         return builder.toString();
+    }
+
+    private String urlEncode(String value) {
+        try {
+            return URLEncoder.encode(value, StandardCharsets.UTF_8.name());
+        } catch (UnsupportedEncodingException e) {
+            return value;
+        }
     }
 }
