@@ -6,7 +6,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.ataulm.whatsnext.Film;
+import com.ataulm.whatsnext.FilmSummary;
 import com.ataulm.whatsnext.FilmSummariesAdapter;
 
 import java.util.List;
@@ -40,18 +40,18 @@ class SearchDisplayer {
         searchButton.setOnClickListener(null);
     }
 
-    void display(List<Film> films) {
+    void display(List<FilmSummary> filmSummaries) {
         if (resultsRecyclerView.getLayoutManager() == null) {
             resultsRecyclerView.setLayoutManager(new LinearLayoutManager(resultsRecyclerView.getContext()));
         }
 
         FilmSummariesAdapter adapter = (FilmSummariesAdapter) resultsRecyclerView.getAdapter();
         if (adapter == null) {
-            adapter = new FilmSummariesAdapter(films);
+            adapter = new FilmSummariesAdapter(filmSummaries);
             resultsRecyclerView.setAdapter(adapter);
         } else {
             // TODO: diff utils?
-            adapter.update(films);
+            adapter.update(filmSummaries);
         }
     }
 

@@ -20,10 +20,10 @@ public class WhatsNextService {
         this.clock = clock;
     }
 
-    public Observable<List<Film>> search(final String searchTerm) {
-        return Observable.fromCallable(new Callable<List<Film>>() {
+    public Observable<List<FilmSummary>> search(final String searchTerm) {
+        return Observable.fromCallable(new Callable<List<FilmSummary>>() {
             @Override
-            public List<Film> call() throws Exception {
+            public List<FilmSummary> call() throws Exception {
                 return api.search(searchTerm);
             }
         });

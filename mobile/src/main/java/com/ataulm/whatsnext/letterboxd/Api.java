@@ -1,7 +1,7 @@
 package com.ataulm.whatsnext.letterboxd;
 
 import com.ataulm.whatsnext.Clock;
-import com.ataulm.whatsnext.Film;
+import com.ataulm.whatsnext.FilmSummary;
 import com.ataulm.whatsnext.Token;
 import com.google.gson.Gson;
 
@@ -64,19 +64,19 @@ public class Api {
         return tokenConverter.convert(apiAuthResponse);
     }
 
-    public List<Film> search(String searchTerm) throws IOException {
+    public List<FilmSummary> search(String searchTerm) throws IOException {
         String url = new LetterboxdUrlBuilder(apiKey, clock).path("/search").addQueryParameter("input", searchTerm).build();
         Response response = createAndExecuteRequest(HTTP_METHOD_GET, url, "");
         ApiSearchResponse apiSearchResponse = gson.fromJson(response.body().string(), ApiSearchResponse.class);
-        List<Film> films = new ArrayList<>(apiSearchResponse.searchItems.size());
+        List<FilmSummary> filmSummaries = new ArrayList<>(apiSearchResponse.searchItems.size());
         for (ApiSearchResponse.Result searchItem : apiSearchResponse.searchItems) {
             if (!"FilmSearchItem".equals(searchItem.type)) {
                 continue;
             }
-            Film film = filmConverter.convert(searchItem.filmSummary);
-            films.add(film);
+            FilmSummary filmSummary = filmConverter.convert(searchItem.filmSummary);
+            filmSummaries.add(filmSummary);
         }
-        return films;
+        return filmSummaries;
     }
 
     public ApiMemberAccountResponse me(String accessToken) throws IOException {
@@ -86,17 +86,17 @@ public class Api {
         return gson.fromJson(responseString, ApiMemberAccountResponse.class);
     }
 
-    public List<Film> watchlist(String accessToken, String userId) throws IOException {
+    public List<FilmSummary> watchlist(String accessToken, String userId) throws IOException {
         String url = new LetterboxdUrlBuilder(apiKey, clock).path("/member/" + userId + "/watchlist").build();
         Response response = createAndExecuteUserAuthedRequest(HTTP_METHOD_GET, url, accessToken);
         String responseString = response.body().string();
         ApiFilmsResponse apiFilmsResponse = gson.fromJson(responseString, ApiFilmsResponse.class);
-        List<Film> films = new ArrayList<>(apiFilmsResponse.filmSummaries.size());
+        List<FilmSummary> filmSummaries = new ArrayList<>(apiFilmsResponse.filmSummaries.size());
         for (ApiFilmSummary filmSummary : apiFilmsResponse.filmSummaries) {
-            Film film = filmConverter.convert(filmSummary);
-            films.add(film);
+            FilmSummary film = filmConverter.convert(filmSummary);
+            filmSummaries.add(film);
         }
-        return films;
+        return filmSummaries;
     }
 
     private Response createAndExecuteUserAuthedRequest(String httpMethod, String url, String accessToken) throws IOException {

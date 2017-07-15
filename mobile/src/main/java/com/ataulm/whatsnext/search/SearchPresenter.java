@@ -4,7 +4,7 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.ataulm.whatsnext.ErrorTrackingDisposableObserver;
-import com.ataulm.whatsnext.Film;
+import com.ataulm.whatsnext.FilmSummary;
 import com.ataulm.whatsnext.WhatsNextService;
 
 import java.util.List;
@@ -34,11 +34,11 @@ class SearchPresenter {
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribeWith(
-                                new ErrorTrackingDisposableObserver<List<Film>>() {
+                                new ErrorTrackingDisposableObserver<List<FilmSummary>>() {
                                     @Override
-                                    public void onNext(List<Film> films) {
-                                        Log.d("!!!", "onNext " + films.toString());
-                                        displayer.display(films);
+                                    public void onNext(List<FilmSummary> filmSummaries) {
+                                        Log.d("!!!", "onNext " + filmSummaries.toString());
+                                        displayer.display(filmSummaries);
                                     }
 
                                     @Override

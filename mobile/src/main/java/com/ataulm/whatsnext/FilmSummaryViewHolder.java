@@ -24,8 +24,8 @@ class FilmSummaryViewHolder extends RecyclerView.ViewHolder {
         ButterKnife.bind(this, itemView);
     }
 
-    void bind(Film film) {
-        itemView.setContentDescription(film.getName() + " (" + film.getYear() + ")");
-        nameTextView.setText(film.getName() + " (" + film.getYear() + ")");
+    void bind(FilmSummary filmSummary) {
+        itemView.setContentDescription(filmSummary.getName() + " (" + filmSummary.getYear() + ")");
+        nameTextView.setText(filmSummary.getName() + " (" + filmSummary.getYear() + ")");
     }
 }

@@ -7,15 +7,15 @@ import java.util.List;
 
 public class FilmSummariesAdapter extends RecyclerView.Adapter<FilmSummaryViewHolder> {
 
-    private List<Film> films;
+    private List<FilmSummary> filmSummaries;
 
-    public FilmSummariesAdapter(List<Film> films) {
+    public FilmSummariesAdapter(List<FilmSummary> filmSummaries) {
         super.setHasStableIds(true);
-        this.films = films;
+        this.filmSummaries = filmSummaries;
     }
 
-    public void update(List<Film> films) {
-        this.films = films;
+    public void update(List<FilmSummary> filmSummaries) {
+        this.filmSummaries = filmSummaries;
         notifyDataSetChanged();
     }
 
@@ -26,17 +26,17 @@ public class FilmSummariesAdapter extends RecyclerView.Adapter<FilmSummaryViewHo
 
     @Override
     public void onBindViewHolder(FilmSummaryViewHolder holder, int position) {
-        Film film = films.get(position);
-        holder.bind(film);
+        FilmSummary filmSummary = filmSummaries.get(position);
+        holder.bind(filmSummary);
     }
 
     @Override
     public int getItemCount() {
-        return films.size();
+        return filmSummaries.size();
     }
 
     @Override
     public long getItemId(int position) {
-        return films.get(position).getId().hashCode();
+        return filmSummaries.get(position).getId().hashCode();
     }
 }
