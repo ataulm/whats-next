@@ -1,4 +1,4 @@
-package com.ataulm.whatsnext.letterboxd;
+package com.ataulm.whatsnext.api;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;

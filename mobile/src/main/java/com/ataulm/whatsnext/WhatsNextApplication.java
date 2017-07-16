@@ -1,13 +1,11 @@
 package com.ataulm.whatsnext;
 
 import android.app.Application;
-import android.content.Context;
-import android.widget.Toast;
 
-import com.ataulm.whatsnext.letterboxd.FilmRelationshipConverter;
-import com.ataulm.whatsnext.letterboxd.FilmSummaryConverter;
-import com.ataulm.whatsnext.letterboxd.Api;
-import com.ataulm.whatsnext.letterboxd.TokenConverter;
+import com.ataulm.whatsnext.api.FilmRelationshipConverter;
+import com.ataulm.whatsnext.api.FilmSummaryConverter;
+import com.ataulm.whatsnext.api.Letterboxd;
+import com.ataulm.whatsnext.api.TokenConverter;
 import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.core.CrashlyticsCore;
 import com.google.gson.Gson;
@@ -53,7 +51,7 @@ public class WhatsNextApplication extends Application {
         Clock clock = new Clock();
         TokenConverter tokenConverter = new TokenConverter(clock);
         TokensStore tokensStore = TokensStore.Companion.create(this);
-        Api api = new Api(
+        Letterboxd letterboxd = new Letterboxd(
                 BuildConfig.LETTERBOXD_KEY,
                 BuildConfig.LETTERBOXD_SECRET,
                 clock,
@@ -63,7 +61,7 @@ public class WhatsNextApplication extends Application {
                 new OkHttpClient(),
                 new Gson()
         );
-        return new WhatsNextService(api, tokensStore, clock);
+        return new WhatsNextService(letterboxd, tokensStore, clock);
     }
 
 }

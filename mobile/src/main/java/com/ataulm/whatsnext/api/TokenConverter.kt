@@ -1,4 +1,4 @@
-package com.ataulm.whatsnext.letterboxd
+package com.ataulm.whatsnext.api
 
 import com.ataulm.whatsnext.Clock
 import com.ataulm.whatsnext.Token

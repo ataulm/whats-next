@@ -1,6 +1,6 @@
 package com.ataulm.whatsnext;
 
-import com.ataulm.whatsnext.letterboxd.Api;
+import com.ataulm.whatsnext.api.Letterboxd;
 
 import java.io.IOException;
 import java.util.List;
@@ -10,12 +10,12 @@ import io.reactivex.Observable;
 
 public class WhatsNextService {
 
-    private final Api api;
+    private final Letterboxd letterboxd;
     private final TokensStore tokensStore;
     private final Clock clock;
 
-    WhatsNextService(Api api, TokensStore tokensStore, Clock clock) {
-        this.api = api;
+    WhatsNextService(Letterboxd letterboxd, TokensStore tokensStore, Clock clock) {
+        this.letterboxd = letterboxd;
         this.tokensStore = tokensStore;
         this.clock = clock;
     }
@@ -24,7 +24,7 @@ public class WhatsNextService {
         return Observable.fromCallable(new Callable<List<FilmSummary>>() {
             @Override
             public List<FilmSummary> call() throws Exception {
-                return api.search(searchTerm);
+                return letterboxd.search(searchTerm);
             }
         });
     }
@@ -33,7 +33,7 @@ public class WhatsNextService {
         return Observable.fromCallable(new Callable<Film>() {
             @Override
             public Film call() throws Exception {
-                return api.film(letterboxdId, getToken().getAccessToken());
+                return letterboxd.film(letterboxdId, getToken().getAccessToken());
             }
         });
     }
@@ -41,10 +41,10 @@ public class WhatsNextService {
     private Token getToken() throws IOException {
         Token token = tokensStore.getToken();
         if (token == null) {
-            token = api.fetchAccessToken(BuildConfig.LETTERBOXD_USERNAME, BuildConfig.LETTERBOXD_PASSWORD);
+            token = letterboxd.fetchAccessToken(BuildConfig.LETTERBOXD_USERNAME, BuildConfig.LETTERBOXD_PASSWORD);
             tokensStore.store(token);
         } else if (token.getExpiryMillisSinceEpoch() < clock.getCurrentTimeMillis()) {
-            token = api.refreshAccessToken(token.getRefreshToken());
+            token = letterboxd.refreshAccessToken(token.getRefreshToken());
             tokensStore.store(token);
         }
         return token;

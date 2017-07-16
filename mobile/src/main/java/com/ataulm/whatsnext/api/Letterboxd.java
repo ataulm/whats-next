@@ -1,4 +1,4 @@
-package com.ataulm.whatsnext.letterboxd;
+package com.ataulm.whatsnext.api;
 
 import com.ataulm.whatsnext.Clock;
 import com.ataulm.whatsnext.Film;
@@ -18,7 +18,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public class Api {
+public class Letterboxd {
 
     private static final String HTTP_METHOD_POST = "POST";
     private static final String HTTP_METHOD_GET = "GET";
@@ -32,7 +32,7 @@ public class Api {
     private final OkHttpClient okHttpClient;
     private final Gson gson;
 
-    public Api(String apiKey, String apiSecret, Clock clock, TokenConverter tokenConverter, FilmSummaryConverter filmSummaryConverter, FilmRelationshipConverter filmRelationshipConverter, OkHttpClient okHttpClient, Gson gson) {
+    public Letterboxd(String apiKey, String apiSecret, Clock clock, TokenConverter tokenConverter, FilmSummaryConverter filmSummaryConverter, FilmRelationshipConverter filmRelationshipConverter, OkHttpClient okHttpClient, Gson gson) {
         this.apiKey = apiKey;
         this.apiSecret = apiSecret;
         this.clock = clock;
