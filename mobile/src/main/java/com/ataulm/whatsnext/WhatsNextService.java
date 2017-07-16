@@ -29,6 +29,15 @@ public class WhatsNextService {
         });
     }
 
+    public Observable<Film> film(final String letterboxdId) {
+        return Observable.fromCallable(new Callable<Film>() {
+            @Override
+            public Film call() throws Exception {
+                return api.film(letterboxdId, getToken().getAccessToken());
+            }
+        });
+    }
+
     private Token getToken() throws IOException {
         Token token = tokensStore.getToken();
         if (token == null) {

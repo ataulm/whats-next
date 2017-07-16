@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/film_text_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/film_text_watch_status"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:id="@+id/film_button_mark_watched"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Mark as watched" />
+
+    <Button
+        android:id="@+id/film_button_mark_not_watched"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Mark as not watched" />
+
+</LinearLayout>

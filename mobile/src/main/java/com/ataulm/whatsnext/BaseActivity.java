@@ -7,4 +7,8 @@ public class BaseActivity extends AppCompatActivity {
     protected WhatsNextService whatsNextService() {
         return ((WhatsNextApplication) getApplication()).whatsNextService();
     }
+
+    protected Navigator navigator() {
+        return ((WhatsNextApplication) getApplication()).navigator();
+    }
 }

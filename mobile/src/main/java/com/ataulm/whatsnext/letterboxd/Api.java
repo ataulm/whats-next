@@ -1,6 +1,8 @@
 package com.ataulm.whatsnext.letterboxd;
 
 import com.ataulm.whatsnext.Clock;
+import com.ataulm.whatsnext.Film;
+import com.ataulm.whatsnext.FilmRelationship;
 import com.ataulm.whatsnext.FilmSummary;
 import com.ataulm.whatsnext.Token;
 import com.google.gson.Gson;
@@ -25,16 +27,18 @@ public class Api {
     private final String apiSecret;
     private final Clock clock;
     private final TokenConverter tokenConverter;
-    private final FilmConverter filmConverter;
+    private final FilmSummaryConverter filmSummaryConverter;
+    private final FilmRelationshipConverter filmRelationshipConverter;
     private final OkHttpClient okHttpClient;
     private final Gson gson;
 
-    public Api(String apiKey, String apiSecret, Clock clock, TokenConverter tokenConverter, FilmConverter filmConverter, OkHttpClient okHttpClient, Gson gson) {
+    public Api(String apiKey, String apiSecret, Clock clock, TokenConverter tokenConverter, FilmSummaryConverter filmSummaryConverter, FilmRelationshipConverter filmRelationshipConverter, OkHttpClient okHttpClient, Gson gson) {
         this.apiKey = apiKey;
         this.apiSecret = apiSecret;
         this.clock = clock;
         this.tokenConverter = tokenConverter;
-        this.filmConverter = filmConverter;
+        this.filmSummaryConverter = filmSummaryConverter;
+        this.filmRelationshipConverter = filmRelationshipConverter;
         this.okHttpClient = okHttpClient;
         this.gson = gson;
     }
@@ -60,23 +64,43 @@ public class Api {
         String url = new LetterboxdUrlBuilder(apiKey, clock).path("/auth/token").build();
         Response response = createAndExecuteRequest(HTTP_METHOD_POST, url, urlEncodedBody);
         String responseString = response.body().string();
-        ApiAuthResponse apiAuthResponse = gson.fromJson(responseString, ApiAuthResponse.class);
-        return tokenConverter.convert(apiAuthResponse);
+        ApiAuthResponse deserializedResponse = gson.fromJson(responseString, ApiAuthResponse.class);
+        return tokenConverter.convert(deserializedResponse);
     }
 
     public List<FilmSummary> search(String searchTerm) throws IOException {
         String url = new LetterboxdUrlBuilder(apiKey, clock).path("/search").addQueryParameter("input", searchTerm).build();
-        Response response = createAndExecuteRequest(HTTP_METHOD_GET, url, "");
-        ApiSearchResponse apiSearchResponse = gson.fromJson(response.body().string(), ApiSearchResponse.class);
-        List<FilmSummary> filmSummaries = new ArrayList<>(apiSearchResponse.searchItems.size());
-        for (ApiSearchResponse.Result searchItem : apiSearchResponse.searchItems) {
+        Response response = createAndExecuteRequest(HTTP_METHOD_GET, url);
+        ApiSearchResponse deserializedResponse = gson.fromJson(response.body().string(), ApiSearchResponse.class);
+        List<FilmSummary> filmSummaries = new ArrayList<>(deserializedResponse.searchItems.size());
+        for (ApiSearchResponse.Result searchItem : deserializedResponse.searchItems) {
             if (!"FilmSearchItem".equals(searchItem.type)) {
                 continue;
             }
-            FilmSummary filmSummary = filmConverter.convert(searchItem.filmSummary);
+            FilmSummary filmSummary = filmSummaryConverter.convert(searchItem.filmSummary);
             filmSummaries.add(filmSummary);
         }
         return filmSummaries;
+    }
+
+    public Film film(String letterboxdId, String accessToken) throws IOException {
+        FilmSummary filmSummary = filmSummary(letterboxdId);
+        FilmRelationship filmRelationship = filmRelationship(letterboxdId, accessToken);
+        return new Film(filmSummary, filmRelationship);
+    }
+
+    private FilmSummary filmSummary(String letterboxdId) throws IOException {
+        String url = new LetterboxdUrlBuilder(apiKey, clock).path("/film/" + letterboxdId).build();
+        Response response = createAndExecuteRequest(HTTP_METHOD_GET, url);
+        ApiFilm deserializedResponse = gson.fromJson(response.body().string(), ApiFilm.class);
+        return filmSummaryConverter.convert(deserializedResponse);
+    }
+
+    private FilmRelationship filmRelationship(String letterboxdId, String accessToken) throws IOException {
+        String url = new LetterboxdUrlBuilder(apiKey, clock).path("/film/" + letterboxdId + "/me").build();
+        Response response = createAndExecuteUserAuthedRequest(HTTP_METHOD_GET, url, accessToken);
+        ApiFilmRelationship deserializedResponse = gson.fromJson(response.body().string(), ApiFilmRelationship.class);
+        return filmRelationshipConverter.convert(deserializedResponse);
     }
 
     public ApiMemberAccountResponse me(String accessToken) throws IOException {
@@ -90,10 +114,10 @@ public class Api {
         String url = new LetterboxdUrlBuilder(apiKey, clock).path("/member/" + userId + "/watchlist").build();
         Response response = createAndExecuteUserAuthedRequest(HTTP_METHOD_GET, url, accessToken);
         String responseString = response.body().string();
-        ApiFilmsResponse apiFilmsResponse = gson.fromJson(responseString, ApiFilmsResponse.class);
-        List<FilmSummary> filmSummaries = new ArrayList<>(apiFilmsResponse.filmSummaries.size());
-        for (ApiFilmSummary filmSummary : apiFilmsResponse.filmSummaries) {
-            FilmSummary film = filmConverter.convert(filmSummary);
+        ApiFilmsResponse deserializedResponse = gson.fromJson(responseString, ApiFilmsResponse.class);
+        List<FilmSummary> filmSummaries = new ArrayList<>(deserializedResponse.filmSummaries.size());
+        for (ApiFilmSummary filmSummary : deserializedResponse.filmSummaries) {
+            FilmSummary film = filmSummaryConverter.convert(filmSummary);
             filmSummaries.add(film);
         }
         return filmSummaries;
@@ -107,6 +131,10 @@ public class Api {
 
         Request request = builder.build();
         return okHttpClient.newCall(request).execute();
+    }
+
+    private Response createAndExecuteRequest(String httpMethod, String url) throws IOException {
+        return createAndExecuteRequest(httpMethod, url, "");
     }
 
     private Response createAndExecuteRequest(String httpMethod, String url, String urlEncodedBody) throws IOException {

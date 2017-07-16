@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.ataulm.whatsnext.ErrorTrackingDisposableObserver;
 import com.ataulm.whatsnext.FilmSummary;
+import com.ataulm.whatsnext.Navigator;
 import com.ataulm.whatsnext.WhatsNextService;
 
 import java.util.List;
@@ -17,13 +18,15 @@ class SearchPresenter {
 
     private final WhatsNextService service;
     private final SearchDisplayer displayer;
+    private final Navigator navigator;
 
     @Nullable
     private Disposable disposable;
 
-    SearchPresenter(WhatsNextService service, SearchDisplayer displayer) {
+    SearchPresenter(WhatsNextService service, SearchDisplayer displayer, Navigator navigator) {
         this.service = service;
         this.displayer = displayer;
+        this.navigator = navigator;
     }
 
     void startPresenting() {
@@ -48,6 +51,11 @@ class SearchPresenter {
                                 }
                         );
             }
+
+            @Override
+            public void onClick(FilmSummary filmSummary) {
+                navigator.navigateToFilm(filmSummary.getId());
+            }
         });
     }
 
@@ -55,5 +63,6 @@ class SearchPresenter {
         if (disposable != null) {
             disposable.dispose();
         }
+        displayer.detachCallback();
     }
 }

@@ -7,6 +7,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.ataulm.whatsnext.BaseActivity;
+import com.ataulm.whatsnext.Navigator;
 import com.ataulm.whatsnext.R;
 
 import butterknife.ButterKnife;
@@ -25,7 +26,7 @@ public class SearchActivity extends BaseActivity {
         RecyclerView resultsRecyclerView = ButterKnife.findById(this, R.id.search_recycler_view);
 
         SearchDisplayer displayer = new SearchDisplayer(searchEditText, searchButton, resultsRecyclerView);
-        presenter = new SearchPresenter(whatsNextService(), displayer);
+        presenter = new SearchPresenter(whatsNextService(), displayer, navigator());
     }
 
     @Override
