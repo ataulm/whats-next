@@ -3,6 +3,7 @@ package com.ataulm.whatsnext.film;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ataulm.whatsnext.BaseActivity;
@@ -26,12 +27,13 @@ public class FilmActivity extends BaseActivity {
 
         setContentView(R.layout.activity_film);
 
+        ImageView posterImageView = ButterKnife.findById(this, R.id.film_image_poster);
         TextView titleTextView = ButterKnife.findById(this, R.id.film_text_title);
         TextView watchStatusTextView = ButterKnife.findById(this, R.id.film_text_watch_status);
         Button markAsWatchedButton = ButterKnife.findById(this, R.id.film_button_mark_watched);
         Button markAsNotWatchedButton = ButterKnife.findById(this, R.id.film_button_mark_not_watched);
 
-        FilmDisplayer displayer = new FilmDisplayer(titleTextView, watchStatusTextView, markAsWatchedButton, markAsNotWatchedButton);
+        FilmDisplayer displayer = new FilmDisplayer(posterImageView, titleTextView, watchStatusTextView, markAsWatchedButton, markAsNotWatchedButton);
         String filmId = getIntent().getStringExtra(EXTRA_FILM_ID);
         presenter = new FilmPresenter(whatsNextService(), displayer, filmId);
     }

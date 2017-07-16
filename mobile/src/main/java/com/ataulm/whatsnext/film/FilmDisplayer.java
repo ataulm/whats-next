@@ -2,18 +2,22 @@ package com.ataulm.whatsnext.film;
 
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ataulm.whatsnext.Film;
+import com.bumptech.glide.Glide;
 
 class FilmDisplayer {
 
+    private final ImageView posterImageView;
     private final TextView titleTextView;
     private final TextView watchStatusTextView;
     private final Button markAsWatchedButton;
     private final Button markAsNotWatchedButton;
 
-    FilmDisplayer(TextView titleTextView, TextView watchStatusTextView, Button markAsWatchedButton, Button markAsNotWatchedButton) {
+    FilmDisplayer(ImageView posterImageView, TextView titleTextView, TextView watchStatusTextView, Button markAsWatchedButton, Button markAsNotWatchedButton) {
+        this.posterImageView = posterImageView;
         this.titleTextView = titleTextView;
         this.watchStatusTextView = watchStatusTextView;
         this.markAsWatchedButton = markAsWatchedButton;
@@ -44,6 +48,9 @@ class FilmDisplayer {
     void display(Film film) {
         titleTextView.setText(film.getSummary().getName());
         watchStatusTextView.setText(film.getRelationship().getWatched() ? "watched" : "not watched");
+        Glide.with(posterImageView.getContext())
+                .load(film.getSummary().getPoster().forWidth(posterImageView.getWidth()).getUrl())
+                .into(posterImageView);
     }
 
     interface Callback {

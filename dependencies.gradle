@@ -25,6 +25,7 @@ ext {
             crashlytics        : 'com.crashlytics.sdk.android:crashlytics:2.6.8@aar',
             espressoCore       : 'com.android.support.test.espresso:espresso-core:2.2.2',
             festAssertCore     : 'org.easytesting:fest-assert-core:2.0M10',
+            glide              : 'com.github.bumptech.glide:glide:3.5.2',
             gson               : 'com.google.code.gson:gson:2.3.1',
             jUnit              : 'junit:junit:4.12',
             jsr305             : 'com.google.code.findbugs:jsr305:2.0.1',
