@@ -20,12 +20,14 @@ class Toaster private constructor(private val context: Context) {
         @SuppressLint("StaticFieldLeak") // it's application context, and yep I'm gross, esta bien.
         private var toaster: Toaster? = null
 
+        @JvmStatic
         fun init(context: Context) {
             if (toaster == null) {
                 toaster = Toaster(context.applicationContext)
             }
         }
 
+        @JvmStatic
         fun display(message: String) {
             ensureInitialized()
             toaster!!.toast(message)

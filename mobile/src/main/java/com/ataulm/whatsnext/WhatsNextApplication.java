@@ -23,7 +23,7 @@ public class WhatsNextApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        Toaster.Companion.init(this);
+        Toaster.init(this);
 
         whatsNextService = createWhatsNextService();
         navigator = createNavigator();

@@ -31,12 +31,12 @@ class FilmPresenter {
         displayer.attach(new FilmDisplayer.Callback() {
             @Override
             public void onClickMarkAsWatched() {
-                Toaster.Companion.display("on click mark as watched");
+                Toaster.display("on click mark as watched");
             }
 
             @Override
             public void onClickMarkAsNotWatched() {
-                Toaster.Companion.display("on click mark as not watched");
+                Toaster.display("on click mark as not watched");
             }
         });
 
