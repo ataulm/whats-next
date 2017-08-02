@@ -5,7 +5,7 @@ import android.util.Log;
 
 import com.ataulm.whatsnext.ErrorTrackingDisposableObserver;
 import com.ataulm.whatsnext.Film;
-import com.ataulm.whatsnext.Toaster;
+import com.ataulm.support.Toaster;
 import com.ataulm.whatsnext.WhatsNextService;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;

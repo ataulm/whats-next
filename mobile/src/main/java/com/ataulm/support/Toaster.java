@@ -1,4 +1,4 @@
-package com.ataulm.whatsnext;
+package com.ataulm.support;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -10,7 +10,7 @@ public final class Toaster {
     private static Toaster toaster;
 
     private final Context context;
-    
+
     private Toast toast;
 
     static void init(Context context) {

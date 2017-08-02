@@ -1,6 +1,6 @@
 package com.ataulm.whatsnext.api
 
-import com.ataulm.whatsnext.Clock
+import com.ataulm.support.Clock
 import com.ataulm.whatsnext.Token
 import java.util.concurrent.TimeUnit
 

@@ -1,6 +1,6 @@
 package com.ataulm.whatsnext.api;
 
-import com.ataulm.whatsnext.Clock;
+import com.ataulm.support.Clock;
 import com.ataulm.whatsnext.Film;
 import com.ataulm.whatsnext.FilmRelationship;
 import com.ataulm.whatsnext.FilmSummary;

@@ -1,6 +1,6 @@
 package com.ataulm.whatsnext.api;
 
-import com.ataulm.whatsnext.Clock;
+import com.ataulm.support.Clock;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;

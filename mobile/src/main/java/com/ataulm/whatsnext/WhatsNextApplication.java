@@ -2,6 +2,8 @@ package com.ataulm.whatsnext;
 
 import android.app.Application;
 
+import com.ataulm.support.Clock;
+import com.ataulm.support.Toaster;
 import com.ataulm.whatsnext.api.FilmRelationshipConverter;
 import com.ataulm.whatsnext.api.FilmSummaryConverter;
 import com.ataulm.whatsnext.api.Letterboxd;

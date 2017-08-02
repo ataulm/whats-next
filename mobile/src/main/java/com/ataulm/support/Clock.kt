@@ -1,4 +1,4 @@
-package com.ataulm.whatsnext
+package com.ataulm.support
 
 internal class Clock {
 
