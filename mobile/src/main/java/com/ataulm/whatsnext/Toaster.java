@@ -10,14 +10,24 @@ public final class Toaster {
     private static Toaster toaster;
 
     private final Context context;
+    
     private Toast toast;
 
     static void init(Context context) {
-        toaster = new Toaster(context.getApplicationContext());
+        if (toaster == null) {
+            toaster = new Toaster(context.getApplicationContext());
+        }
     }
 
     public static void display(String message) {
+        ensureInitialized();
         toaster.toast(message);
+    }
+
+    private static void ensureInitialized() {
+        if (toaster == null) {
+            throw new IllegalStateException("Toaster.init(Context) must be called once before use");
+        }
     }
 
     private Toaster(Context context) {
