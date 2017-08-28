@@ -21,7 +21,7 @@ class Toaster private constructor(private val context: Context) {
         private var toaster: Toaster? = null
 
         @JvmStatic
-        fun init(context: Context) {
+        fun create(context: Context) {
             if (toaster == null) {
                 toaster = Toaster(context.applicationContext)
             }
@@ -35,7 +35,7 @@ class Toaster private constructor(private val context: Context) {
 
         private fun ensureInitialized() {
             if (toaster == null) {
-                throw IllegalStateException("Toaster.init(Context) must be called once before use")
+                throw IllegalStateException("Toaster.create(Context) must be called once before use")
             }
         }
     }
