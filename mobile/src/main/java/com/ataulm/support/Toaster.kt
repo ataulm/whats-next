@@ -17,7 +17,7 @@ class Toaster private constructor(private val context: Context) {
 
     companion object {
 
-        @SuppressLint("StaticFieldLeak") // it's application context, and yep I'm gross, esta bien.
+        @SuppressLint("StaticFieldLeak") // it's application context, and yep I'm gross, está bien.
         private var toaster: Toaster? = null
 
         @JvmStatic
