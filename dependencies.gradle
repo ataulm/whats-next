@@ -12,7 +12,6 @@ ext {
 
     libraries = [
             build              : [
-                    androidApt     : 'com.neenbedankt.gradle.plugins:android-apt:1.8',
                     androidGradle  : 'com.android.tools.build:gradle:3.0.0-beta2',
                     buildProperties: 'com.novoda:gradle-build-properties-plugin:0.3',
                     fabric         : 'io.fabric.tools:gradle:1.22.1',
