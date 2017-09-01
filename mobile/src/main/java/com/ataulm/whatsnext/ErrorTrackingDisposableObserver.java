@@ -13,4 +13,9 @@ public abstract class ErrorTrackingDisposableObserver<T> extends DisposableObser
         Log.e("!!!", "onError", e);
         Crashlytics.logException(e);
     }
+
+    @Override
+    public void onComplete() {
+        Log.d("!!!", "onComplete");
+    }
 }

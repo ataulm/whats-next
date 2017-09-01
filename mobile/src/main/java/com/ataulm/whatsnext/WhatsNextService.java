@@ -21,6 +21,15 @@ public class WhatsNextService {
         this.clock = clock;
     }
 
+    public Observable<Token> login(final String username, final String password) {
+        return Observable.fromCallable(new Callable<Token>() {
+            @Override
+            public Token call() throws Exception {
+                return letterboxd.fetchAccessToken(username, password);
+            }
+        });
+    }
+
     public Observable<List<FilmSummary>> search(final String searchTerm) {
         return Observable.fromCallable(new Callable<List<FilmSummary>>() {
             @Override
@@ -49,10 +58,5 @@ public class WhatsNextService {
             tokensStore.store(token);
         }
         return token;
-    }
-
-    private static class FilmService {
-
-
     }
 }

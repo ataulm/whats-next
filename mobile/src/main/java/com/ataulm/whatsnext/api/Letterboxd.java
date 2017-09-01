@@ -32,7 +32,15 @@ public class Letterboxd {
     private final OkHttpClient okHttpClient;
     private final Gson gson;
 
-    public Letterboxd(String apiKey, String apiSecret, Clock clock, TokenConverter tokenConverter, FilmSummaryConverter filmSummaryConverter, FilmRelationshipConverter filmRelationshipConverter, OkHttpClient okHttpClient, Gson gson) {
+    public Letterboxd(String apiKey,
+                      String apiSecret,
+                      Clock clock,
+                      TokenConverter tokenConverter,
+                      FilmSummaryConverter filmSummaryConverter,
+                      FilmRelationshipConverter filmRelationshipConverter,
+                      OkHttpClient okHttpClient,
+                      Gson gson
+    ) {
         this.apiKey = apiKey;
         this.apiSecret = apiSecret;
         this.clock = clock;

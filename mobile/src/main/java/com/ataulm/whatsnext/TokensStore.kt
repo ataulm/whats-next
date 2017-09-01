@@ -31,6 +31,7 @@ internal class TokensStore private constructor(private val preferences: SharedPr
         @JvmStatic private val KEY_REFRESH_TOKEN_VALUE = "refresh.value"
         @JvmStatic private val KEY_ACCESS_TOKEN_EXPIRY = "access.expiry"
 
+        @JvmStatic
         fun create(context: Context): TokensStore {
             val preferences = context.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE)
             return TokensStore(preferences)

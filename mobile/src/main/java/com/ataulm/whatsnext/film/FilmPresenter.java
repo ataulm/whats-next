@@ -50,11 +50,6 @@ class FilmPresenter {
                                 Log.d("!!!", "onNext " + film.toString());
                                 displayer.display(film);
                             }
-
-                            @Override
-                            public void onComplete() {
-                                Log.d("!!!", "onComplete");
-                            }
                         }
                 );
     }

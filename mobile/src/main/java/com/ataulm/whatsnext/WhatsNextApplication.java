@@ -19,13 +19,18 @@ public class WhatsNextApplication extends Application {
 
     private WhatsNextService whatsNextService;
     private Navigator navigator;
+    private Letterboxd letterboxd;
 
     @Override
     public void onCreate() {
         super.onCreate();
         Toaster.create(this);
 
-        whatsNextService = createWhatsNextService();
+        Clock clock = new Clock();
+        TokenConverter tokenConverter = new TokenConverter(clock);
+        letterboxd = createLetterboxd(clock, tokenConverter);
+        TokensStore tokensStore = TokensStore.Companion.create(this);
+        whatsNextService = createWhatsNextService(clock, letterboxd, tokensStore);
         navigator = createNavigator();
 
         initializeFabric();
@@ -35,6 +40,10 @@ public class WhatsNextApplication extends Application {
         CrashlyticsCore core = new CrashlyticsCore.Builder().build();
         Crashlytics crashlytics = new Crashlytics.Builder().core(core).build();
         Fabric.with(this, crashlytics);
+    }
+
+    public Letterboxd letterboxd() {
+        return letterboxd;
     }
 
     public WhatsNextService whatsNextService() {
@@ -49,11 +58,12 @@ public class WhatsNextApplication extends Application {
         return new Navigator(this);
     }
 
-    private WhatsNextService createWhatsNextService() {
-        Clock clock = new Clock();
-        TokenConverter tokenConverter = new TokenConverter(clock);
-        TokensStore tokensStore = TokensStore.Companion.create(this);
-        Letterboxd letterboxd = new Letterboxd(
+    private WhatsNextService createWhatsNextService(Clock clock, Letterboxd letterboxd, TokensStore tokensStore) {
+        return new WhatsNextService(letterboxd, tokensStore, clock);
+    }
+
+    private Letterboxd createLetterboxd(Clock clock, TokenConverter tokenConverter) {
+        return new Letterboxd(
                 BuildConfig.LETTERBOXD_KEY,
                 BuildConfig.LETTERBOXD_SECRET,
                 clock,
@@ -63,7 +73,5 @@ public class WhatsNextApplication extends Application {
                 new OkHttpClient(),
                 new Gson()
         );
-        return new WhatsNextService(letterboxd, tokensStore, clock);
     }
-
 }
