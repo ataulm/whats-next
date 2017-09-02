@@ -2,7 +2,6 @@ package com.ataulm.whatsnext.search;
 
 import android.support.annotation.Nullable;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.ataulm.support.Clock;
 import com.ataulm.whatsnext.ErrorTrackingDisposableObserver;

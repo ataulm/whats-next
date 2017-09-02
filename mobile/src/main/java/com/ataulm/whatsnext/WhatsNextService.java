@@ -1,6 +1,8 @@
 package com.ataulm.whatsnext;
 
 import com.ataulm.support.Clock;
+import com.ataulm.whatsnext.api.AuthenticationError;
+import com.ataulm.whatsnext.api.AuthenticationError.Type;
 import com.ataulm.whatsnext.api.Letterboxd;
 
 import java.io.IOException;
@@ -48,16 +50,26 @@ public class WhatsNextService {
         });
     }
 
-    private Token getToken() throws IOException {
+    private Token getToken() {
         Token token = tokensStore.getToken();
+
         if (token == null) {
-            token = letterboxd.fetchAccessToken(BuildConfig.LETTERBOXD_USERNAME, BuildConfig.LETTERBOXD_PASSWORD);
-            tokensStore.store(token);
-        } else if (token.getExpiryMillisSinceEpoch() < clock.getCurrentTimeMillis()) {
-            // TODO: if refreshing the TokenFails, this error needs to bubble up so we can get user to sign in again
-            token = letterboxd.refreshAccessToken(token.getRefreshToken());
+            throw new AuthenticationError(Type.REQUIRES_USER_SIGN_IN);
+        }
+
+        if (token.getExpiryMillisSinceEpoch() < clock.getCurrentTimeMillis()) {
+            token = refreshToken(token);
             tokensStore.store(token);
         }
+
         return token;
+    }
+
+    private Token refreshToken(Token token) {
+        try {
+            return letterboxd.refreshAccessToken(token.getRefreshToken());
+        } catch (IOException e) {
+            throw new AuthenticationError(e, Type.EXCHANGING_REFRESH_TOKEN_FOR_FRESH_TOKEN);
+        }
     }
 }
