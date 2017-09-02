@@ -54,6 +54,7 @@ public class WhatsNextService {
             token = letterboxd.fetchAccessToken(BuildConfig.LETTERBOXD_USERNAME, BuildConfig.LETTERBOXD_PASSWORD);
             tokensStore.store(token);
         } else if (token.getExpiryMillisSinceEpoch() < clock.getCurrentTimeMillis()) {
+            // TODO: if refreshing the TokenFails, this error needs to bubble up so we can get user to sign in again
             token = letterboxd.refreshAccessToken(token.getRefreshToken());
             tokensStore.store(token);
         }

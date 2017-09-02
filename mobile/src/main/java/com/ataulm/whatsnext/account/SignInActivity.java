@@ -1,69 +1,59 @@
 package com.ataulm.whatsnext.account;
 
-import android.accounts.Account;
-import android.accounts.AccountManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.ataulm.whatsnext.BaseActivity;
 import com.ataulm.whatsnext.BuildConfig;
-import com.ataulm.whatsnext.ErrorTrackingDisposableObserver;
 import com.ataulm.whatsnext.R;
 import com.ataulm.whatsnext.Token;
+import com.ataulm.whatsnext.TokensStore;
 
-import butterknife.BindView;
 import butterknife.ButterKnife;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
 
 public class SignInActivity extends BaseActivity {
 
-    @BindView(R.id.sign_in_edittext_username)
-    EditText usernameEditText;
-
-    @BindView(R.id.sign_in_edittext_password)
-    EditText passwordEditText;
-
-    @BindView(R.id.sign_in_button)
-    Button signInButton;
+    private SignInPresenter presenter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
-        ButterKnife.bind(this);
 
+        EditText usernameEditText = ButterKnife.findById(this, R.id.sign_in_edittext_username);
+        EditText passwordEditText = ButterKnife.findById(this, R.id.sign_in_edittext_password);
+        TextView infoTextView = ButterKnife.findById(this, R.id.sign_in_textview_info);
+        Button signInButton = ButterKnife.findById(this, R.id.sign_in_button);
+
+        SignInScreen screen = new SignInScreen(usernameEditText, passwordEditText, signInButton, infoTextView);
         if (BuildConfig.DEBUG) {
-            usernameEditText.setText(BuildConfig.LETTERBOXD_USERNAME);
-            passwordEditText.setText(BuildConfig.LETTERBOXD_PASSWORD);
+            screen.setCredentials(BuildConfig.LETTERBOXD_USERNAME, BuildConfig.LETTERBOXD_PASSWORD);
         }
 
-        signInButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final String username = usernameEditText.getText().toString();
-                String password = passwordEditText.getText().toString();
-                whatsNextService().login(username, password)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribeWith(new ErrorTrackingDisposableObserver<Token>() {
-                            @Override
-                            public void onNext(Token token) {
-                                Account account = new Account(username, getString(R.string.account_type));
-                                AccountManager.get(getApplicationContext()).addAccountExplicitly(account, null, Bundle.EMPTY);
-                                // TODO: next activity, finish this one
-                            }
+        presenter = new SignInPresenter(whatsNextService(), screen, callback);
+    }
 
-                            @Override
-                            public void onError(Throwable e) {
-                                super.onError(e);
-                                // TODO: display error and stop loading
-                            }
-                        });
-            }
-        });
+    private final SignInPresenter.Callback callback = new SignInPresenter.Callback() {
+        @Override
+        public void onTokenReceieved(String username, Token token) {
+            TokensStore tokensStore = TokensStore.create(SignInActivity.this);
+            tokensStore.store(token);
+            finish();
+        }
+    };
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        presenter.startPresenting();
+    }
+
+    @Override
+    protected void onStop() {
+        presenter.stopPresenting();
+        super.onStop();
     }
 }

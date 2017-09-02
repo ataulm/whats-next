@@ -13,6 +13,14 @@ internal class TokensStore private constructor(private val preferences: SharedPr
                 .apply()
     }
 
+    fun clear() {
+        preferences.edit()
+                .remove(KEY_ACCESS_TOKEN_VALUE)
+                .remove(KEY_REFRESH_TOKEN_VALUE)
+                .remove(KEY_ACCESS_TOKEN_EXPIRY)
+                .apply()
+    }
+
     val token: Token?
         get() {
             if (preferences.contains(KEY_ACCESS_TOKEN_VALUE) && preferences.contains(KEY_ACCESS_TOKEN_EXPIRY)) {

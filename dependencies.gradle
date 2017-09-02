@@ -3,10 +3,10 @@ ext {
             androidSdk: [
                     buildTools: '26.0.0',
                     compile   : 25,
-                    min       : 21,
+                    min       : 23,
                     target    : 25
             ],
-            kotlin    : '1.1.3',
+            kotlin    : '1.1.4-3',
             support   : '25.4.0'
     ]
 

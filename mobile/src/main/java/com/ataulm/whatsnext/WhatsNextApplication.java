@@ -20,13 +20,14 @@ public class WhatsNextApplication extends Application {
     private WhatsNextService whatsNextService;
     private Navigator navigator;
     private Letterboxd letterboxd;
+    private Clock clock;
 
     @Override
     public void onCreate() {
         super.onCreate();
         Toaster.create(this);
 
-        Clock clock = new Clock();
+        clock = new Clock();
         TokenConverter tokenConverter = new TokenConverter(clock);
         letterboxd = createLetterboxd(clock, tokenConverter);
         TokensStore tokensStore = TokensStore.Companion.create(this);
@@ -52,6 +53,10 @@ public class WhatsNextApplication extends Application {
 
     public Navigator navigator() {
         return navigator;
+    }
+
+    public Clock clock() {
+        return clock;
     }
 
     private Navigator createNavigator() {

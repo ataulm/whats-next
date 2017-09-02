@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.ataulm.whatsnext.FilmSummary;
 import com.ataulm.whatsnext.FilmSummariesAdapter;
@@ -18,14 +19,16 @@ class SearchDisplayer {
     private final EditText searchEditText;
     private final Button searchButton;
     private final RecyclerView resultsRecyclerView;
+    private final Button signInButton;
 
     @Nullable
     private Callback callback;
 
-    SearchDisplayer(EditText searchEditText, Button searchButton, RecyclerView resultsRecyclerView) {
+    SearchDisplayer(EditText searchEditText, Button searchButton, RecyclerView resultsRecyclerView, Button signInButton) {
         this.searchEditText = searchEditText;
         this.searchButton = searchButton;
         this.resultsRecyclerView = resultsRecyclerView;
+        this.signInButton = signInButton;
     }
 
     void attach(final Callback callback) {
@@ -40,11 +43,19 @@ class SearchDisplayer {
                 callback.onSearch(searchTerm);
             }
         });
+
+        signInButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                callback.onClickSignIn();
+            }
+        });
     }
 
     void detachCallback() {
-        this.callback = null;
         searchButton.setOnClickListener(null);
+        signInButton.setOnClickListener(null);
+        this.callback = null;
     }
 
     void display(List<FilmSummary> filmSummaries) {
@@ -71,10 +82,22 @@ class SearchDisplayer {
         }
     };
 
+    private Toast toast;
+
+    void toastAlreadySignedIn() {
+        if (toast != null) {
+            toast.cancel();
+        }
+        toast = Toast.makeText(resultsRecyclerView.getContext(), "already signed in!", Toast.LENGTH_SHORT);
+        toast.show();
+    }
+
     interface Callback {
 
         void onSearch(String searchTerm);
 
         void onClick(FilmSummary filmSummary);
+
+        void onClickSignIn();
     }
 }
