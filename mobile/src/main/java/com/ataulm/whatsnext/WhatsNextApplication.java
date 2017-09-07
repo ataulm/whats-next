@@ -4,9 +4,11 @@ import android.app.Application;
 
 import com.ataulm.support.Clock;
 import com.ataulm.support.Toaster;
+import com.ataulm.whatsnext.api.FakeLetterboxd;
 import com.ataulm.whatsnext.api.FilmRelationshipConverter;
 import com.ataulm.whatsnext.api.FilmSummaryConverter;
 import com.ataulm.whatsnext.api.Letterboxd;
+import com.ataulm.whatsnext.api.LetterboxdImpl;
 import com.ataulm.whatsnext.api.TokenConverter;
 import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.core.CrashlyticsCore;
@@ -68,7 +70,11 @@ public class WhatsNextApplication extends Application {
     }
 
     private Letterboxd createLetterboxd(Clock clock, TokenConverter tokenConverter) {
-        return new Letterboxd(
+        if (BuildConfig.OFFLINE) {
+            return new FakeLetterboxd();
+        }
+
+        return new LetterboxdImpl(
                 BuildConfig.LETTERBOXD_KEY,
                 BuildConfig.LETTERBOXD_SECRET,
                 clock,

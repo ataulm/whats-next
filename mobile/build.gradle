@@ -41,6 +41,7 @@ android {
         buildConfigString 'LETTERBOXD_SECRET', buildProperties.letterboxd['apiSecret'].string
         buildConfigString 'LETTERBOXD_USERNAME', buildProperties.letterboxd['username'].or('').string
         buildConfigString 'LETTERBOXD_PASSWORD', buildProperties.letterboxd['password'].or('').string
+        buildConfigBoolean 'OFFLINE', true
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }

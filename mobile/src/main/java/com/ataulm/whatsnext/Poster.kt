@@ -1,13 +1,9 @@
 package com.ataulm.whatsnext
 
-data class Poster(val images: List<Image>) {
+data class Poster(private val images: List<Image>) {
 
     fun forWidth(width: Int): Image? {
-        if (images.isNotEmpty()) {
-            // TODO: this should calculate the best image that fits the prescribed width
-            return images.get(0)
-        } else {
-            return null
-        }
+        // TODO: this should calculate the best image that fits the prescribed width
+        return if (images.isNotEmpty()) images[0] else null
     }
 }

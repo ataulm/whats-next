@@ -27,8 +27,9 @@ internal class FilmDisplayer(
     fun display(film: Film) {
         titleTextView.text = film.summary.name
         watchStatusTextView.text = if (film.relationship.watched) "watched" else "not watched"
+
         Glide.with(posterImageView.context)
-                .load(film.summary.poster.forWidth(posterImageView.width)!!.url)
+                .load(film.summary.poster.forWidth(posterImageView.width)?.url)
                 .into(posterImageView)
     }
 
