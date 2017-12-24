@@ -8,6 +8,11 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
+        <ImageView
+            android:id="@+id/film_details_backdrop"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
         <com.ataulm.whatsnext.film.FilmDetailsInfoWidget
             android:id="@+id/film_details_info"
             android:layout_width="match_parent"

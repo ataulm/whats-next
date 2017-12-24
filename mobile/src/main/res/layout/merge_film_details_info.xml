@@ -31,7 +31,7 @@
 
     <ImageView
         android:id="@+id/film_details_info_image_poster"
-        android:layout_width="450dp"
+        android:layout_width="96dp"
         android:layout_height="wrap_content" />
 
 </merge>

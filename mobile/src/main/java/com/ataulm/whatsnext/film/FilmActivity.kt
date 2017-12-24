@@ -21,12 +21,13 @@ class FilmActivity : BaseActivity() {
 
         setContentView(R.layout.activity_film)
 
+        val backdropImageView = ButterKnife.findById<ImageView>(this, R.id.film_details_backdrop)
         val filmDetailsInfoWidget = ButterKnife.findById<FilmDetailsInfoWidget>(this, R.id.film_details_info)
         val watchStatusTextView = ButterKnife.findById<TextView>(this, R.id.film_text_watch_status)
         val markAsWatchedButton = ButterKnife.findById<Button>(this, R.id.film_button_mark_watched)
         val markAsNotWatchedButton = ButterKnife.findById<Button>(this, R.id.film_button_mark_not_watched)
 
-        val displayer = FilmDisplayer(filmDetailsInfoWidget, watchStatusTextView, markAsWatchedButton, markAsNotWatchedButton)
+        val displayer = FilmDisplayer(backdropImageView, filmDetailsInfoWidget, watchStatusTextView, markAsWatchedButton, markAsNotWatchedButton)
         val filmId = intent.getStringExtra(EXTRA_FILM_ID)
         presenter = FilmPresenter(whatsNextService(), displayer, filmId)
     }
