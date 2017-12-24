@@ -1,5 +1,7 @@
 package com.ataulm.whatsnext.api;
 
+import android.support.annotation.Nullable;
+
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
@@ -9,17 +11,21 @@ class ApiFilmSummary {
     @SerializedName("name")
     String name;
 
+    @Nullable
     @SerializedName("tagline")
     String tagline;
 
+    @Nullable
     @SerializedName("description")
     String description;
 
+    @Nullable
     @SerializedName("releaseYear")
-    int releaseYear;
+    Integer releaseYear;
 
+    @Nullable
     @SerializedName("runTime")
-    int runTimeMinutes;
+    Integer runtimeMinutes;
 
     @SerializedName("poster")
     ApiImage poster;
