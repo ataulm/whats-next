@@ -40,6 +40,6 @@ public class FilmSummariesAdapter extends RecyclerView.Adapter<FilmSummaryViewHo
 
     @Override
     public long getItemId(int position) {
-        return filmSummaries.get(position).getId().hashCode();
+        return filmSummaries.get(position).getIds().getLetterboxd().hashCode();
     }
 }

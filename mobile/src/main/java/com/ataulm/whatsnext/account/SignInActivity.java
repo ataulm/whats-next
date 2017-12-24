@@ -34,6 +34,7 @@ public class SignInActivity extends BaseActivity {
         }
 
         presenter = new SignInPresenter(whatsNextService(), screen, callback);
+
     }
 
     private final SignInPresenter.Callback callback = new SignInPresenter.Callback() {

@@ -61,7 +61,7 @@ class SearchPresenter {
 
             @Override
             public void onClick(FilmSummary filmSummary) {
-                navigator.navigateToFilm(filmSummary.getId());
+                navigator.navigateToFilm(filmSummary.getIds().getLetterboxd());
             }
 
             @Override

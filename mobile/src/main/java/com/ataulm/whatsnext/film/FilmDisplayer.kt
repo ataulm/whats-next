@@ -15,8 +15,12 @@ internal class FilmDisplayer(
 ) {
 
     fun attach(callback: Callback) {
-        markAsWatchedButton.setOnClickListener { callback.onClickMarkAsWatched() }
-        markAsNotWatchedButton.setOnClickListener { callback.onClickMarkAsNotWatched() }
+        markAsWatchedButton.setOnClickListener {
+            callback.onClickMarkAsWatched()
+        }
+        markAsNotWatchedButton.setOnClickListener {
+            callback.onClickMarkAsNotWatched()
+        }
     }
 
     fun detachCallback() {
@@ -29,7 +33,7 @@ internal class FilmDisplayer(
         watchStatusTextView.text = if (film.relationship.watched) "watched" else "not watched"
 
         Glide.with(posterImageView.context)
-                .load(film.summary.poster.forWidth(posterImageView.width)?.url)
+                .load(film.summary.poster.bestFor(posterImageView.width, posterImageView.height)?.url)
                 .into(posterImageView)
     }
 

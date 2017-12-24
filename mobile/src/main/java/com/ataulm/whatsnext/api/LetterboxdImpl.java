@@ -98,7 +98,10 @@ public class LetterboxdImpl implements Letterboxd {
     public Film film(String letterboxdId, String accessToken) throws IOException {
         FilmSummary filmSummary = filmSummary(letterboxdId);
         FilmRelationship filmRelationship = filmRelationship(letterboxdId, accessToken);
-        return new Film(filmSummary, filmRelationship);
+        return new Film(
+                filmSummary,
+                filmRelationship
+        );
     }
 
     private FilmSummary filmSummary(String letterboxdId) throws IOException {
