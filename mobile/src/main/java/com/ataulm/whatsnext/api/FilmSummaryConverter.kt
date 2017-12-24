@@ -24,8 +24,8 @@ internal class FilmSummaryConverter {
 
     private fun ids(apiFilmSummary: ApiFilmSummary): Ids {
         val letterboxd = apiFilmSummary.links.first { link -> link.type == "letterboxd" }.id
-        val imdb = apiFilmSummary.links.firstOrNull { link -> link.type == "imdb" }?.id
-        val tmdb = apiFilmSummary.links.firstOrNull { link -> link.type == "tmdb" }?.id
+        val imdb = apiFilmSummary.links.find { link -> link.type == "imdb" }?.id
+        val tmdb = apiFilmSummary.links.find { link -> link.type == "tmdb" }?.id
         return Ids(letterboxd, imdb, tmdb)
     }
 
