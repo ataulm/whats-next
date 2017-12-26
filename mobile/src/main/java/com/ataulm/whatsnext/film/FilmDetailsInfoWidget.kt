@@ -9,7 +9,6 @@ import android.widget.TextView
 import butterknife.BindView
 import butterknife.ButterKnife
 import com.ataulm.whatsnext.FilmSummary
-import com.ataulm.whatsnext.Person
 import com.ataulm.whatsnext.R
 import com.bumptech.glide.Glide
 
@@ -59,16 +58,12 @@ class FilmDetailsInfoWidget constructor(context: Context, attrs: AttributeSet) :
 
 
     private fun releaseYearText(filmSummary: FilmSummary): String? {
-        director(filmSummary)?.name?.let { directorName ->
+        filmSummary.director()?.name?.let { directorName ->
             filmSummary.year?.let { year ->
                 return resources.getString(R.string.film_details_release_year_director_format, year, directorName)
             }
             return directorName
         }
         return filmSummary.year
-    }
-
-    private fun director(filmSummary: FilmSummary): Person? {
-        return filmSummary.crew.find { contributor -> contributor.type == "Director" }?.person
     }
 }

@@ -11,4 +11,11 @@ data class FilmSummary(
         val backdrop: Images,
         val cast: List<Actor>,
         val crew: List<Contributor>
-)
+) {
+
+    fun director(): Person? {
+        return crew.find { contributor -> contributor.type == "Director" }?.person
+    }
+}
+
+
