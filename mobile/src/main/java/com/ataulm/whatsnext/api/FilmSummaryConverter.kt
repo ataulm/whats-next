@@ -1,9 +1,6 @@
 package com.ataulm.whatsnext.api
 
-import com.ataulm.whatsnext.FilmSummary
-import com.ataulm.whatsnext.Ids
-import com.ataulm.whatsnext.Image
-import com.ataulm.whatsnext.Images
+import com.ataulm.whatsnext.*
 
 internal class FilmSummaryConverter {
 
@@ -17,8 +14,8 @@ internal class FilmSummaryConverter {
                 apiFilmSummary.description,
                 images(apiFilmSummary.poster),
                 images(apiFilmSummary.backdrop),
-                emptyList(),
-                emptyList()
+                cast(apiFilmSummary),
+                crew(apiFilmSummary)
         )
     }
 
@@ -34,5 +31,15 @@ internal class FilmSummaryConverter {
             return Images(emptyList())
         }
         return Images(apiImage.sizes.map { Image(it.width, it.height, it.url) })
+    }
+
+    private fun cast(apiFilmSummary: ApiFilmSummary): List<Actor> {
+        // TODO: parse the actors
+        return emptyList()
+    }
+
+    private fun crew(apiFilmSummary: ApiFilmSummary): List<Contributor> {
+        // TODO: parse the crew
+        return emptyList()
     }
 }

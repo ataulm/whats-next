@@ -27,12 +27,18 @@ class ApiFilmSummary {
     @SerializedName("runTime")
     Integer runtimeMinutes;
 
+    @Nullable
     @SerializedName("poster")
     ApiImage poster;
 
+    @Nullable
     @SerializedName("backdrop")
     ApiImage backdrop;
 
     @SerializedName("links")
     List<ApiLink> links;
+
+    @Nullable
+    @SerializedName("contributions")
+    List<ApiContribution> contributions;
 }
