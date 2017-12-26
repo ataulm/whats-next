@@ -16,7 +16,7 @@ import com.bumptech.glide.Glide
 class FilmDetailsInfoWidget constructor(context: Context, attrs: AttributeSet) : ConstraintLayout(context, attrs) {
 
     @BindView(R.id.film_details_info_text_title) lateinit var titleTextView: TextView
-    @BindView(R.id.film_details_info_text_release_year_director) lateinit var releaseYearDirectorTextView: TextView
+    @BindView(R.id.film_details_info_text_release_year_director) lateinit var releaseYearTextView: TextView
     @BindView(R.id.film_details_info_text_runtime) lateinit var runtimeTextView: TextView
     @BindView(R.id.film_details_info_image_poster) lateinit var posterImageView: ImageView
     @BindView(R.id.film_details_info_text_tagline) lateinit var taglineTextView: TextView
@@ -31,24 +31,41 @@ class FilmDetailsInfoWidget constructor(context: Context, attrs: AttributeSet) :
     fun bind(filmSummary: FilmSummary) {
         titleTextView.text = filmSummary.name
 
-        releaseYearDirectorTextView.text = releaseYearDirectorText(filmSummary)
-        runtimeTextView.text = filmSummary.runtimeMinutes.toString()
-        taglineTextView.text = filmSummary.tagline
-        descriptionTextView.text = filmSummary.description
+        releaseYearText(filmSummary)?.let {
+            releaseYearTextView.text = it
+            releaseYearTextView.visibility = VISIBLE
+        } ?: run {
+            releaseYearTextView.visibility = GONE
+        }
+
+        filmSummary.tagline?.let {
+            taglineTextView.text = it
+            taglineTextView.visibility = VISIBLE
+        } ?: run {
+            taglineTextView.visibility = GONE
+        }
+
+        filmSummary.description?.let {
+            descriptionTextView.text = it
+            descriptionTextView.visibility = VISIBLE
+        } ?: run {
+            descriptionTextView.visibility = GONE
+        }
 
         Glide.with(posterImageView.context)
                 .load(filmSummary.poster.bestFor(posterImageView.width)?.url)
                 .into(posterImageView)
     }
 
-    private fun releaseYearDirectorText(filmSummary: FilmSummary): String {
-        val director = director(filmSummary)
-        return if (director == null) {
-            filmSummary.year.toString()
-        } else {
-            resources.getString(R.string.film_details_release_year_director_format,
-                    filmSummary.year.toString(), director.name)
+
+    private fun releaseYearText(filmSummary: FilmSummary): String? {
+        director(filmSummary)?.name?.let { directorName ->
+            filmSummary.year?.let { year ->
+                return resources.getString(R.string.film_details_release_year_director_format, year, directorName)
+            }
+            return directorName
         }
+        return filmSummary.year
     }
 
     private fun director(filmSummary: FilmSummary): Person? {
