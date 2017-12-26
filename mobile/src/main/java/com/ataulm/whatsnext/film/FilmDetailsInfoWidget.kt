@@ -9,6 +9,7 @@ import android.widget.TextView
 import butterknife.BindView
 import butterknife.ButterKnife
 import com.ataulm.whatsnext.FilmSummary
+import com.ataulm.whatsnext.Person
 import com.ataulm.whatsnext.R
 import com.bumptech.glide.Glide
 
@@ -29,7 +30,8 @@ class FilmDetailsInfoWidget constructor(context: Context, attrs: AttributeSet) :
 
     fun bind(filmSummary: FilmSummary) {
         titleTextView.text = filmSummary.name
-        releaseYearDirectorTextView.text = filmSummary.year + " | Director" // TODO get real director and use resource string
+
+        releaseYearDirectorTextView.text = releaseYearDirectorText(filmSummary)
         runtimeTextView.text = filmSummary.runtimeMinutes.toString()
         taglineTextView.text = filmSummary.tagline
         descriptionTextView.text = filmSummary.description
@@ -37,5 +39,19 @@ class FilmDetailsInfoWidget constructor(context: Context, attrs: AttributeSet) :
         Glide.with(posterImageView.context)
                 .load(filmSummary.poster.bestFor(posterImageView.width)?.url)
                 .into(posterImageView)
+    }
+
+    private fun releaseYearDirectorText(filmSummary: FilmSummary): String {
+        val director = director(filmSummary)
+        return if (director == null) {
+            filmSummary.year.toString()
+        } else {
+            resources.getString(R.string.film_details_release_year_director_format,
+                    filmSummary.year.toString(), director.name)
+        }
+    }
+
+    private fun director(filmSummary: FilmSummary): Person? {
+        return filmSummary.crew.find { contributor -> contributor.type == "Director" }?.person
     }
 }
