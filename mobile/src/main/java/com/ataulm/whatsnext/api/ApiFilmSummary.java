@@ -39,6 +39,10 @@ class ApiFilmSummary {
     List<ApiLink> links;
 
     @Nullable
+    @SerializedName("genres")
+    List<ApiGenre> genres;
+
+    @Nullable
     @SerializedName("contributions")
     List<ApiContribution> contributions;
 }

@@ -19,6 +19,8 @@ class FilmDetailsInfoWidget constructor(context: Context, attrs: AttributeSet) :
     @BindView(R.id.film_details_info_text_release_year_director) lateinit var releaseYearTextView: TextView
     @BindView(R.id.film_details_info_text_label_duration) lateinit var durationLabelTextView: TextView
     @BindView(R.id.film_details_info_text_duration) lateinit var durationTextView: TextView
+    @BindView(R.id.film_details_info_text_label_genres) lateinit var genresLabelTextView: TextView
+    @BindView(R.id.film_details_info_text_genres) lateinit var genresTextView: TextView
     @BindView(R.id.film_details_info_image_poster) lateinit var posterImageView: ImageView
     @BindView(R.id.film_details_info_text_tagline) lateinit var taglineTextView: TextView
     @BindView(R.id.film_details_info_text_description) lateinit var descriptionTextView: TextView
@@ -62,12 +64,21 @@ class FilmDetailsInfoWidget constructor(context: Context, attrs: AttributeSet) :
             durationLabelTextView.visibility = GONE
         }
 
+        genresText(filmSummary)?.let {
+            genresTextView.text = it
+            genresTextView.visibility = VISIBLE
+            genresLabelTextView.visibility = VISIBLE
+        } ?: run {
+            genresTextView.visibility = GONE
+            genresLabelTextView.visibility = GONE
+        }
+
         Glide.with(posterImageView.context)
                 .load(filmSummary.poster.bestFor(posterImageView.width)?.url)
                 .into(posterImageView)
     }
 
-
+    // TODO: this should be ready as `String?` in a viewmodel
     private fun releaseYearText(filmSummary: FilmSummary): String? {
         filmSummary.director()?.name?.let { directorName ->
             filmSummary.year?.let { year ->
@@ -78,6 +89,7 @@ class FilmDetailsInfoWidget constructor(context: Context, attrs: AttributeSet) :
         return filmSummary.year
     }
 
+    // TODO: this should be ready as `String?` in a viewmodel
     private fun durationText(filmSummary: FilmSummary): String? {
         filmSummary.runtimeMinutes?.let {
             return if (TimeUnit.MINUTES.toHours(it.toLong()) > 0) {
@@ -89,5 +101,14 @@ class FilmDetailsInfoWidget constructor(context: Context, attrs: AttributeSet) :
             }
         }
         return null
+    }
+
+    // TODO: this should be ready as `String?` in a viewmodel
+    private fun genresText(filmSummary: FilmSummary): String? {
+        return if (filmSummary.genres.isNotEmpty()) {
+            filmSummary.genres.joinToString(", ")
+        } else {
+            null
+        }
     }
 }

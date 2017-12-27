@@ -58,6 +58,7 @@ class FakeLetterboxd : Letterboxd {
             "In the small town of Rockwell, Maine in October 1957, a giant metal machine befriends a nine-year-old boy and ultimately finds its humanity by unselfishly saving people from their own fears and prejudices.",
             ironGiantPoster(),
             ironGiantBackdrop(),
+            ironGiantGenres(),
             ironGiantCast(),
             ironGiantCrew()
     )
@@ -82,6 +83,10 @@ class FakeLetterboxd : Letterboxd {
                     Image(1200, 675, "https://a.ltrbxd.com/resized/sm/upload/xq/b9/aq/52/the-iron-giant-1200-1200-675-675-crop-000000.jpg?k=efb0ae3ec5")
             )
     )
+
+    private fun ironGiantGenres(): List<String> {
+        return listOf("Family", "Animation", "Science Fiction", "Fantasy", "Adventure")
+    }
 
     private fun ironGiantCast() = listOf(
             Actor("Hogarth Hughes (voice)", Person("6uzf", "Eli Marienthal")),

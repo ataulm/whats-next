@@ -14,6 +14,7 @@ internal class FilmSummaryConverter {
                 apiFilmSummary.description,
                 images(apiFilmSummary.poster),
                 images(apiFilmSummary.backdrop),
+                genres(apiFilmSummary),
                 cast(apiFilmSummary),
                 crew(apiFilmSummary)
         )
@@ -31,6 +32,13 @@ internal class FilmSummaryConverter {
             return Images(emptyList())
         }
         return Images(apiImage.sizes.map { Image(it.width, it.height, it.url) })
+    }
+
+    private fun genres(apiFilmSummary: ApiFilmSummary): List<String> {
+        apiFilmSummary.genres?.let {
+            return it.map { apiGenre -> apiGenre.name }
+        }
+        return emptyList()
     }
 
     private fun cast(apiFilmSummary: ApiFilmSummary): List<Actor> {
