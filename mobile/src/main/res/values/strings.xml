@@ -4,5 +4,7 @@
   <string name="genres">Genres</string>
   <string name="minutes_format">%1$smin</string>
   <string name="hours_minutes_format">%1$shr %2$smin</string>
+  <string name="cast">Cast</string>
+  <string name="crew">Crew</string>
 
 </resources>

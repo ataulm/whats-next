@@ -42,12 +42,21 @@ internal class FilmSummaryConverter {
     }
 
     private fun cast(apiFilmSummary: ApiFilmSummary): List<Actor> {
-        // TODO: parse the actors
-        return emptyList()
+        return apiFilmSummary.contributions
+                ?.filter { it.type == "Actor" }
+                ?.flatMap { it.contributors }
+                ?.map { Actor(it.characterName, Person(it.id, it.name)) }
+                .orEmpty()
     }
 
     private fun crew(apiFilmSummary: ApiFilmSummary): List<Contributor> {
-        // TODO: parse the crew
-        return emptyList()
+        return apiFilmSummary.contributions
+                ?.filterNot { it.type == "Actor" }
+                ?.flatMap { contributors(it.type, it.contributors) }
+                .orEmpty()
+    }
+
+    private fun contributors(type: String, apiContributors: List<ApiContributor>): List<Contributor> {
+        return apiContributors.map { Contributor(type, Person(it.id, it.name)) }
     }
 }

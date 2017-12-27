@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:layout_height="wrap_content"
+    tools:layout_width="match_parent"
+    tools:orientation="vertical"
+    tools:padding="8dp"
+    tools:parentTag="android.widget.LinearLayout">
+
+    <TextView
+        android:id="@+id/people_widget_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="Cast" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/people_widget_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+</merge>

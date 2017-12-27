@@ -1,0 +1,7 @@
+<resources>
+
+    <declare-styleable name="PeopleWidget">
+        <attr name="label" format="string" />
+    </declare-styleable>
+
+</resources>
