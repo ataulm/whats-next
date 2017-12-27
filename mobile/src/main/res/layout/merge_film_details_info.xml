@@ -70,7 +70,7 @@
         app:layout_constraintTop_toBottomOf="@+id/film_details_info_text_description" />
 
     <TextView
-        android:id="@+id/film_details_info_text_runtime"
+        android:id="@+id/film_details_info_text_duration"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -84,20 +84,22 @@
         android:id="@+id/film_details_info_text_label_genres"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:text="@string/film_details_label_genres"
-        app:layout_constraintBaseline_toBaselineOf="@+id/film_details_info_text_label_duration"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/film_details_info_text_label_duration" />
+        app:layout_constraintStart_toEndOf="@+id/film_details_info_text_label_duration"
+        app:layout_constraintTop_toBottomOf="@+id/film_details_info_text_description" />
 
     <TextView
         android:id="@+id/film_details_info_text_genres"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintBaseline_toBaselineOf="@+id/film_details_info_text_runtime"
+        android:layout_marginTop="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/film_details_info_text_runtime"
+        app:layout_constraintStart_toEndOf="@+id/film_details_info_text_duration"
+        app:layout_constraintTop_toBottomOf="@+id/film_details_info_text_label_genres"
         tools:text="Family, Animation, Science Fiction, Fantasy, Adventure" />
 
 </merge>

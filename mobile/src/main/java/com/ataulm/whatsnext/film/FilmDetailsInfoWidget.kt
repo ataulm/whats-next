@@ -11,12 +11,14 @@ import butterknife.ButterKnife
 import com.ataulm.whatsnext.FilmSummary
 import com.ataulm.whatsnext.R
 import com.bumptech.glide.Glide
+import java.util.concurrent.TimeUnit
 
 class FilmDetailsInfoWidget constructor(context: Context, attrs: AttributeSet) : ConstraintLayout(context, attrs) {
 
     @BindView(R.id.film_details_info_text_title) lateinit var titleTextView: TextView
     @BindView(R.id.film_details_info_text_release_year_director) lateinit var releaseYearTextView: TextView
-    @BindView(R.id.film_details_info_text_runtime) lateinit var runtimeTextView: TextView
+    @BindView(R.id.film_details_info_text_label_duration) lateinit var durationLabelTextView: TextView
+    @BindView(R.id.film_details_info_text_duration) lateinit var durationTextView: TextView
     @BindView(R.id.film_details_info_image_poster) lateinit var posterImageView: ImageView
     @BindView(R.id.film_details_info_text_tagline) lateinit var taglineTextView: TextView
     @BindView(R.id.film_details_info_text_description) lateinit var descriptionTextView: TextView
@@ -51,6 +53,15 @@ class FilmDetailsInfoWidget constructor(context: Context, attrs: AttributeSet) :
             descriptionTextView.visibility = GONE
         }
 
+        durationText(filmSummary)?.let {
+            durationTextView.text = it
+            durationTextView.visibility = VISIBLE
+            durationLabelTextView.visibility = VISIBLE
+        } ?: run {
+            durationTextView.visibility = GONE
+            durationLabelTextView.visibility = GONE
+        }
+
         Glide.with(posterImageView.context)
                 .load(filmSummary.poster.bestFor(posterImageView.width)?.url)
                 .into(posterImageView)
@@ -65,5 +76,18 @@ class FilmDetailsInfoWidget constructor(context: Context, attrs: AttributeSet) :
             return directorName
         }
         return filmSummary.year
+    }
+
+    private fun durationText(filmSummary: FilmSummary): String? {
+        filmSummary.runtimeMinutes?.let {
+            return if (TimeUnit.MINUTES.toHours(it.toLong()) > 0) {
+                val hours = TimeUnit.MINUTES.toHours(it.toLong())
+                val minutes = it.toLong() - TimeUnit.HOURS.toMinutes(hours)
+                resources.getString(R.string.film_details_duration_hours_and_minutes_format, hours.toString(), minutes.toString())
+            } else {
+                resources.getString(R.string.film_details_duration_minutes_format, it.toString())
+            }
+        }
+        return null
     }
 }
