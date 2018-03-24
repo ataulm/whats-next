@@ -4,23 +4,14 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-import butterknife.BindView
-import butterknife.ButterKnife
+import kotlinx.android.synthetic.main.view_film_summary.view.*
 
 class FilmSummaryViewHolder internal constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
-
-    @BindView(R.id.film_summary_text_name)
-    lateinit var nameTextView: TextView
-
-    init {
-        ButterKnife.bind(this, itemView)
-    }
 
     fun bind(filmSummary: FilmSummary, callback: Callback) {
         itemView.setOnClickListener { callback.onClick(filmSummary) }
         itemView.contentDescription = filmSummary.name + " (" + filmSummary.year + ")"
-        nameTextView.text = filmSummary.name + " (" + filmSummary.year + ")"
+        itemView.film_summary_text_name.text = filmSummary.name + " (" + filmSummary.year + ")"
     }
 
     interface Callback {

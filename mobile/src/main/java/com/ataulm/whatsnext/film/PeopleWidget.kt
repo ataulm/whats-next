@@ -10,15 +10,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
-import android.widget.TextView
-import butterknife.BindView
-import butterknife.ButterKnife
 import com.ataulm.whatsnext.R
+import kotlinx.android.synthetic.main.merge_people_widget.view.*
+import kotlinx.android.synthetic.main.view_item_people.view.*
 
 class PeopleWidget constructor(context: Context, attrs: AttributeSet) : LinearLayout(context, attrs) {
-
-    @BindView(R.id.people_widget_label) lateinit var labelTextView: TextView
-    @BindView(R.id.people_widget_list) lateinit var list: RecyclerView
 
     private val label: String
 
@@ -39,25 +35,23 @@ class PeopleWidget constructor(context: Context, attrs: AttributeSet) : LinearLa
     override fun onFinishInflate() {
         super.onFinishInflate()
         View.inflate(context, R.layout.merge_people_widget, this)
-        ButterKnife.bind(this)
-
-        labelTextView.text = label
-        list.layoutManager = LinearLayoutManager(context)
-        ViewCompat.setNestedScrollingEnabled(list, false);
+        people_widget_label.text = label
+        people_widget_list.layoutManager = LinearLayoutManager(context)
+        ViewCompat.setNestedScrollingEnabled(people_widget_list, false);
     }
 
     fun bind(people: List<PersonViewModel>) {
-        list.adapter = PeopleAdapter(people)
+        people_widget_list.adapter = PeopleAdapter(people)
     }
 
     private class PeopleAdapter(private val people: List<PersonViewModel>) : Adapter<PersonViewHolder>() {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PersonViewHolder {
-            return PersonViewHolder.create(parent!!)
+            return PersonViewHolder.create(parent)
         }
 
         override fun onBindViewHolder(holder: PersonViewHolder, position: Int) {
-            holder?.bind(people[position])
+            holder.bind(people[position])
         }
 
         override fun getItemCount(): Int {
@@ -75,16 +69,9 @@ class PeopleWidget constructor(context: Context, attrs: AttributeSet) : LinearLa
             }
         }
 
-        @BindView(R.id.item_people_text_primary) lateinit var primaryTextView: TextView
-        @BindView(R.id.item_people_text_secondary) lateinit var secondaryTextView: TextView
-
-        init {
-            ButterKnife.bind(this, itemView)
-        }
-
         fun bind(person: PersonViewModel) {
-            primaryTextView.text = person.primaryLabel
-            secondaryTextView.text = person.secondaryLabel
+            itemView.item_people_text_primary.text = person.primaryLabel
+            itemView.item_people_text_secondary.text = person.secondaryLabel
         }
     }
 

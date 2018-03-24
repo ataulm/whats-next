@@ -10,6 +10,7 @@ buildscript {
 apply plugin: 'com.android.application'
 apply plugin: 'com.novoda.build-properties'
 apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'io.fabric'
 
@@ -27,11 +28,11 @@ android {
     buildToolsVersion versions.androidSdk.buildTools
 
     defaultConfig {
-        applicationId "com.ataulm.whatsnext"
+        applicationId 'com.ataulm.whatsnext'
         minSdkVersion versions.androidSdk.min
         targetSdkVersion versions.androidSdk.target
         versionCode 1
-        versionName "1.0"
+        versionName '1.0'
 
         manifestPlaceholders = [
                 fabricApiKey: buildProperties.fabric['apiKey'].string
@@ -66,9 +67,6 @@ dependencies {
     implementation libraries.supportDesign
     implementation libraries.supportRecyclerView
     implementation libraries.supportV13
-
-    implementation libraries.butterknife
-    kapt libraries.butterknifeCompiler
 
     // Android runner and rules support
     androidTestImplementation(libraries.androidTestRunner) {

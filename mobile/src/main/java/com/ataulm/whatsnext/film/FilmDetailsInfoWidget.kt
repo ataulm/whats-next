@@ -4,78 +4,64 @@ import android.content.Context
 import android.support.constraint.ConstraintLayout
 import android.util.AttributeSet
 import android.view.View
-import android.widget.ImageView
-import android.widget.TextView
-import butterknife.BindView
-import butterknife.ButterKnife
 import com.ataulm.whatsnext.FilmSummary
 import com.ataulm.whatsnext.R
 import com.bumptech.glide.Glide
+import kotlinx.android.synthetic.main.merge_film_details_info.view.*
 import java.util.concurrent.TimeUnit
 
 class FilmDetailsInfoWidget constructor(context: Context, attrs: AttributeSet) : ConstraintLayout(context, attrs) {
 
-    @BindView(R.id.film_details_info_text_title) lateinit var titleTextView: TextView
-    @BindView(R.id.film_details_info_text_release_year_director) lateinit var releaseYearTextView: TextView
-    @BindView(R.id.film_details_info_text_label_duration) lateinit var durationLabelTextView: TextView
-    @BindView(R.id.film_details_info_text_duration) lateinit var durationTextView: TextView
-    @BindView(R.id.film_details_info_text_label_genres) lateinit var genresLabelTextView: TextView
-    @BindView(R.id.film_details_info_text_genres) lateinit var genresTextView: TextView
-    @BindView(R.id.film_details_info_image_poster) lateinit var posterImageView: ImageView
-    @BindView(R.id.film_details_info_text_tagline) lateinit var taglineTextView: TextView
-    @BindView(R.id.film_details_info_text_description) lateinit var descriptionTextView: TextView
-
     override fun onFinishInflate() {
         super.onFinishInflate()
         View.inflate(context, R.layout.merge_film_details_info, this)
-        ButterKnife.bind(this)
     }
 
     fun bind(filmSummary: FilmSummary) {
-        titleTextView.text = filmSummary.name
+        film_details_info_text_title
 
         releaseYearText(filmSummary)?.let {
-            releaseYearTextView.text = it
-            releaseYearTextView.visibility = VISIBLE
+            film_details_info_text_release_year_director.text = it
+            film_details_info_text_release_year_director.visibility = VISIBLE
         } ?: run {
-            releaseYearTextView.visibility = GONE
+            film_details_info_text_release_year_director.visibility = GONE
         }
 
         filmSummary.tagline?.let {
-            taglineTextView.text = it
-            taglineTextView.visibility = VISIBLE
+            film_details_info_text_tagline.text = it
+            film_details_info_text_tagline.visibility = VISIBLE
         } ?: run {
-            taglineTextView.visibility = GONE
+            film_details_info_text_tagline.visibility = GONE
         }
 
         filmSummary.description?.let {
-            descriptionTextView.text = it
-            descriptionTextView.visibility = VISIBLE
+            film_details_info_text_description.text = it
+            film_details_info_text_description.visibility = VISIBLE
         } ?: run {
-            descriptionTextView.visibility = GONE
+            film_details_info_text_description.visibility = GONE
         }
 
         durationText(filmSummary)?.let {
-            durationTextView.text = it
-            durationTextView.visibility = VISIBLE
-            durationLabelTextView.visibility = VISIBLE
+            film_details_info_text_duration.text = it
+            film_details_info_text_duration.visibility = VISIBLE
+            film_details_info_text_label_duration.visibility = VISIBLE
         } ?: run {
-            durationTextView.visibility = GONE
-            durationLabelTextView.visibility = GONE
+            film_details_info_text_duration.visibility = GONE
+            film_details_info_text_label_duration.visibility = GONE
         }
 
         genresText(filmSummary)?.let {
-            genresTextView.text = it
-            genresTextView.visibility = VISIBLE
-            genresLabelTextView.visibility = VISIBLE
+            film_details_info_text_genres.text = it
+            film_details_info_text_genres.visibility = VISIBLE
+            film_details_info_text_label_genres.visibility = VISIBLE
         } ?: run {
-            genresTextView.visibility = GONE
-            genresLabelTextView.visibility = GONE
+            film_details_info_text_genres.visibility = GONE
+            film_details_info_text_label_genres.visibility = GONE
         }
 
-        Glide.with(posterImageView.context)
-                .load(filmSummary.poster.bestFor(posterImageView.width)?.url)
-                .into(posterImageView)
+        Glide.with(film_details_info_image_poster.context)
+                .load(filmSummary.poster.bestFor(film_details_info_image_poster.width)?.url)
+                .into(film_details_info_image_poster)
     }
 
     // TODO: this should be ready as `String?` in a viewmodel
