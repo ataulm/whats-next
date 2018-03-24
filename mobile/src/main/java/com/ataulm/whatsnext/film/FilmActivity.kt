@@ -1,14 +1,16 @@
 package com.ataulm.whatsnext.film
 
+import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
+import com.ataulm.support.Toaster
 import com.ataulm.whatsnext.BaseActivity
 import com.ataulm.whatsnext.BuildConfig
+import com.ataulm.whatsnext.Film
 import com.ataulm.whatsnext.R
 import kotlinx.android.synthetic.main.activity_film.*
 
 class FilmActivity : BaseActivity() {
-
-    private lateinit var presenter: FilmPresenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -17,6 +19,9 @@ class FilmActivity : BaseActivity() {
         }
 
         setContentView(R.layout.activity_film)
+        val filmId = intent.getStringExtra(EXTRA_FILM_ID)
+        val viewModelProvider = ViewModelProviders.of(this, FilmViewModelProvider(whatsNextService(), filmId))
+        val viewModel = viewModelProvider.get(FilmViewModel::class.java)
 
         val displayer = FilmDisplayer(
                 film_details_backdrop,
@@ -27,18 +32,26 @@ class FilmActivity : BaseActivity() {
                 film_button_mark_watched,
                 film_button_mark_not_watched
         )
-        val filmId = intent.getStringExtra(EXTRA_FILM_ID)
-        presenter = FilmPresenter(whatsNextService(), displayer, filmId)
-    }
 
-    override fun onStart() {
-        super.onStart()
-        presenter.startPresenting()
-    }
+        displayer.attach(object : FilmDisplayer.Callback {
+            override fun onClickMarkAsWatched() {
+                Toaster.display("on click mark as watched")
+                // TODO: call viewModel.onClickMarkAsWatched() here?
+            }
 
-    override fun onStop() {
-        presenter.stopPresenting()
-        super.onStop()
+            override fun onClickMarkAsNotWatched() {
+                Toaster.display("on click mark as not watched")
+                // TODO: call viewModel.onClickMarkAsNotWatched() here?
+            }
+        })
+
+        viewModel.film.observe(this, object : Observer<Film> {
+            override fun onChanged(film: Film?) {
+                if (film != null) {
+                    displayer.display(film)
+                }
+            }
+        })
     }
 
     companion object {

@@ -1,7 +1,7 @@
 package com.ataulm.whatsnext.film
 
+import android.arch.lifecycle.MutableLiveData
 import android.util.Log
-import com.ataulm.support.Toaster
 import com.ataulm.whatsnext.ErrorTrackingDisposableObserver
 import com.ataulm.whatsnext.Film
 import com.ataulm.whatsnext.WhatsNextService
@@ -9,21 +9,11 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 
-internal class FilmPresenter(private val service: WhatsNextService, private val displayer: FilmDisplayer, private val filmId: String) {
+class FilmLiveData(val service: WhatsNextService, val filmId: String) : MutableLiveData<Film>() {
 
-    private lateinit var disposable: Disposable
+    private var disposable: Disposable? = null
 
-    fun startPresenting() {
-        displayer.attach(object : FilmDisplayer.Callback {
-            override fun onClickMarkAsWatched() {
-                Toaster.display("on click mark as watched")
-            }
-
-            override fun onClickMarkAsNotWatched() {
-                Toaster.display("on click mark as not watched")
-            }
-        })
-
+    override fun onActive() {
         disposable = service.film(filmId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -31,14 +21,13 @@ internal class FilmPresenter(private val service: WhatsNextService, private val 
                         object : ErrorTrackingDisposableObserver<Film>() {
                             override fun onNext(film: Film) {
                                 Log.d("!!!", "onNext " + film.toString())
-                                displayer.display(film)
+                                value = film
                             }
                         }
                 )
     }
 
-    fun stopPresenting() {
-        disposable.dispose()
-        displayer.detachCallback()
+    override fun onInactive() {
+        disposable?.dispose()
     }
 }
