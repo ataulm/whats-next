@@ -52,11 +52,11 @@ class PeopleWidget constructor(context: Context, attrs: AttributeSet) : LinearLa
 
     private class PeopleAdapter(private val people: List<PersonViewModel>) : Adapter<PersonViewHolder>() {
 
-        override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): PersonViewHolder {
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PersonViewHolder {
             return PersonViewHolder.create(parent!!)
         }
 
-        override fun onBindViewHolder(holder: PersonViewHolder?, position: Int) {
+        override fun onBindViewHolder(holder: PersonViewHolder, position: Int) {
             holder?.bind(people[position])
         }
 

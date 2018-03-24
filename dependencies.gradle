@@ -1,19 +1,20 @@
 ext {
     versions = [
             androidSdk: [
-                    compile: 27,
-                    min    : 23,
-                    target : 27
+                    buildTools: '27.0.3',
+                    compile   : 27,
+                    min       : 19,
+                    target    : 27
             ],
-            kotlin    : '1.2.10',
-            support   : '27.0.2'
+            kotlin    : '1.2.31',
+            support   : '27.1.0'
     ]
 
     libraries = [
             build                  : [
                     androidGradle  : 'com.android.tools.build:gradle:3.0.1',
-                    buildProperties: 'com.novoda:gradle-build-properties-plugin:0.3',
-                    fabric         : 'io.fabric.tools:gradle:1.22.1',
+                    buildProperties: 'com.novoda:gradle-build-properties-plugin:0.4',
+                    fabric         : 'io.fabric.tools:gradle:1.25.2',
                     kotlinGradle   : "org.jetbrains.kotlin:kotlin-gradle-plugin:${versions.kotlin}"
             ],
             androidTestRules       : 'com.android.support.test:rules:0.5',

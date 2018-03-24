@@ -7,6 +7,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.ataulm.whatsnext.BaseActivity;
+import com.ataulm.whatsnext.Navigator;
 import com.ataulm.whatsnext.R;
 import com.ataulm.whatsnext.TokensStore;
 
@@ -27,7 +28,8 @@ public class SearchActivity extends BaseActivity {
         Button signInButton = ButterKnife.findById(this, R.id.search_button_sign_in);
 
         SearchDisplayer displayer = new SearchDisplayer(searchEditText, searchButton, resultsRecyclerView, signInButton);
-        presenter = new SearchPresenter(whatsNextService(), displayer, TokensStore.create(this), clock(), navigator());
+        Navigator navigator = navigator();
+        presenter = new SearchPresenter(whatsNextService(), displayer, TokensStore.create(this), clock(), navigator);
     }
 
     @Override
