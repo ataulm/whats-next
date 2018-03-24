@@ -55,6 +55,8 @@ android {
 }
 
 dependencies {
+    implementation libraries.androidArchLifecycleExtensions
+    kapt libraries.androidArchLifecycleCompiler
     implementation(libraries.crashlytics) { transitive = true }
     implementation libraries.glide
     implementation libraries.gson
