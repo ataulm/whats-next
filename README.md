@@ -19,3 +19,9 @@ apiSecret=your_letterboxd_api_secret
 username=your_username
 password=your_password
 ```
+
+You'll also to add `fabric.properties` to the root project directory:
+
+```
+apiKey=your_fabric_api_key
+```
