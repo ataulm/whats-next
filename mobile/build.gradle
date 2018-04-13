@@ -16,10 +16,10 @@ apply plugin: 'io.fabric'
 
 buildProperties {
     letterboxd {
-        file project.file('../letterboxd.properties')
+        using rootProject.file('letterboxd.properties')
     }
     fabric {
-        file project.file('../fabric.properties')
+        using rootProject.file('fabric.properties')
     }
 }
 
