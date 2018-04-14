@@ -13,5 +13,5 @@ interface Letterboxd {
                     @Field("password") password: String,
                     @Field("grant_type") grantType: String = "password"): Observable<Token>
 
-    data class Token(val accessToken: String, val refreshToken: String, val expiryMillisSinceEpoch: Long)
+    data class Token(val access_token: String, val refresh_token: String, val expires_in: Long)
 }
