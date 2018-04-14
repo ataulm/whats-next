@@ -13,5 +13,10 @@ interface LetterboxdApi {
                     @Field("password") password: String,
                     @Field("grant_type") grantType: String = "password"): Observable<AccessToken>
 
+    @FormUrlEncoded
+    @POST("auth/token")
+    fun refreshAccessToken(@Field("refresh_token") refreshToken: String,
+                           @Field("grant_type") grantType: String = "refresh_token"): Observable<AccessToken>
+
     data class AccessToken(val access_token: String, val refresh_token: String, val expires_in: Long)
 }
