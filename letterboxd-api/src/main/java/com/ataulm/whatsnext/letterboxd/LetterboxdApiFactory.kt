@@ -8,17 +8,17 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.*
 import java.util.concurrent.TimeUnit
 
-class LetterboxdFactory(private val apiKey: String, private val apiSecret: String, private val clock: Clock) {
+class LetterboxdApiFactory(private val apiKey: String, private val apiSecret: String, private val clock: Clock) {
 
-    fun create(mockResponses: Boolean = false): Letterboxd {
+    fun create(mockResponses: Boolean = false): LetterboxdApi {
         return if (mockResponses) {
-            MockResponsesLetterboxd()
+            MockResponsesLetterboxdApi()
         } else {
-            remoteApiLetterboxd()
+            remoteLetterboxdApi()
         }
     }
 
-    private fun remoteApiLetterboxd(): Letterboxd {
+    private fun remoteLetterboxdApi(): LetterboxdApi {
         val okHttpClient = OkHttpClient.Builder()
                 .addNetworkInterceptor { chain ->
                     val builder = chain.request().newBuilder()
@@ -40,7 +40,7 @@ class LetterboxdFactory(private val apiKey: String, private val apiSecret: Strin
                 .addConverterFactory(GsonConverterFactory.create())
                 .baseUrl("https://api.letterboxd.com/api/v0/")
                 .build()
-                .create(Letterboxd::class.java)
+                .create(LetterboxdApi::class.java)
     }
 
     private fun generateSignature(httpMethod: String, url: String, body: String, apiSecret: String): String {
