@@ -1,1 +1,2 @@
+include ':letterboxd'
 include ':mobile'
