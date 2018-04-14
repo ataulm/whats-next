@@ -29,7 +29,7 @@ class LetterboxdApiFactory(private val apiKey: String, private val apiSecret: St
                             .addQueryParameter("timestamp", TimeUnit.MILLISECONDS.toSeconds(clock2.currentTimeMillis).toString())
                             .build()
                     builder.url(url)
-                    val urlEncodedBody = stringFrom(chain.request().body() as FormBody)
+                    val urlEncodedBody = (chain.request().body() as FormBody).toUrlEncodedString()
                     builder.addHeader("Authorization", "Signature ${generateSignature(apiSecret, chain.request().method(), url.toString(), urlEncodedBody)}")
                     chain.proceed(builder.build())
                 }
@@ -44,16 +44,16 @@ class LetterboxdApiFactory(private val apiKey: String, private val apiSecret: St
                 .create(LetterboxdApi::class.java)
     }
 
-    private fun stringFrom(formBody: FormBody): String {
-        val pairs = ArrayList<String>()
-        for (i in 0 until formBody.size()) {
-            pairs.add(formBody.encodedName(i) + "=" + formBody.encodedValue(i))
-        }
-        return pairs.joinToString(separator = "&")
-    }
-
     private fun generateSignature(apiSecret: String, httpMethod: String, url: String, urlEncodedBody: String): String {
         val preHashed = String.format(Locale.US, "%s\u0000%s\u0000%s", httpMethod.toUpperCase(Locale.US), url, urlEncodedBody)
         return HmacSha256.generateHash(apiSecret, preHashed).toLowerCase(Locale.US)
     }
+}
+
+private fun FormBody.toUrlEncodedString(): String {
+    val pairs = ArrayList<String>()
+    for (i in 0 until size()) {
+        pairs.add(encodedName(i) + "=" + encodedValue(i))
+    }
+    return pairs.joinToString(separator = "&")
 }
