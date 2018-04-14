@@ -11,7 +11,7 @@ interface Letterboxd {
     @POST("/auth/token")
     fun accessToken(@Field("username") username: String,
                     @Field("password") password: String,
-                    @Field("grant_type") grantType: String = "password"): Observable<Token>
+                    @Field("grant_type") grantType: String = "password"): Observable<AccessToken>
 
-    data class Token(val access_token: String, val refresh_token: String, val expires_in: Long)
+    data class AccessToken(val access_token: String, val refresh_token: String, val expires_in: Long)
 }
