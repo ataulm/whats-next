@@ -8,7 +8,7 @@ import retrofit2.http.POST
 interface LetterboxdApi {
 
     @FormUrlEncoded
-    @POST("/auth/token")
+    @POST("auth/token")
     fun accessToken(@Field("username") username: String,
                     @Field("password") password: String,
                     @Field("grant_type") grantType: String = "password"): Observable<AccessToken>
