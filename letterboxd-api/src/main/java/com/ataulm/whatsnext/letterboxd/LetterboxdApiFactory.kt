@@ -1,6 +1,5 @@
 package com.ataulm.whatsnext.letterboxd
 
-import com.ataulm.support.Clock2
 import com.google.gson.GsonBuilder
 import okhttp3.*
 import retrofit2.Retrofit
@@ -9,7 +8,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.*
 import java.util.concurrent.TimeUnit
 
-class LetterboxdApiFactory(private val tokenStore: TokenStore, private val apiKey: String, private val apiSecret: String, private val clock2: Clock2) {
+class LetterboxdApiFactory(private val tokenStore: TokenStore, private val apiKey: String, private val apiSecret: String, private val clock: Clock) {
 
     fun create(mockResponses: Boolean = false): LetterboxdApi {
         return if (mockResponses) {
@@ -21,7 +20,7 @@ class LetterboxdApiFactory(private val tokenStore: TokenStore, private val apiKe
 
     private fun remoteLetterboxdApi(): LetterboxdApi {
         val okHttpClient = OkHttpClient.Builder()
-                .addNetworkInterceptor(AddApiKeyQueryParameterInterceptor(apiKey, clock2))
+                .addNetworkInterceptor(AddApiKeyQueryParameterInterceptor(apiKey, clock))
                 .addNetworkInterceptor(AddAuthorizationHeaderInterceptor(apiSecret, tokenStore))
                 .build()
 
@@ -41,13 +40,13 @@ class LetterboxdApiFactory(private val tokenStore: TokenStore, private val apiKe
 
 }
 
-private class AddApiKeyQueryParameterInterceptor(private val apiKey: String, private val clock2: Clock2) : Interceptor {
+private class AddApiKeyQueryParameterInterceptor(private val apiKey: String, private val clock: Clock) : Interceptor {
 
     override fun intercept(chain: Interceptor.Chain): Response {
         val url = chain.request().url().newBuilder()
                 .addQueryParameter("apikey", apiKey)
                 .addQueryParameter("nonce", UUID.randomUUID().toString())
-                .addQueryParameter("timestamp", TimeUnit.MILLISECONDS.toSeconds(clock2.currentTimeMillis).toString())
+                .addQueryParameter("timestamp", TimeUnit.MILLISECONDS.toSeconds(clock.currentTimeMillis()).toString())
                 .build()
         val request = chain.request().newBuilder().url(url).build()
         return chain.proceed(request)

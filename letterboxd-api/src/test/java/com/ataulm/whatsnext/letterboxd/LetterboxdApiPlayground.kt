@@ -1,6 +1,5 @@
 package com.ataulm.whatsnext.letterboxd
 
-import com.ataulm.support.Clock2
 import org.junit.Test
 import java.io.File
 import java.io.FileReader
@@ -45,7 +44,11 @@ class LetterboxdApiPlayground {
                 tokenStore,
                 properties.getProperty("apiKey"),
                 properties.getProperty("apiSecret"),
-                Clock2()
+                object : Clock {
+                    override fun currentTimeMillis(): Long {
+                        return System.currentTimeMillis()
+                    }
+                }
         ).create()
 
         val accessToken = api.accessToken(properties.getProperty("username"), properties.getProperty("password")).blockingFirst()
