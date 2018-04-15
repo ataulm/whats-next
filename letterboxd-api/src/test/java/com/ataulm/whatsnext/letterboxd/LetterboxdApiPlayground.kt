@@ -14,6 +14,12 @@ class LetterboxdApiPlayground {
         print(response)
     }
 
+    @Test
+    fun search() {
+        val response = signedInApi().search("iron giant").blockingFirst()
+        print(response)
+    }
+
     private fun signedInApi(): LetterboxdApi {
         val tokenStore = object : TokenStore {
 
