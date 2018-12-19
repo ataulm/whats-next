@@ -1,0 +1,89 @@
+buildscript {
+    dependencies {
+        classpath libraries.build.androidGradle
+        classpath libraries.build.buildProperties
+        classpath libraries.build.fabric
+        classpath libraries.build.kotlinGradle
+    }
+}
+
+apply plugin: 'com.android.application'
+apply plugin: 'com.novoda.build-properties'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'io.fabric'
+
+buildProperties {
+    letterboxd {
+        using rootProject.file('letterboxd.properties')
+    }
+    fabric {
+        using rootProject.file('fabric.properties')
+    }
+}
+
+android {
+    compileSdkVersion versions.androidSdk.compile
+
+    defaultConfig {
+        applicationId 'com.ataulm.whatsnext'
+        minSdkVersion versions.androidSdk.min
+        targetSdkVersion versions.androidSdk.target
+        versionCode 1
+        versionName '1.0'
+
+        manifestPlaceholders = [
+                fabricApiKey: buildProperties.fabric['apiKey'].string
+        ]
+
+        buildConfigString 'LETTERBOXD_KEY', buildProperties.letterboxd['apiKey'].string
+        buildConfigString 'LETTERBOXD_SECRET', buildProperties.letterboxd['apiSecret'].string
+        buildConfigString 'LETTERBOXD_USERNAME', buildProperties.letterboxd['username'].or('').string
+        buildConfigString 'LETTERBOXD_PASSWORD', buildProperties.letterboxd['password'].or('').string
+        buildConfigBoolean 'OFFLINE', true
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    implementation libraries.androidxLifecycleExtensions
+    kapt libraries.androidxLifecycleCompiler
+    implementation(libraries.crashlytics) { transitive = true }
+    implementation libraries.glide
+    implementation libraries.gson
+    implementation libraries.kotlinStdLib
+    implementation libraries.okhttp
+    implementation libraries.rxandroid
+    implementation libraries.rxjava
+    implementation libraries.androidxAppCompat
+    implementation libraries.androidxConstraintLayout
+    implementation libraries.androidxMaterial
+    implementation libraries.androidxRecyclerView
+    implementation libraries.androidxLegacySupportV13
+
+    // Android runner and rules support
+    androidTestImplementation(libraries.androidxTestRunner) {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    }
+
+    androidTestImplementation(libraries.androidxTestRules) {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    }
+
+    // Espresso support
+    androidTestImplementation(libraries.espressoCore) {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    }
+
+    testImplementation libraries.jUnit
+    testImplementation libraries.mockitoCore
+    testImplementation libraries.festAssertCore
+}

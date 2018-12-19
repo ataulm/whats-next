@@ -1,2 +1,2 @@
 include ':letterboxd-api'
-include ':mobile'
+include ':app'
