@@ -1,6 +1,6 @@
 package com.ataulm.whatsnext.account;
 
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 import com.ataulm.whatsnext.ErrorTrackingDisposableObserver;
 import com.ataulm.whatsnext.Token;

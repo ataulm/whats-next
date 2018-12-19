@@ -1,6 +1,6 @@
 package com.ataulm.whatsnext
 
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 
 import com.ataulm.support.Clock
 

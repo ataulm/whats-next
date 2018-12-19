@@ -1,7 +1,7 @@
 package com.ataulm.whatsnext.film
 
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
 import com.ataulm.support.Toaster
 import com.ataulm.whatsnext.BaseActivity

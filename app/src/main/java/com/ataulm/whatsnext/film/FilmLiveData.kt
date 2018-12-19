@@ -1,6 +1,6 @@
 package com.ataulm.whatsnext.film
 
-import android.arch.lifecycle.MutableLiveData
+import androidx.lifecycle.MutableLiveData
 import android.util.Log
 import com.ataulm.whatsnext.ErrorTrackingDisposableObserver
 import com.ataulm.whatsnext.Film

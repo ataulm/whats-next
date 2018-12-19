@@ -54,8 +54,8 @@ android {
 }
 
 dependencies {
-    implementation libraries.androidArchLifecycleExtensions
-    kapt libraries.androidArchLifecycleCompiler
+    implementation libraries.androidxLifecycleExtensions
+    kapt libraries.androidxLifecycleCompiler
     implementation(libraries.crashlytics) { transitive = true }
     implementation libraries.glide
     implementation libraries.gson
@@ -63,18 +63,18 @@ dependencies {
     implementation libraries.okhttp
     implementation libraries.rxandroid
     implementation libraries.rxjava
-    implementation libraries.supportAppCompatV7
-    implementation libraries.supportConstraintLayout
-    implementation libraries.supportDesign
-    implementation libraries.supportRecyclerView
-    implementation libraries.supportV13
+    implementation libraries.androidxAppCompat
+    implementation libraries.androidxConstraintLayout
+    implementation libraries.androidxMaterial
+    implementation libraries.androidxRecyclerView
+    implementation libraries.androidxLegacySupportV13
 
     // Android runner and rules support
-    androidTestImplementation(libraries.androidTestRunner) {
+    androidTestImplementation(libraries.androidxTestRunner) {
         exclude group: 'com.android.support', module: 'support-annotations'
     }
 
-    androidTestImplementation(libraries.androidTestRules) {
+    androidTestImplementation(libraries.androidxTestRules) {
         exclude group: 'com.android.support', module: 'support-annotations'
     }
 

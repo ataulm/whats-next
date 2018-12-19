@@ -1,7 +1,7 @@
 package com.ataulm.whatsnext.film
 
-import android.arch.lifecycle.ViewModel
-import android.arch.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import com.ataulm.whatsnext.WhatsNextService
 
 class FilmViewModelProvider(val service: WhatsNextService, val filmId: String) : ViewModelProvider.Factory {

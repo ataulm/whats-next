@@ -1,7 +1,7 @@
 package com.ataulm.whatsnext.film
 
 import android.content.Context
-import android.support.constraint.ConstraintLayout
+import androidx.constraintlayout.widget.ConstraintLayout
 import android.util.AttributeSet
 import android.view.View
 import com.ataulm.whatsnext.FilmSummary
