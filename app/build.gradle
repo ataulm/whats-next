@@ -39,17 +39,18 @@ android {
 dependencies {
     implementation libraries.androidxLifecycleExtensions
     kapt libraries.androidxLifecycleCompiler
+    implementation libraries.androidxAppCompat
+    implementation libraries.androidxConstraintLayout
+    implementation libraries.androidxCoordinatorLayout
+    implementation libraries.androidxMaterial
+    implementation libraries.androidxRecyclerView
+    implementation libraries.androidxLegacySupportV13
     implementation libraries.glide
     implementation libraries.gson
     implementation libraries.kotlinStdLib
     implementation libraries.okhttp
     implementation libraries.rxandroid
     implementation libraries.rxjava
-    implementation libraries.androidxAppCompat
-    implementation libraries.androidxConstraintLayout
-    implementation libraries.androidxMaterial
-    implementation libraries.androidxRecyclerView
-    implementation libraries.androidxLegacySupportV13
 
     // Android runner and rules support
     androidTestImplementation(libraries.androidxTestRunner) {
