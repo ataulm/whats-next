@@ -23,7 +23,7 @@ android {
         buildConfigField 'String', 'LETTERBOXD_SECRET', "\"${letterboxd_api_secret}\""
         buildConfigField 'String', 'LETTERBOXD_USERNAME', "\"${letterboxd_username}\""
         buildConfigField 'String', 'LETTERBOXD_PASSWORD', "\"${letterboxd_password}\""
-        buildConfigField 'boolean', 'OFFLINE', "true"
+        buildConfigField 'boolean', 'OFFLINE', "false"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }

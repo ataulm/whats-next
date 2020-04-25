@@ -17,7 +17,6 @@ import okhttp3.OkHttpClient;
 public class WhatsNextApplication extends Application {
 
     private WhatsNextService whatsNextService;
-    private Navigator navigator;
     private Letterboxd letterboxd;
     private Clock clock;
 
@@ -31,7 +30,6 @@ public class WhatsNextApplication extends Application {
         letterboxd = createLetterboxd(clock, tokenConverter);
         TokensStore tokensStore = TokensStore.Companion.create(this);
         whatsNextService = createWhatsNextService(clock, letterboxd, tokensStore);
-        navigator = createNavigator();
     }
 
     public Letterboxd letterboxd() {
@@ -42,16 +40,8 @@ public class WhatsNextApplication extends Application {
         return whatsNextService;
     }
 
-    public Navigator navigator() {
-        return navigator;
-    }
-
     public Clock clock() {
         return clock;
-    }
-
-    private Navigator createNavigator() {
-        return new Navigator(this);
     }
 
     private WhatsNextService createWhatsNextService(Clock clock, Letterboxd letterboxd, TokensStore tokensStore) {

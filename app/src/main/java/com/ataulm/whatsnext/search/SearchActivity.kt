@@ -35,4 +35,13 @@ class SearchActivity : BaseActivity() {
         presenter.stopPresenting()
         super.onStop()
     }
+
+    override fun onBackPressed() {
+        if (bottomSheetBehavior.state == BottomSheetBehavior.STATE_EXPANDED) {
+            bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+            searchEditText.clearFocus()
+        } else {
+            super.onBackPressed()
+        }
+    }
 }

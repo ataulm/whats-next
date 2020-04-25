@@ -15,6 +15,6 @@ abstract class BaseActivity : AppCompatActivity() {
     }
 
     protected fun navigator(): Navigator {
-        return (application as WhatsNextApplication).navigator()
+        return Navigator(this)
     }
 }
