@@ -1,27 +1,14 @@
 buildscript {
     dependencies {
         classpath libraries.build.androidGradle
-        classpath libraries.build.buildProperties
-        classpath libraries.build.fabric
         classpath libraries.build.kotlinGradle
     }
 }
 
 apply plugin: 'com.android.application'
-apply plugin: 'com.novoda.build-properties'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
-apply plugin: 'io.fabric'
-
-buildProperties {
-    letterboxd {
-        using rootProject.file('letterboxd.properties')
-    }
-    fabric {
-        using rootProject.file('fabric.properties')
-    }
-}
 
 android {
     compileSdkVersion versions.androidSdk.compile
@@ -33,15 +20,11 @@ android {
         versionCode 1
         versionName '1.0'
 
-        manifestPlaceholders = [
-                fabricApiKey: buildProperties.fabric['apiKey'].string
-        ]
-
-        buildConfigString 'LETTERBOXD_KEY', buildProperties.letterboxd['apiKey'].string
-        buildConfigString 'LETTERBOXD_SECRET', buildProperties.letterboxd['apiSecret'].string
-        buildConfigString 'LETTERBOXD_USERNAME', buildProperties.letterboxd['username'].or('').string
-        buildConfigString 'LETTERBOXD_PASSWORD', buildProperties.letterboxd['password'].or('').string
-        buildConfigBoolean 'OFFLINE', true
+        buildConfigField 'String', 'LETTERBOXD_KEY', "\"${letterboxd_api_key}\""
+        buildConfigField 'String', 'LETTERBOXD_SECRET', "\"${letterboxd_api_secret}\""
+        buildConfigField 'String', 'LETTERBOXD_USERNAME', "\"${letterboxd_username}\""
+        buildConfigField 'String', 'LETTERBOXD_PASSWORD', "\"${letterboxd_password}\""
+        buildConfigField 'boolean', 'OFFLINE', "true"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
@@ -56,7 +39,6 @@ android {
 dependencies {
     implementation libraries.androidxLifecycleExtensions
     kapt libraries.androidxLifecycleCompiler
-    implementation(libraries.crashlytics) { transitive = true }
     implementation libraries.glide
     implementation libraries.gson
     implementation libraries.kotlinStdLib

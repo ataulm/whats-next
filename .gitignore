@@ -30,6 +30,3 @@ proguard/
 
 # Log Files
 *.log
-
-letterboxd.properties
-fabric.properties

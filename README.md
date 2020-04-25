@@ -4,24 +4,12 @@ android letterboxd client offering a subset of [letterboxd](https://letterboxd.c
 
 ## Running
 
-You'll need to add `letterboxd.properties` to the root project directory:
+You'll need to add these properties somewhere that Gradle can read them (e.g. in `~/.gradle/gradle.properties`):
 
 ```
-apiKey=your_letterboxd_api_key
-apiSecret=your_letterboxd_api_secret
-```
-
-You can add your username and password in that file too and it'll auto-fill the credentials boxes on DEBUG builds:
-
-```
-apiKey=your_letterboxd_api_key
-apiSecret=your_letterboxd_api_secret
-username=your_username
-password=your_password
-```
-
-You'll also to add `fabric.properties` to the root project directory:
-
-```
-apiKey=your_fabric_api_key
+# Letterboxd
+letterboxd_api_key=12345678
+letterboxd_api_secret=12345678
+letterboxd_username=ataulm
+letterboxd_password=12345678
 ```

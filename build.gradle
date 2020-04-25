@@ -5,14 +5,12 @@ buildscript {
 subprojects {
     buildscript {
         repositories {
+            google()
             jcenter()
-            maven { url 'https://maven.fabric.io/public' }
-            maven { url "https://maven.google.com" }
         }
     }
     repositories {
+        google()
         jcenter()
-        maven { url 'https://maven.fabric.io/public' }
-        maven { url "https://maven.google.com" }
     }
 }

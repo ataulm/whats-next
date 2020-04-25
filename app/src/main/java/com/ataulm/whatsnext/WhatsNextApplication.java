@@ -10,11 +10,8 @@ import com.ataulm.whatsnext.api.FilmSummaryConverter;
 import com.ataulm.whatsnext.api.Letterboxd;
 import com.ataulm.whatsnext.api.LetterboxdImpl;
 import com.ataulm.whatsnext.api.TokenConverter;
-import com.crashlytics.android.Crashlytics;
-import com.crashlytics.android.core.CrashlyticsCore;
 import com.google.gson.Gson;
 
-import io.fabric.sdk.android.Fabric;
 import okhttp3.OkHttpClient;
 
 public class WhatsNextApplication extends Application {
@@ -35,14 +32,6 @@ public class WhatsNextApplication extends Application {
         TokensStore tokensStore = TokensStore.Companion.create(this);
         whatsNextService = createWhatsNextService(clock, letterboxd, tokensStore);
         navigator = createNavigator();
-
-        initializeFabric();
-    }
-
-    private void initializeFabric() {
-        CrashlyticsCore core = new CrashlyticsCore.Builder().build();
-        Crashlytics crashlytics = new Crashlytics.Builder().core(core).build();
-        Fabric.with(this, crashlytics);
     }
 
     public Letterboxd letterboxd() {
