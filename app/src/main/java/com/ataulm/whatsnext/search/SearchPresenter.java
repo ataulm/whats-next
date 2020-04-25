@@ -64,16 +64,6 @@ class SearchPresenter {
                 navigator.navigateToFilm(filmSummary.getIds().getLetterboxd());
             }
 
-            @Override
-            public void onClickSignIn() {
-                Token token = tokensStore.getToken();
-                if (token == null || expired(token)) {
-                    navigator.navigateToSignIn();
-                } else {
-                    displayer.toastAlreadySignedIn();
-                }
-            }
-
             private boolean expired(Token token) {
                 return token.getExpiryMillisSinceEpoch() < clock.getCurrentTimeMillis();
             }

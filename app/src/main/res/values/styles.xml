@@ -1,5 +1,5 @@
 <resources>
 
-  <style name="AppTheme" parent="Theme.AppCompat.NoActionBar" />
+  <style name="Theme.WhatsNext" parent="Theme.MaterialComponents.Light.NoActionBar" />
 
 </resources>

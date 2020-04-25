@@ -1,30 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-  android:layout_width="match_parent"
-  android:layout_height="match_parent"
-  android:orientation="vertical">
-
-  <EditText
-    android:id="@+id/search_edittext"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:inputType="text" />
+    android:layout_height="match_parent">
 
-  <Button
-    android:id="@+id/search_button"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="Search" />
+    <LinearLayout
+        android:id="@+id/searchBottomSheet"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="?attr/colorSurface"
+        android:elevation="8dp"
+        android:orientation="vertical"
+        app:behavior_hideable="false"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
+        tools:behavior_peekHeight="92dp">
 
-  <Button
-    android:id="@+id/search_button_sign_in"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:text="sign in" />
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/searchFieldContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp">
 
-  <androidx.recyclerview.widget.RecyclerView
-    android:id="@+id/search_recycler_view"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent" />
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/searchEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Search for movie"
+                android:imeOptions="actionSearch"
+                android:inputType="textCapSentences" />
 
-</LinearLayout>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/searchRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </LinearLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

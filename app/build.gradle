@@ -12,7 +12,6 @@ apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion versions.androidSdk.compile
-
     defaultConfig {
         applicationId 'com.ataulm.whatsnext'
         minSdkVersion versions.androidSdk.min
@@ -34,6 +33,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    kotlinOptions { jvmTarget = "1.8" }
 }
 
 dependencies {
@@ -42,6 +42,7 @@ dependencies {
     implementation libraries.androidxAppCompat
     implementation libraries.androidxConstraintLayout
     implementation libraries.androidxCoordinatorLayout
+    implementation libraries.androidxCoreKtx
     implementation libraries.androidxMaterial
     implementation libraries.androidxRecyclerView
     implementation libraries.androidxLegacySupportV13

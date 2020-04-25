@@ -1,60 +1,57 @@
 package com.ataulm.whatsnext.search;
 
+import android.view.KeyEvent;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Toast;
 
-import com.ataulm.whatsnext.FilmSummary;
 import com.ataulm.whatsnext.FilmSummariesAdapter;
+import com.ataulm.whatsnext.FilmSummary;
 import com.ataulm.whatsnext.FilmSummaryViewHolder;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
 import java.util.List;
 
 class SearchDisplayer {
 
     private final EditText searchEditText;
-    private final Button searchButton;
     private final RecyclerView resultsRecyclerView;
-    private final Button signInButton;
+    private final BottomSheetBehavior<View> bottomSheetBehavior;
 
     @Nullable
     private Callback callback;
 
-    SearchDisplayer(EditText searchEditText, Button searchButton, RecyclerView resultsRecyclerView, Button signInButton) {
+    SearchDisplayer(
+            EditText searchEditText,
+            RecyclerView resultsRecyclerView,
+            BottomSheetBehavior<View> bottomSheetBehavior
+    ) {
         this.searchEditText = searchEditText;
-        this.searchButton = searchButton;
         this.resultsRecyclerView = resultsRecyclerView;
-        this.signInButton = signInButton;
+        this.bottomSheetBehavior = bottomSheetBehavior;
     }
 
     void attach(final Callback callback) {
         this.callback = callback;
-        searchButton.setOnClickListener(new View.OnClickListener() {
+        searchEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
-            public void onClick(View v) {
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 String searchTerm = searchEditText.getText().toString().trim();
-                if (searchTerm.isEmpty()) {
-                    return;
+                if (!searchTerm.isEmpty()) {
+                    callback.onSearch(searchTerm);
                 }
-                callback.onSearch(searchTerm);
-            }
-        });
-
-        signInButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                callback.onClickSignIn();
+                return true;
             }
         });
     }
 
     void detachCallback() {
-        searchButton.setOnClickListener(null);
-        signInButton.setOnClickListener(null);
+        searchEditText.setOnEditorActionListener(null);
         this.callback = null;
     }
 
@@ -71,6 +68,7 @@ class SearchDisplayer {
             // TODO: diff utils?
             adapter.update(filmSummaries);
         }
+        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
     }
 
     private final FilmSummaryViewHolder.Callback filmSummaryCallback = new FilmSummaryViewHolder.Callback() {
@@ -97,7 +95,5 @@ class SearchDisplayer {
         void onSearch(String searchTerm);
 
         void onClick(FilmSummary filmSummary);
-
-        void onClickSignIn();
     }
 }
