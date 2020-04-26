@@ -19,7 +19,6 @@
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/searchFieldContainer"
             android:layout_width="match_parent"
-            android:background="?attr/colorPrimary"
             android:layout_height="wrap_content"
             android:padding="16dp">
 
@@ -27,7 +26,7 @@
                 android:id="@+id/searchEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Search for movie"
+                android:hint="Search films"
                 android:imeOptions="actionSearch"
                 android:inputType="textCapSentences" />
 
