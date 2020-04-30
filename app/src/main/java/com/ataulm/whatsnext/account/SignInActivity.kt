@@ -1,18 +1,24 @@
 package com.ataulm.whatsnext.account
 
 import android.os.Bundle
-import com.ataulm.whatsnext.BaseActivity
-import com.ataulm.whatsnext.BuildConfig
-import com.ataulm.whatsnext.R
-import com.ataulm.whatsnext.TokensStore
+import com.ataulm.whatsnext.*
+import com.ataulm.whatsnext.di.DaggerSignInComponent
+import com.ataulm.whatsnext.di.appComponent
 import kotlinx.android.synthetic.main.activity_sign_in.*
+import javax.inject.Inject
 
 class SignInActivity : BaseActivity() {
 
+    @Inject
+    internal lateinit var whatsNextService: WhatsNextService
     private var presenter: SignInPresenter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        DaggerSignInComponent.builder()
+                .appComponent(appComponent())
+                .build()
+                .inject(this)
         setContentView(R.layout.activity_sign_in)
 
         val screen = SignInScreen(
@@ -25,7 +31,7 @@ class SignInActivity : BaseActivity() {
             screen.setCredentials(BuildConfig.LETTERBOXD_USERNAME, BuildConfig.LETTERBOXD_PASSWORD)
         }
 
-        presenter = SignInPresenter(whatsNextService(), screen, callback)
+        presenter = SignInPresenter(whatsNextService, screen, callback)
 
     }
 
