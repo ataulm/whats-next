@@ -1,14 +1,12 @@
 package com.ataulm.whatsnext.search;
 
-import androidx.annotation.Nullable;
 import android.util.Log;
 
-import com.ataulm.support.Clock;
+import androidx.annotation.Nullable;
+
 import com.ataulm.whatsnext.ErrorTrackingDisposableObserver;
 import com.ataulm.whatsnext.FilmSummary;
 import com.ataulm.whatsnext.Navigator;
-import com.ataulm.whatsnext.Token;
-import com.ataulm.whatsnext.TokensStore;
 import com.ataulm.whatsnext.WhatsNextService;
 
 import java.util.List;
@@ -21,18 +19,14 @@ class SearchPresenter {
 
     private final WhatsNextService service;
     private final SearchDisplayer displayer;
-    private final TokensStore tokensStore;
-    private final Clock clock;
     private final Navigator navigator;
 
     @Nullable
     private Disposable disposable;
 
-    SearchPresenter(WhatsNextService service, SearchDisplayer displayer, TokensStore tokensStore, Clock clock, Navigator navigator) {
+    SearchPresenter(WhatsNextService service, SearchDisplayer displayer, Navigator navigator) {
         this.service = service;
         this.displayer = displayer;
-        this.tokensStore = tokensStore;
-        this.clock = clock;
         this.navigator = navigator;
     }
 
@@ -62,10 +56,6 @@ class SearchPresenter {
             @Override
             public void onClick(FilmSummary filmSummary) {
                 navigator.navigateToFilm(filmSummary.getIds().getLetterboxd());
-            }
-
-            private boolean expired(Token token) {
-                return token.getExpiryMillisSinceEpoch() < clock.getCurrentTimeMillis();
             }
         });
     }
