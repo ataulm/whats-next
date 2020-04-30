@@ -1,27 +1,35 @@
 package com.ataulm.whatsnext.film
 
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
+import androidx.lifecycle.Observer
 import com.ataulm.support.Toaster
 import com.ataulm.whatsnext.BaseActivity
 import com.ataulm.whatsnext.BuildConfig
 import com.ataulm.whatsnext.Film
 import com.ataulm.whatsnext.R
+import com.ataulm.whatsnext.di.DaggerFilmComponent
+import com.ataulm.whatsnext.di.appComponent
 import kotlinx.android.synthetic.main.activity_film.*
+import javax.inject.Inject
 
 class FilmActivity : BaseActivity() {
+
+    @Inject
+    internal lateinit var viewModel: FilmViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (!intent.hasExtra(EXTRA_FILM_ID)) {
             throw IllegalStateException("how you open FilmActivity without a film id?")
         }
-
+        val filmId = intent.getStringExtra(EXTRA_FILM_ID)!!
+        DaggerFilmComponent.builder()
+                .activity(this)
+                .with(filmId)
+                .appComponent(appComponent())
+                .build()
+                .inject(this)
         setContentView(R.layout.activity_film)
-        val filmId = intent.getStringExtra(EXTRA_FILM_ID)
-        val viewModelProvider = ViewModelProviders.of(this, FilmViewModelProvider(whatsNextService(), filmId))
-        val viewModel = viewModelProvider.get(FilmViewModel::class.java)
 
         val displayer = FilmDisplayer(
                 titleTextView,

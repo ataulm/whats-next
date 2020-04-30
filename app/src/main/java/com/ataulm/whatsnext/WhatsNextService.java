@@ -17,7 +17,7 @@ public class WhatsNextService {
     private final TokensStore tokensStore;
     private final Clock clock;
 
-    WhatsNextService(Letterboxd letterboxd, TokensStore tokensStore, Clock clock) {
+    public WhatsNextService(Letterboxd letterboxd, TokensStore tokensStore, Clock clock) {
         this.letterboxd = letterboxd;
         this.tokensStore = tokensStore;
         this.clock = clock;

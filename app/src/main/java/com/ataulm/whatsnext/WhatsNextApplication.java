@@ -10,12 +10,18 @@ import com.ataulm.whatsnext.api.FilmSummaryConverter;
 import com.ataulm.whatsnext.api.Letterboxd;
 import com.ataulm.whatsnext.api.LetterboxdImpl;
 import com.ataulm.whatsnext.api.TokenConverter;
+import com.ataulm.whatsnext.di.AppComponent;
+import com.ataulm.whatsnext.di.AppComponentProvider;
+import com.ataulm.whatsnext.di.DaggerAppComponent;
 import com.google.gson.Gson;
+
+import org.jetbrains.annotations.NotNull;
 
 import okhttp3.OkHttpClient;
 
-public class WhatsNextApplication extends Application {
+public class WhatsNextApplication extends Application implements AppComponentProvider {
 
+    private AppComponent appComponent;
     private WhatsNextService whatsNextService;
     private Letterboxd letterboxd;
     private Clock clock;
@@ -23,8 +29,9 @@ public class WhatsNextApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        Toaster.create(this);
+        this.appComponent = DaggerAppComponent.builder().application(this).build();
 
+        Toaster.create(this);
         clock = new Clock();
         TokenConverter tokenConverter = new TokenConverter(clock);
         letterboxd = createLetterboxd(clock, tokenConverter);
@@ -63,5 +70,11 @@ public class WhatsNextApplication extends Application {
                 new OkHttpClient(),
                 new Gson()
         );
+    }
+
+    @NotNull
+    @Override
+    public AppComponent provideAppComponent() {
+        return appComponent;
     }
 }
