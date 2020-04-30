@@ -24,13 +24,10 @@ class FilmActivity : BaseActivity() {
         val viewModel = viewModelProvider.get(FilmViewModel::class.java)
 
         val displayer = FilmDisplayer(
-                film_details_backdrop,
-                film_details_info,
-                film_details_people_cast,
-                film_details_people_crew,
-                film_text_watch_status,
-                film_button_mark_watched,
-                film_button_mark_not_watched
+                titleTextView,
+                watchedCheckBox,
+                likeCheckBox,
+                ratingBar
         )
 
         displayer.attach(object : FilmDisplayer.Callback {

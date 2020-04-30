@@ -24,6 +24,8 @@ class SearchActivity : BaseActivity() {
         val displayer = SearchDisplayer(searchEditText, searchRecyclerView, bottomSheetBehavior)
         val navigator = navigator()
         presenter = SearchPresenter(whatsNextService(), displayer, TokensStore.create(this), clock(), navigator)
+
+        signInButton.setOnClickListener { navigator.navigateToSignIn() }
     }
 
     override fun onStart() {

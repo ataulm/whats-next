@@ -1,54 +1,35 @@
 package com.ataulm.whatsnext.film
 
-import android.widget.Button
-import android.widget.ImageView
+import android.widget.CheckBox
+import android.widget.RatingBar
 import android.widget.TextView
 import com.ataulm.whatsnext.Film
 import com.bumptech.glide.Glide
 
 internal class FilmDisplayer(
-        private val backdropImageView: ImageView,
-        private val detailsInfoWidget: FilmDetailsInfoWidget,
-        private val castPeopleWidget: PeopleWidget,
-        private val crewPeopleWidget: PeopleWidget,
-        private val watchStatusTextView: TextView,
-        private val markAsWatchedButton: Button,
-        private val markAsNotWatchedButton: Button
+        private val titleTextView: TextView,
+        private val watchedCheckBox: CheckBox,
+        private val likeCheckBox: CheckBox,
+        private val ratingBar: RatingBar
 ) {
 
-    fun attach(callback: Callback) {
-        markAsWatchedButton.setOnClickListener {
-            callback.onClickMarkAsWatched()
-        }
-        markAsNotWatchedButton.setOnClickListener {
-            callback.onClickMarkAsNotWatched()
-        }
-    }
+    private lateinit var callback: Callback
 
-    fun detachCallback() {
-        markAsWatchedButton.setOnClickListener(null)
-        markAsNotWatchedButton.setOnClickListener(null)
+    fun attach(callback: Callback) {
+        this.callback = callback
+        // TODO: haven't got this in the callback yet
+        likeCheckBox.isEnabled = false
     }
 
     fun display(film: Film) {
-        Glide.with(backdropImageView.context)
-                .load(film.summary.backdrop.bestFor(backdropImageView.width)?.url)
-                .into(backdropImageView)
-        detailsInfoWidget.bind(film.summary)
-        castPeopleWidget.bind(castFrom(film))
-        crewPeopleWidget.bind(crewFrom(film))
-
-        watchStatusTextView.text = if (film.relationship.watched) "watched" else "not watched"
-    }
-
-    // TODO: should be done at presenter level
-    private fun castFrom(film: Film): List<PeopleWidget.PersonViewModel> {
-        return film.summary.cast.map { PeopleWidget.PersonViewModel(it.person.name, it.character) }
-    }
-
-    // TODO: should be done at presenter level
-    private fun crewFrom(film: Film): List<PeopleWidget.PersonViewModel> {
-        return film.summary.crew.map { PeopleWidget.PersonViewModel(it.person.name, it.type) }
+        titleTextView.text = if (film.summary.year != null) {
+            "${film.summary.name} (${film.summary.year})"
+        } else {
+            film.summary.name
+        }
+        likeCheckBox.isChecked = film.relationship.liked
+        watchedCheckBox.isChecked = film.relationship.watched
+        ratingBar.rating = film.relationship.rating.toFloat()
     }
 
     internal interface Callback {

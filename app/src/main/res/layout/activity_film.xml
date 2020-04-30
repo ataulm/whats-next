@@ -1,52 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
 
-    <LinearLayout
+    <TextView
+        android:id="@+id/titleTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:textAppearance="?attr/textAppearanceHeadline5"
+        tools:text="The Iron Giant (1999)" />
 
-        <ImageView
-            android:id="@+id/film_details_backdrop"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+    <CheckBox
+        android:id="@+id/watchedCheckBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Watched" />
 
-        <com.ataulm.whatsnext.film.FilmDetailsInfoWidget
-            android:id="@+id/film_details_info"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+    <CheckBox
+        android:id="@+id/likeCheckBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Like" />
 
-        <com.ataulm.whatsnext.film.PeopleWidget
-            android:id="@+id/film_details_people_cast"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:label="@string/film_details_cast_label" />
+    <RatingBar
+        android:id="@+id/ratingBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:max="5"
+        android:stepSize="0.5" />
 
-        <com.ataulm.whatsnext.film.PeopleWidget
-            android:id="@+id/film_details_people_crew"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:label="@string/film_details_crew_label" />
-
-        <TextView
-            android:id="@+id/film_text_watch_status"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-        <Button
-            android:id="@+id/film_button_mark_watched"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Mark as watched" />
-
-        <Button
-            android:id="@+id/film_button_mark_not_watched"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Mark as not watched" />
-
-    </LinearLayout>
-</androidx.core.widget.NestedScrollView>
+</LinearLayout>
