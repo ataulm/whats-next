@@ -9,6 +9,8 @@ import com.ataulm.whatsnext.api.FilmSummaryConverter;
 import com.ataulm.whatsnext.api.Letterboxd;
 import com.ataulm.whatsnext.api.LetterboxdApi;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +21,7 @@ import io.reactivex.functions.Function;
 
 public class WhatsNextService {
 
+    @Deprecated
     private final Letterboxd letterboxd;
     private final LetterboxdApi letterboxdApi;
     private final FilmSummaryConverter filmSummaryConverter;
@@ -36,16 +39,20 @@ public class WhatsNextService {
     public Observable<Token> login(final String username, final String password) {
         return letterboxdApi.fetchAuthToken(username, password, "password")
                 .toObservable()
-                .map(new Function<AuthTokenApiResponse, Token>() {
-                    @Override
-                    public Token apply(AuthTokenApiResponse authTokenApiResponse) {
-                        return new Token(
-                                authTokenApiResponse.getAccessToken(),
-                                authTokenApiResponse.getRefreshToken(),
-                                authTokenApiResponse.getSecondsUntilExpiry()
-                        );
-                    }
-                });
+                .map(toToken());
+    }
+
+    private Function<AuthTokenApiResponse, Token> toToken() {
+        return new Function<AuthTokenApiResponse, Token>() {
+            @Override
+            public Token apply(AuthTokenApiResponse authTokenApiResponse) {
+                return new Token(
+                        authTokenApiResponse.getAccessToken(),
+                        authTokenApiResponse.getRefreshToken(),
+                        authTokenApiResponse.getSecondsUntilExpiry()
+                );
+            }
+        };
     }
 
     public Observable<List<FilmSummary>> search(final String searchTerm) {
@@ -93,8 +100,10 @@ public class WhatsNextService {
 
     private Token refreshToken(Token token) {
         try {
-            return letterboxd.refreshAccessToken(token.getRefreshToken());
-        } catch (IOException e) {
+            return letterboxdApi.refreshAuthToken(token.getRefreshToken(), "refresh_token")
+                    .map(toToken())
+                    .blockingGet();
+        } catch (Exception e) {
             throw new AuthenticationError(e, Type.EXCHANGING_REFRESH_TOKEN_FOR_FRESH_TOKEN);
         }
     }

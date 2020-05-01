@@ -17,6 +17,13 @@ interface LetterboxdApi {
             @Field("grant_type") grantType: String = "password"
     ): Single<AuthTokenApiResponse>
 
+    @FormUrlEncoded
+    @POST("auth/token")
+    fun refreshAuthToken(
+            @Field("refresh_token") refreshToken: String,
+            @Field("grant_type") grantType: String = "refresh_token"
+    ): Single<AuthTokenApiResponse>
+
     @GET("search")
     fun search(@Query("input") searchTerm: String): Single<ApiSearchResponse>
 }
