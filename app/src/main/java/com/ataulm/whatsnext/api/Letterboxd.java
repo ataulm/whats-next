@@ -7,6 +7,7 @@ import com.ataulm.whatsnext.Token;
 import java.io.IOException;
 import java.util.List;
 
+@Deprecated // use LetterboxdApi
 public interface Letterboxd {
 
     Token fetchAccessToken(String username, String password) throws IOException;

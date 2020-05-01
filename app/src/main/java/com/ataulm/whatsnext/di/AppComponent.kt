@@ -39,12 +39,24 @@ internal object AppModule {
 
     @JvmStatic
     @Provides
-    fun whatsNextService(context: Context): WhatsNextService {
+    fun whatsNextService(context: Context, letterboxdApi: LetterboxdApi): WhatsNextService {
         val clock = Clock()
         val tokenConverter = TokenConverter(clock)
         val letterboxd = createLetterboxd(clock, tokenConverter)
         val tokensStore = TokensStore.create(context)
-        return WhatsNextService(letterboxd, tokensStore, clock)
+        return WhatsNextService(letterboxd, letterboxdApi, tokensStore, clock)
+    }
+
+    @JvmStatic
+    @Provides
+    fun letterboxdApi(): LetterboxdApi {
+        // TODO: an offline version? if BuildConfig.OFFLINE
+        return LetterboxdApiFactory(
+                apiKey = BuildConfig.LETTERBOXD_KEY,
+                apiSecret = BuildConfig.LETTERBOXD_SECRET,
+                clock = Clock(),
+                enableHttpLogging = BuildConfig.DEBUG
+        ).createRemote()
     }
 
     private fun createLetterboxd(clock: Clock, tokenConverter: TokenConverter): Letterboxd {

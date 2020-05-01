@@ -8,6 +8,7 @@ ext {
             androidArchLifecycle: '1.1.1',
             dagger              : '2.25.2',
             kotlin              : '1.3.11',
+            okhttp              : '4.2.2',
             retrofit            : '2.8.1',
             support             : '27.1.0'
     ]
@@ -39,7 +40,8 @@ ext {
             jsr305                     : 'com.google.code.findbugs:jsr305:2.0.1',
             kotlinStdLib               : "org.jetbrains.kotlin:kotlin-stdlib:${versions.kotlin}",
             mockitoCore                : 'org.mockito:mockito-core:1.10.19',
-            okhttp                     : 'com.squareup.okhttp3:okhttp:3.8.0',
+            okhttp                     : "com.squareup.okhttp3:okhttp:${versions.okhttp}",
+            okhttpLoggingInterceptor   : "com.squareup.okhttp3:logging-interceptor:${versions.okhttp}",
             retrofit                   : "com.squareup.retrofit2:retrofit:${versions.retrofit}",
             retrofitGson               : "com.squareup.retrofit2:converter-gson:${versions.retrofit}",
             retrofitRxJava             : "com.squareup.retrofit2:adapter-rxjava2:${versions.retrofit}",

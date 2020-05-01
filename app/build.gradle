@@ -52,6 +52,7 @@ dependencies {
     implementation libraries.gson
     implementation libraries.kotlinStdLib
     implementation libraries.okhttp
+    implementation libraries.okhttpLoggingInterceptor
     implementation libraries.retrofit
     implementation libraries.retrofitGson
     implementation libraries.retrofitRxJava
