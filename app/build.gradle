@@ -52,6 +52,9 @@ dependencies {
     implementation libraries.gson
     implementation libraries.kotlinStdLib
     implementation libraries.okhttp
+    implementation libraries.retrofit
+    implementation libraries.retrofitGson
+    implementation libraries.retrofitRxJava
     implementation libraries.rxandroid
     implementation libraries.rxjava
 
