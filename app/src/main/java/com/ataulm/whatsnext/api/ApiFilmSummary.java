@@ -6,43 +6,43 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-class ApiFilmSummary {
+public class ApiFilmSummary {
 
     @SerializedName("name")
-    String name;
+    public String name;
 
     @Nullable
     @SerializedName("tagline")
-    String tagline;
+    public String tagline;
 
     @Nullable
     @SerializedName("description")
-    String description;
+    public String description;
 
     @Nullable
     @SerializedName("releaseYear")
-    Integer releaseYear;
+    public Integer releaseYear;
 
     @Nullable
     @SerializedName("runTime")
-    Integer runtimeMinutes;
+    public Integer runtimeMinutes;
 
     @Nullable
     @SerializedName("poster")
-    ApiImage poster;
+    public ApiImage poster;
 
     @Nullable
     @SerializedName("backdrop")
-    ApiImage backdrop;
+    public ApiImage backdrop;
 
     @SerializedName("links")
-    List<ApiLink> links;
+    public List<ApiLink> links;
 
     @Nullable
     @SerializedName("genres")
-    List<ApiGenre> genres;
+    public List<ApiGenre> genres;
 
     @Nullable
     @SerializedName("contributions")
-    List<ApiContribution> contributions;
+    public List<ApiContribution> contributions;
 }

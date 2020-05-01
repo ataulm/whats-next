@@ -2,11 +2,11 @@ package com.ataulm.whatsnext.api;
 
 import com.google.gson.annotations.SerializedName;
 
-class ApiLink {
+public class ApiLink {
 
     @SerializedName("type")
-    String type;
+    public String type;
 
     @SerializedName("id")
-    String id;
+    public String id;
 }

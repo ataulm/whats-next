@@ -4,20 +4,20 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-class ApiSearchResponse {
+public class ApiSearchResponse {
 
     @SerializedName("next")
-    String cursorToNextPageOfResults;
+    public String cursorToNextPageOfResults;
 
     @SerializedName("items")
-    List<Result> searchItems;
+    public List<Result> searchItems;
 
-    static class Result {
+    public static class Result {
 
         @SerializedName("type")
-        String type;
+        public String type;
 
         @SerializedName("film")
-        ApiFilmSummary filmSummary;
+        public ApiFilmSummary filmSummary;
     }
 }

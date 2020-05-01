@@ -1,13 +1,16 @@
 package com.ataulm.whatsnext;
 
 import com.ataulm.support.Clock;
+import com.ataulm.whatsnext.api.ApiSearchResponse;
 import com.ataulm.whatsnext.api.AuthTokenApiResponse;
 import com.ataulm.whatsnext.api.AuthenticationError;
 import com.ataulm.whatsnext.api.AuthenticationError.Type;
+import com.ataulm.whatsnext.api.FilmSummaryConverter;
 import com.ataulm.whatsnext.api.Letterboxd;
 import com.ataulm.whatsnext.api.LetterboxdApi;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
 
@@ -18,12 +21,14 @@ public class WhatsNextService {
 
     private final Letterboxd letterboxd;
     private final LetterboxdApi letterboxdApi;
+    private final FilmSummaryConverter filmSummaryConverter;
     private final TokensStore tokensStore;
     private final Clock clock;
 
-    public WhatsNextService(Letterboxd letterboxd, LetterboxdApi letterboxdApi, TokensStore tokensStore, Clock clock) {
+    public WhatsNextService(Letterboxd letterboxd, LetterboxdApi letterboxdApi, FilmSummaryConverter filmSummaryConverter, TokensStore tokensStore, Clock clock) {
         this.letterboxd = letterboxd;
         this.letterboxdApi = letterboxdApi;
+        this.filmSummaryConverter = filmSummaryConverter;
         this.tokensStore = tokensStore;
         this.clock = clock;
     }
@@ -44,12 +49,22 @@ public class WhatsNextService {
     }
 
     public Observable<List<FilmSummary>> search(final String searchTerm) {
-        return Observable.fromCallable(new Callable<List<FilmSummary>>() {
-            @Override
-            public List<FilmSummary> call() throws Exception {
-                return letterboxd.search(searchTerm);
-            }
-        });
+        return letterboxdApi.search(searchTerm)
+                .toObservable()
+                .map(new Function<ApiSearchResponse, List<FilmSummary>>() {
+                    @Override
+                    public List<FilmSummary> apply(ApiSearchResponse apiSearchResponse) {
+                        List<FilmSummary> filmSummaries = new ArrayList<>(apiSearchResponse.searchItems.size());
+                        for (ApiSearchResponse.Result searchItem : apiSearchResponse.searchItems) {
+                            if (!"FilmSearchItem".equals(searchItem.type)) {
+                                continue;
+                            }
+                            FilmSummary filmSummary = filmSummaryConverter.convert(searchItem.filmSummary);
+                            filmSummaries.add(filmSummary);
+                        }
+                        return filmSummaries;
+                    }
+                });
     }
 
     public Observable<Film> film(final String letterboxdId) {

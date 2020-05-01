@@ -2,9 +2,7 @@ package com.ataulm.whatsnext.api
 
 import com.google.gson.annotations.SerializedName
 import io.reactivex.Single
-import retrofit2.http.Field
-import retrofit2.http.FormUrlEncoded
-import retrofit2.http.POST
+import retrofit2.http.*
 
 /**
  * Retrofit implementation of [Letterboxd]. When that's been removed, this comment can disappear.
@@ -18,6 +16,9 @@ interface LetterboxdApi {
             @Field("password") password: String,
             @Field("grant_type") grantType: String = "password"
     ): Single<AuthTokenApiResponse>
+
+    @GET("search")
+    fun search(@Query("input") searchTerm: String): Single<ApiSearchResponse>
 }
 
 data class AuthTokenApiResponse(

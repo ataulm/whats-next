@@ -44,7 +44,8 @@ internal object AppModule {
         val tokenConverter = TokenConverter(clock)
         val letterboxd = createLetterboxd(clock, tokenConverter)
         val tokensStore = TokensStore.create(context)
-        return WhatsNextService(letterboxd, letterboxdApi, tokensStore, clock)
+        val filmSummaryConverter = FilmSummaryConverter()
+        return WhatsNextService(letterboxd, letterboxdApi, filmSummaryConverter, tokensStore, clock)
     }
 
     @JvmStatic
