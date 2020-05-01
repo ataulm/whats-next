@@ -30,16 +30,6 @@ class FakeLetterboxd : Letterboxd {
         return ironGiantFilm()
     }
 
-    @Throws(IOException::class)
-    override fun me(accessToken: String): ApiMemberAccountResponse? {
-        return null
-    }
-
-    @Throws(IOException::class)
-    override fun watchlist(accessToken: String, userId: String): List<FilmSummary>? {
-        return null
-    }
-
     private fun ironGiantFilm(): Film {
         return Film(
                 ironGiantSummary(),

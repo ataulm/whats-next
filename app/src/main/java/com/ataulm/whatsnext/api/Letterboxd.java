@@ -16,8 +16,4 @@ public interface Letterboxd {
     List<FilmSummary> search(String searchTerm) throws IOException;
 
     Film film(String letterboxdId, String accessToken) throws IOException;
-
-    ApiMemberAccountResponse me(String accessToken) throws IOException;
-
-    List<FilmSummary> watchlist(String accessToken, String userId) throws IOException;
 }

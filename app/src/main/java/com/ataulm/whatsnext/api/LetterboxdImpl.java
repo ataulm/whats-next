@@ -118,28 +118,6 @@ public class LetterboxdImpl implements Letterboxd {
         return filmRelationshipConverter.convert(deserializedResponse);
     }
 
-    @Override
-    public ApiMemberAccountResponse me(String accessToken) throws IOException {
-        String url = new LetterboxdUrlBuilder(apiKey, clock).path("/me").build();
-        Response response = createAndExecuteUserAuthedRequest(HTTP_METHOD_GET, url, accessToken);
-        String responseString = response.body().string();
-        return gson.fromJson(responseString, ApiMemberAccountResponse.class);
-    }
-
-    @Override
-    public List<FilmSummary> watchlist(String accessToken, String userId) throws IOException {
-        String url = new LetterboxdUrlBuilder(apiKey, clock).path("/member/" + userId + "/watchlist").build();
-        Response response = createAndExecuteUserAuthedRequest(HTTP_METHOD_GET, url, accessToken);
-        String responseString = response.body().string();
-        ApiFilmsResponse deserializedResponse = gson.fromJson(responseString, ApiFilmsResponse.class);
-        List<FilmSummary> filmSummaries = new ArrayList<>(deserializedResponse.filmSummaries.size());
-        for (ApiFilmSummary filmSummary : deserializedResponse.filmSummaries) {
-            FilmSummary film = filmSummaryConverter.convert(filmSummary);
-            filmSummaries.add(film);
-        }
-        return filmSummaries;
-    }
-
     private Response createAndExecuteUserAuthedRequest(String httpMethod, String url, String accessToken) throws IOException {
         Request.Builder builder = new Request.Builder()
                 .url(url + "&signature=" + generateSignature(httpMethod, url, ""))
