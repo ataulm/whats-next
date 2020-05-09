@@ -21,8 +21,6 @@ import javax.inject.Singleton
 @Singleton
 interface AppComponent {
 
-    fun context(): Context
-
     fun whatsNextService(): WhatsNextService
 
     @Component.Builder
@@ -35,33 +33,28 @@ interface AppComponent {
     }
 }
 
-@Module(includes = [AppModule.Declarations::class])
+@Module
 internal object AppModule {
 
     @JvmStatic
     @Provides
-    fun whatsNextService(letterboxdApi: LetterboxdApi): WhatsNextService {
+    fun whatsNextService(application: Application): WhatsNextService {
+        val tokensStore = tokensStore(application)
+        val letterboxdApi = letterboxdApi(tokensStore)
         val filmSummaryConverter = FilmSummaryConverter()
         val filmRelationshipConverter = FilmRelationshipConverter()
-        return WhatsNextService(letterboxdApi, filmSummaryConverter, filmRelationshipConverter)
+        return WhatsNextService(letterboxdApi, tokensStore, filmSummaryConverter, filmRelationshipConverter)
     }
 
-    @JvmStatic
-    @Provides
-    fun letterboxdApi(application: Application): LetterboxdApi {
+   private fun letterboxdApi(tokensStore: TokensStore): LetterboxdApi {
         return LetterboxdApiFactory(
                 apiKey = BuildConfig.LETTERBOXD_KEY,
                 apiSecret = BuildConfig.LETTERBOXD_SECRET,
-                tokensStore = TokensStore.create(application),
+                tokensStore = tokensStore,
                 clock = Clock(),
                 enableHttpLogging = BuildConfig.DEBUG
         ).createRemote()
     }
 
-    @Module
-    interface Declarations {
-
-        @Binds
-        fun application(application: Application): Application
-    }
+   private fun tokensStore(application: Application) = TokensStore.create(application)
 }
