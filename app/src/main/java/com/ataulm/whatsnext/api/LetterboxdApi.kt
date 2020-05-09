@@ -4,6 +4,9 @@ import com.google.gson.annotations.SerializedName
 import io.reactivex.Single
 import retrofit2.http.*
 
+@Target(AnnotationTarget.FUNCTION)
+annotation class RequiresAuthenticatedUser
+
 interface LetterboxdApi {
 
     @FormUrlEncoded
@@ -27,6 +30,7 @@ interface LetterboxdApi {
     @GET("film/{id}")
     fun film(@Path("id") letterboxdId: String): Single<ApiFilm>
 
+    @RequiresAuthenticatedUser
     @GET("film/{id}/me")
     fun filmRelationship(@Path("id") letterboxdId: String): Single<ApiFilmRelationship>
 }

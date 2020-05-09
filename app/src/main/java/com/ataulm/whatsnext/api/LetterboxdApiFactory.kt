@@ -4,6 +4,7 @@ import com.ataulm.support.Clock
 import com.ataulm.whatsnext.TokensStore
 import okhttp3.*
 import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.Invocation
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
@@ -61,24 +62,20 @@ private class AddAuthorizationHeaderInterceptor(private val apiSecret: String, p
         val originalUrl = chain.request().url
 
         val signature = generateSignature(chain.request().method, originalUrl, chain.request().body)
-        if (originalUrl.requiresUserAuth()) {
+        if (chain.request().requiresAuthenticatedUser()) {
             val urlWithSignature = originalUrl.newBuilder().addQueryParameter("signature", signature).build()
             builder.url(urlWithSignature)
         } else {
             builder.url(originalUrl)
         }
 
-        if (originalUrl.requiresUserAuth()) {
+        if (chain.request().requiresAuthenticatedUser()) {
             builder.addHeader(HEADER_AUTH, "Bearer ${requireNotNull(tokensStore.token).accessToken}")
         } else {
             builder.addHeader(HEADER_AUTH, "Signature $signature")
         }
 
         return chain.proceed(builder.build())
-    }
-
-    private fun HttpUrl.requiresUserAuth(): Boolean {
-        return pathSegments.contains("me")
     }
 
     private fun generateSignature(httpMethod: String, url: HttpUrl, requestBody: RequestBody?): String {
@@ -102,4 +99,10 @@ private class AddAuthorizationHeaderInterceptor(private val apiSecret: String, p
         }
         return pairs.joinToString(separator = "&")
     }
+}
+
+private fun Request.requiresAuthenticatedUser(): Boolean {
+    return tag(Invocation::class.java)
+            ?.method()
+            ?.getAnnotation(RequiresAuthenticatedUser::class.java) != null
 }
