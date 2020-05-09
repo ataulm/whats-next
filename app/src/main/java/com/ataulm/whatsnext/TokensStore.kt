@@ -3,7 +3,7 @@ package com.ataulm.whatsnext
 import android.content.Context
 import android.content.SharedPreferences
 
-internal class TokensStore private constructor(private val preferences: SharedPreferences) {
+class TokensStore private constructor(private val preferences: SharedPreferences) {
 
     fun store(token: Token) {
         preferences.edit()

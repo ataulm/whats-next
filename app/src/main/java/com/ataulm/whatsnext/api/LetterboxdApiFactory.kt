@@ -1,6 +1,7 @@
 package com.ataulm.whatsnext.api
 
 import com.ataulm.support.Clock
+import com.ataulm.whatsnext.TokensStore
 import okhttp3.*
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -12,6 +13,7 @@ import java.util.concurrent.TimeUnit
 class LetterboxdApiFactory(
         private val apiKey: String,
         private val apiSecret: String,
+        private val tokensStore: TokensStore,
         private val clock: Clock,
         private val enableHttpLogging: Boolean
 ) {
@@ -19,7 +21,7 @@ class LetterboxdApiFactory(
     fun createRemote(): LetterboxdApi {
         val okHttpClient = OkHttpClient.Builder()
                 .addNetworkInterceptor(AddApiKeyQueryParameterInterceptor(apiKey, clock))
-                .addNetworkInterceptor(AddAuthorizationHeaderInterceptor(apiSecret))
+                .addNetworkInterceptor(AddAuthorizationHeaderInterceptor(apiSecret, tokensStore))
 
         if (enableHttpLogging) {
             val httpLoggingInterceptor = HttpLoggingInterceptor()
@@ -52,26 +54,38 @@ private class AddApiKeyQueryParameterInterceptor(private val apiKey: String, pri
 
 private const val HEADER_AUTH = "Authorization"
 
-private class AddAuthorizationHeaderInterceptor(private val apiSecret: String) : Interceptor {
+private class AddAuthorizationHeaderInterceptor(private val apiSecret: String, private val tokensStore: TokensStore) : Interceptor {
 
     override fun intercept(chain: Interceptor.Chain): Response {
         val builder = chain.request().newBuilder()
-        val url = chain.request().url
+        val originalUrl = chain.request().url
 
-        val signature = generateSignature(chain.request().method, url, chain.request().body)
-        builder.url(url)
-        builder.addHeader(HEADER_AUTH, "Signature $signature")
+        val signature = generateSignature(chain.request().method, originalUrl, chain.request().body)
+        if (originalUrl.requiresUserAuth()) {
+            val urlWithSignature = originalUrl.newBuilder().addQueryParameter("signature", signature).build()
+            builder.url(urlWithSignature)
+        } else {
+            builder.url(originalUrl)
+        }
+
+        if (originalUrl.requiresUserAuth()) {
+            builder.addHeader(HEADER_AUTH, "Bearer ${requireNotNull(tokensStore.token).accessToken}")
+        } else {
+            builder.addHeader(HEADER_AUTH, "Signature $signature")
+        }
 
         return chain.proceed(builder.build())
     }
 
-    private fun generateSignature(httpMethod: String, url: HttpUrl,
-                                  requestBody: RequestBody?): String {
+    private fun HttpUrl.requiresUserAuth(): Boolean {
+        return pathSegments.contains("me")
+    }
+
+    private fun generateSignature(httpMethod: String, url: HttpUrl, requestBody: RequestBody?): String {
         return if (requestBody == null) {
             generateSignature(httpMethod, url.toString(), "")
         } else {
-            generateSignature(httpMethod, url.toString(),
-                    (requestBody as FormBody).toUrlEncodedString())
+            generateSignature(httpMethod, url.toString(), (requestBody as FormBody).toUrlEncodedString())
         }
     }
 

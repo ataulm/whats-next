@@ -39,26 +39,31 @@ internal object AppModule {
 
     @JvmStatic
     @Provides
-    fun whatsNextService(context: Context, letterboxdApi: LetterboxdApi): WhatsNextService {
+    fun whatsNextService(tokensStore: TokensStore, letterboxdApi: LetterboxdApi): WhatsNextService {
         val clock = Clock()
         val tokenConverter = TokenConverter(clock)
         val letterboxd = createLetterboxd(clock, tokenConverter)
-        val tokensStore = TokensStore.create(context)
         val filmSummaryConverter = FilmSummaryConverter()
-        return WhatsNextService(letterboxd, letterboxdApi, filmSummaryConverter, tokensStore, clock)
+        val filmRelationshipConverter = FilmRelationshipConverter()
+        return WhatsNextService(letterboxd, letterboxdApi, filmSummaryConverter, filmRelationshipConverter, tokensStore, clock)
     }
 
     @JvmStatic
     @Provides
-    fun letterboxdApi(): LetterboxdApi {
+    fun letterboxdApi(tokensStore: TokensStore): LetterboxdApi {
         // TODO: an offline version? if BuildConfig.OFFLINE
         return LetterboxdApiFactory(
                 apiKey = BuildConfig.LETTERBOXD_KEY,
                 apiSecret = BuildConfig.LETTERBOXD_SECRET,
+                tokensStore = tokensStore,
                 clock = Clock(),
                 enableHttpLogging = BuildConfig.DEBUG
         ).createRemote()
     }
+
+    @JvmStatic
+    @Provides
+    fun tokensStore(context: Context) = TokensStore.create(context)
 
     private fun createLetterboxd(clock: Clock, tokenConverter: TokenConverter): Letterboxd {
         return if (BuildConfig.OFFLINE) {

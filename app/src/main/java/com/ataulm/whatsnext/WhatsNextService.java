@@ -1,22 +1,21 @@
 package com.ataulm.whatsnext;
 
 import com.ataulm.support.Clock;
+import com.ataulm.whatsnext.api.ApiFilm;
+import com.ataulm.whatsnext.api.ApiFilmRelationship;
 import com.ataulm.whatsnext.api.ApiSearchResponse;
 import com.ataulm.whatsnext.api.AuthTokenApiResponse;
-import com.ataulm.whatsnext.api.AuthenticationError;
-import com.ataulm.whatsnext.api.AuthenticationError.Type;
+import com.ataulm.whatsnext.api.FilmRelationshipConverter;
 import com.ataulm.whatsnext.api.FilmSummaryConverter;
 import com.ataulm.whatsnext.api.Letterboxd;
 import com.ataulm.whatsnext.api.LetterboxdApi;
 
-import org.jetbrains.annotations.NotNull;
-
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Callable;
 
 import io.reactivex.Observable;
+import io.reactivex.Single;
+import io.reactivex.functions.BiFunction;
 import io.reactivex.functions.Function;
 
 public class WhatsNextService {
@@ -25,13 +24,15 @@ public class WhatsNextService {
     private final Letterboxd letterboxd;
     private final LetterboxdApi letterboxdApi;
     private final FilmSummaryConverter filmSummaryConverter;
+    private final FilmRelationshipConverter filmRelationshipConverter;
     private final TokensStore tokensStore;
     private final Clock clock;
 
-    public WhatsNextService(Letterboxd letterboxd, LetterboxdApi letterboxdApi, FilmSummaryConverter filmSummaryConverter, TokensStore tokensStore, Clock clock) {
+    public WhatsNextService(Letterboxd letterboxd, LetterboxdApi letterboxdApi, FilmSummaryConverter filmSummaryConverter, FilmRelationshipConverter filmRelationshipConverter, TokensStore tokensStore, Clock clock) {
         this.letterboxd = letterboxd;
         this.letterboxdApi = letterboxdApi;
         this.filmSummaryConverter = filmSummaryConverter;
+        this.filmRelationshipConverter = filmRelationshipConverter;
         this.tokensStore = tokensStore;
         this.clock = clock;
     }
@@ -75,36 +76,18 @@ public class WhatsNextService {
     }
 
     public Observable<Film> film(final String letterboxdId) {
-        return Observable.fromCallable(new Callable<Film>() {
-            @Override
-            public Film call() throws Exception {
-                return letterboxd.film(letterboxdId, getToken().getAccessToken());
-            }
-        });
-    }
-
-    private Token getToken() {
-        Token token = tokensStore.getToken();
-
-        if (token == null) {
-            throw new AuthenticationError(Type.REQUIRES_USER_SIGN_IN);
-        }
-
-        if (token.getExpiryMillisSinceEpoch() < clock.getCurrentTimeMillis()) {
-            token = refreshToken(token);
-            tokensStore.store(token);
-        }
-
-        return token;
-    }
-
-    private Token refreshToken(Token token) {
-        try {
-            return letterboxdApi.refreshAuthToken(token.getRefreshToken(), "refresh_token")
-                    .map(toToken())
-                    .blockingGet();
-        } catch (Exception e) {
-            throw new AuthenticationError(e, Type.EXCHANGING_REFRESH_TOKEN_FOR_FRESH_TOKEN);
-        }
+        return Single.zip(
+                letterboxdApi.film(letterboxdId),
+                letterboxdApi.filmRelationship(letterboxdId),
+                new BiFunction<ApiFilm, ApiFilmRelationship, Film>() {
+                    @Override
+                    public Film apply(ApiFilm apiFilm, ApiFilmRelationship apiFilmRelationship) {
+                        return new Film(
+                                filmSummaryConverter.convert(apiFilm),
+                                filmRelationshipConverter.convert(apiFilmRelationship)
+                        );
+                    }
+                }
+        ).toObservable();
     }
 }

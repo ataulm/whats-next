@@ -26,6 +26,12 @@ interface LetterboxdApi {
 
     @GET("search")
     fun search(@Query("input") searchTerm: String): Single<ApiSearchResponse>
+
+    @GET("film/{id}")
+    fun film(@Path("id") letterboxdId: String): Single<ApiFilm>
+
+    @GET("film/{id}/me")
+    fun filmRelationship(@Path("id") letterboxdId: String): Single<ApiFilmRelationship>
 }
 
 data class AuthTokenApiResponse(
