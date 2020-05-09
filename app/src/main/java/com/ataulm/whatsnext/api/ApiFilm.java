@@ -1,4 +1,4 @@
 package com.ataulm.whatsnext.api;
 
-class ApiFilm extends ApiFilmSummary {
+public class ApiFilm extends ApiFilmSummary {
 }

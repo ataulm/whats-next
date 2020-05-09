@@ -4,11 +4,11 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-class ApiContribution {
+public class ApiContribution {
 
     @SerializedName("type")
-    String type;
+    public String type;
 
     @SerializedName("contributors")
-    List<ApiContributor> contributors;
+    public List<ApiContributor> contributors;
 }

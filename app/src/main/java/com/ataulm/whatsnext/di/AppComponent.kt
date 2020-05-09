@@ -6,10 +6,11 @@ import com.ataulm.support.Clock
 import com.ataulm.whatsnext.BuildConfig
 import com.ataulm.whatsnext.TokensStore
 import com.ataulm.whatsnext.WhatsNextService
-import com.ataulm.whatsnext.api.*
-import com.google.gson.Gson
+import com.ataulm.whatsnext.api.FilmRelationshipConverter
+import com.ataulm.whatsnext.api.FilmSummaryConverter
+import com.ataulm.whatsnext.api.LetterboxdApi
+import com.ataulm.whatsnext.api.LetterboxdApiFactory
 import dagger.*
-import okhttp3.OkHttpClient
 import javax.inject.Singleton
 
 @Component(
@@ -39,33 +40,28 @@ internal object AppModule {
 
     @JvmStatic
     @Provides
-    fun whatsNextService(context: Context): WhatsNextService {
-        val clock = Clock()
-        val tokenConverter = TokenConverter(clock)
-        val letterboxd = createLetterboxd(clock, tokenConverter)
-        val tokensStore = TokensStore.create(context)
-        return WhatsNextService(letterboxd, tokensStore, clock)
+    fun whatsNextService(letterboxdApi: LetterboxdApi): WhatsNextService {
+        val filmSummaryConverter = FilmSummaryConverter()
+        val filmRelationshipConverter = FilmRelationshipConverter()
+        return WhatsNextService(letterboxdApi, filmSummaryConverter, filmRelationshipConverter)
     }
 
-    private fun createLetterboxd(clock: Clock, tokenConverter: TokenConverter): Letterboxd {
-        return if (BuildConfig.OFFLINE) {
-            FakeLetterboxd()
-        } else LetterboxdImpl(
-                BuildConfig.LETTERBOXD_KEY,
-                BuildConfig.LETTERBOXD_SECRET,
-                clock,
-                tokenConverter,
-                FilmSummaryConverter(),
-                FilmRelationshipConverter(),
-                OkHttpClient(),
-                Gson()
-        )
+    @JvmStatic
+    @Provides
+    fun letterboxdApi(application: Application): LetterboxdApi {
+        return LetterboxdApiFactory(
+                apiKey = BuildConfig.LETTERBOXD_KEY,
+                apiSecret = BuildConfig.LETTERBOXD_SECRET,
+                tokensStore = TokensStore.create(application),
+                clock = Clock(),
+                enableHttpLogging = BuildConfig.DEBUG
+        ).createRemote()
     }
 
     @Module
     interface Declarations {
 
         @Binds
-        fun context(application: Application): Context
+        fun application(application: Application): Application
     }
 }

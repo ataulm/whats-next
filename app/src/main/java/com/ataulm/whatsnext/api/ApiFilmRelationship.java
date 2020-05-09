@@ -2,17 +2,17 @@ package com.ataulm.whatsnext.api;
 
 import com.google.gson.annotations.SerializedName;
 
-class ApiFilmRelationship {
+public class ApiFilmRelationship {
 
     @SerializedName("watched")
-    boolean watched;
+    public boolean watched;
 
     @SerializedName("liked")
-    boolean liked;
+    public boolean liked;
 
     @SerializedName("inWatchlist")
-    boolean inWatchlist;
+    public boolean inWatchlist;
 
     @SerializedName("rating")
-    double rating;
+    public double rating;
 }
