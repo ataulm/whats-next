@@ -1,13 +1,11 @@
 package com.ataulm.whatsnext;
 
-import com.ataulm.support.Clock;
 import com.ataulm.whatsnext.api.ApiFilm;
 import com.ataulm.whatsnext.api.ApiFilmRelationship;
 import com.ataulm.whatsnext.api.ApiSearchResponse;
 import com.ataulm.whatsnext.api.AuthTokenApiResponse;
 import com.ataulm.whatsnext.api.FilmRelationshipConverter;
 import com.ataulm.whatsnext.api.FilmSummaryConverter;
-import com.ataulm.whatsnext.api.Letterboxd;
 import com.ataulm.whatsnext.api.LetterboxdApi;
 
 import java.util.ArrayList;
@@ -20,21 +18,14 @@ import io.reactivex.functions.Function;
 
 public class WhatsNextService {
 
-    @Deprecated
-    private final Letterboxd letterboxd;
     private final LetterboxdApi letterboxdApi;
     private final FilmSummaryConverter filmSummaryConverter;
     private final FilmRelationshipConverter filmRelationshipConverter;
-    private final TokensStore tokensStore;
-    private final Clock clock;
 
-    public WhatsNextService(Letterboxd letterboxd, LetterboxdApi letterboxdApi, FilmSummaryConverter filmSummaryConverter, FilmRelationshipConverter filmRelationshipConverter, TokensStore tokensStore, Clock clock) {
-        this.letterboxd = letterboxd;
+    public WhatsNextService(LetterboxdApi letterboxdApi, FilmSummaryConverter filmSummaryConverter, FilmRelationshipConverter filmRelationshipConverter) {
         this.letterboxdApi = letterboxdApi;
         this.filmSummaryConverter = filmSummaryConverter;
         this.filmRelationshipConverter = filmRelationshipConverter;
-        this.tokensStore = tokensStore;
-        this.clock = clock;
     }
 
     public Observable<Token> login(final String username, final String password) {

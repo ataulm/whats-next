@@ -4,9 +4,6 @@ import com.google.gson.annotations.SerializedName
 import io.reactivex.Single
 import retrofit2.http.*
 
-/**
- * Retrofit implementation of [Letterboxd]. When that's been removed, this comment can disappear.
- */
 interface LetterboxdApi {
 
     @FormUrlEncoded
