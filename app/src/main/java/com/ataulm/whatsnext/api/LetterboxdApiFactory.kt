@@ -1,8 +1,15 @@
 package com.ataulm.whatsnext.api
 
 import com.ataulm.support.Clock
+import com.ataulm.whatsnext.Token
 import com.ataulm.whatsnext.TokensStore
-import okhttp3.*
+import okhttp3.FormBody
+import okhttp3.HttpUrl
+import okhttp3.Interceptor
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.RequestBody
+import okhttp3.Response
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Invocation
 import retrofit2.Retrofit
@@ -10,6 +17,8 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.*
 import java.util.concurrent.TimeUnit
+
+private const val LETTERBOXD_BASE_URL = "https://api.letterboxd.com/api/v0/"
 
 class LetterboxdApiFactory(
         private val apiKey: String,
@@ -20,21 +29,41 @@ class LetterboxdApiFactory(
 ) {
 
     fun createRemote(): LetterboxdApi {
-        val okHttpClient = OkHttpClient.Builder()
-                .addNetworkInterceptor(AddApiKeyQueryParameterInterceptor(apiKey, clock))
-                .addNetworkInterceptor(AddAuthorizationHeaderInterceptor(apiSecret, tokensStore))
+        val apiKeyIntercepter = AddApiKeyQueryParameterInterceptor(apiKey, clock)
 
-        if (enableHttpLogging) {
-            val httpLoggingInterceptor = HttpLoggingInterceptor()
-            httpLoggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
-            okHttpClient.addInterceptor(httpLoggingInterceptor)
-        }
+        val refreshAccessTokenClient = OkHttpClient.Builder().apply {
+            addNetworkInterceptor(apiKeyIntercepter)
+            if (enableHttpLogging) {
+                val httpLoggingInterceptor = HttpLoggingInterceptor().apply {
+                    level = HttpLoggingInterceptor.Level.BODY
+                }
+                addInterceptor(httpLoggingInterceptor)
+            }
+        }.build()
+
+        val refreshAccessTokenApi = Retrofit.Builder()
+                .client(refreshAccessTokenClient)
+                .addConverterFactory(GsonConverterFactory.create())
+                .baseUrl(LETTERBOXD_BASE_URL)
+                .build()
+                .create(LetterboxdRefreshAccessTokenApi::class.java)
+
+        val okHttpClient = OkHttpClient.Builder().apply {
+            addNetworkInterceptor(apiKeyIntercepter)
+            addNetworkInterceptor(AddAuthorizationHeaderInterceptor(apiSecret, tokensStore))
+            addNetworkInterceptor(RefreshAccessTokenInterceptor(refreshAccessTokenApi, tokensStore))
+            if (enableHttpLogging) {
+                val httpLoggingInterceptor = HttpLoggingInterceptor()
+                httpLoggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
+                addInterceptor(httpLoggingInterceptor)
+            }
+        }.build()
 
         return Retrofit.Builder()
-                .client(okHttpClient.build())
+                .client(okHttpClient)
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create())
-                .baseUrl("https://api.letterboxd.com/api/v0/")
+                .baseUrl(LETTERBOXD_BASE_URL)
                 .build()
                 .create(LetterboxdApi::class.java)
     }
@@ -98,6 +127,28 @@ private class AddAuthorizationHeaderInterceptor(private val apiSecret: String, p
             pairs.add(encodedName(i) + "=" + encodedValue(i))
         }
         return pairs.joinToString(separator = "&")
+    }
+}
+
+private class RefreshAccessTokenInterceptor(
+        private val refreshAccessTokenApi: LetterboxdRefreshAccessTokenApi,
+        private val tokensStore: TokensStore
+) : Interceptor {
+
+    override fun intercept(chain: Interceptor.Chain): Response {
+        val response = chain.proceed(chain.request())
+        val token = tokensStore.token
+        if (response.code != 401 || token == null || !chain.request().requiresAuthenticatedUser()) {
+            // 1) we only care about unauthorized
+            // 2) if token is null, user needs to sign in explicitly
+            // 3) if this request doesn't need access token, let's not get one
+            return response
+        }
+
+        val updatedToken = refreshAccessTokenApi.refreshAuthToken(token.refreshToken)
+                .let { Token(it.accessToken, it.refreshToken, it.secondsUntilExpiry) }
+        tokensStore.store(updatedToken)
+        return chain.proceed(chain.request())
     }
 }
 

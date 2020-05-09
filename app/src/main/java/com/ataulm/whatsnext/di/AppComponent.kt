@@ -1,7 +1,6 @@
 package com.ataulm.whatsnext.di;
 
 import android.app.Application
-import android.content.Context
 import com.ataulm.support.Clock
 import com.ataulm.whatsnext.BuildConfig
 import com.ataulm.whatsnext.TokensStore
@@ -43,7 +42,7 @@ internal object AppModule {
         val letterboxdApi = letterboxdApi(tokensStore)
         val filmSummaryConverter = FilmSummaryConverter()
         val filmRelationshipConverter = FilmRelationshipConverter()
-        return WhatsNextService(letterboxdApi, tokensStore, filmSummaryConverter, filmRelationshipConverter)
+        return WhatsNextService(letterboxdApi, filmSummaryConverter, filmRelationshipConverter)
     }
 
    private fun letterboxdApi(tokensStore: TokensStore): LetterboxdApi {
