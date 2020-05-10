@@ -11,16 +11,10 @@ import com.ataulm.whatsnext.api.LetterboxdApi;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.reactivex.Completable;
-import io.reactivex.CompletableSource;
 import io.reactivex.Observable;
-import io.reactivex.ObservableSource;
-import io.reactivex.ObservableTransformer;
 import io.reactivex.Single;
-import io.reactivex.functions.Action;
 import io.reactivex.functions.BiFunction;
 import io.reactivex.functions.Function;
-import retrofit2.HttpException;
 
 public class WhatsNextService {
 
@@ -46,8 +40,7 @@ public class WhatsNextService {
             public Token apply(AuthTokenApiResponse authTokenApiResponse) {
                 return new Token(
                         authTokenApiResponse.getAccessToken(),
-                        authTokenApiResponse.getRefreshToken(),
-                        authTokenApiResponse.getSecondsUntilExpiry()
+                        authTokenApiResponse.getRefreshToken()
                 );
             }
         };

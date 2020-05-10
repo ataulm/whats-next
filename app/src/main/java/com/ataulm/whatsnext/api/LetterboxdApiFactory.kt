@@ -151,7 +151,7 @@ private class RefreshAccessTokenInterceptor(
         return refreshAccessTokenApi.refreshAuthToken(refreshToken).execute()
                 .let { response ->
                     response.body()?.let {
-                        Token(it.accessToken, it.refreshToken, it.secondsUntilExpiry)
+                        Token(it.accessToken, it.refreshToken)
                     }
                 }
     }

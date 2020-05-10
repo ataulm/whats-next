@@ -30,9 +30,5 @@ interface LetterboxdApi {
 
 data class AuthTokenApiResponse(
         @SerializedName("access_token") val accessToken: String,
-        /**
-         * TODO: is this seconds or millis? because [com.ataulm.whatsnext.Token] says "millis" 😅
-         */
-        @SerializedName("expires_in") val secondsUntilExpiry: Long,
         @SerializedName("refresh_token") val refreshToken: String
 )
