@@ -54,6 +54,7 @@ dependencies {
     kapt libraries.daggerCompiler
     implementation libraries.glide
     implementation libraries.gson
+    implementation libraries.kotlinCoroutinesCore
     implementation libraries.kotlinStdLib
     implementation libraries.okhttp
     implementation libraries.okhttpLoggingInterceptor
