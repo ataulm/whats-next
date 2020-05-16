@@ -1,7 +1,12 @@
 package com.ataulm.whatsnext.account
 
 import android.os.Bundle
-import com.ataulm.whatsnext.*
+import com.ataulm.whatsnext.BaseActivity
+import com.ataulm.whatsnext.BuildConfig
+import com.ataulm.whatsnext.R
+import com.ataulm.whatsnext.Token
+import com.ataulm.whatsnext.TokensStore
+import com.ataulm.whatsnext.WhatsNextService
 import com.ataulm.whatsnext.di.DaggerSignInComponent
 import com.ataulm.whatsnext.di.appComponent
 import kotlinx.android.synthetic.main.activity_sign_in.*
@@ -35,9 +40,11 @@ class SignInActivity : BaseActivity() {
 
     }
 
-    private val callback = SignInPresenter.Callback { username, token ->
-        TokensStore.create(this).store(token)
-        finish()
+    private val callback = object : SignInPresenter.Callback {
+        override fun onTokenReceieved(username: String, token: Token) {
+            TokensStore.create(this@SignInActivity).store(token)
+            finish()
+        }
     }
 
     override fun onStart() {

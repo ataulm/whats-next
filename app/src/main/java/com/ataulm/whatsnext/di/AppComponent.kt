@@ -18,7 +18,7 @@ import javax.inject.Singleton
         ]
 )
 @Singleton
-interface AppComponent {
+internal interface AppComponent {
 
     fun whatsNextService(): WhatsNextService
 
