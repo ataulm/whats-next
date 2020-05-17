@@ -17,7 +17,7 @@ import javax.inject.Qualifier
         dependencies = [AppComponent::class]
 )
 @FeatureScope
-interface FilmComponent {
+internal interface FilmComponent {
 
     fun inject(activity: FilmActivity)
 

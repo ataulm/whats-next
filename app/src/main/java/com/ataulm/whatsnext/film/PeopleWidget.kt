@@ -26,7 +26,7 @@ class PeopleWidget constructor(context: Context, attrs: AttributeSet) : LinearLa
     private fun extractCustomAttributes(context: Context, attrs: AttributeSet): String {
         val typedArray = context.obtainStyledAttributes(attrs, R.styleable.PeopleWidget)
         try {
-            return typedArray.getString(R.styleable.PeopleWidget_label)
+            return typedArray.getString(R.styleable.PeopleWidget_label)!!
         } finally {
             typedArray.recycle()
         }

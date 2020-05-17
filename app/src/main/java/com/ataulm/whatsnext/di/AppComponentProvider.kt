@@ -7,7 +7,7 @@ package com.ataulm.whatsnext.di
  * Therefore, the application classes of the apps using this module
  * should implement [AppComponentProvider].
  */
-interface AppComponentProvider {
+internal interface AppComponentProvider {
     /**
      * Returns the AppComponent / DI root.
      */

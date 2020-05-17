@@ -7,7 +7,8 @@ ext {
             ],
             androidArchLifecycle: '1.1.1',
             dagger              : '2.25.2',
-            kotlin              : '1.3.11',
+            kotlin              : '1.3.72',
+            kotlinCoroutines    : '1.3.6',
             okhttp              : '4.2.2',
             retrofit            : '2.8.1',
             support             : '27.1.0'
@@ -39,6 +40,8 @@ ext {
             jUnit                      : 'junit:junit:4.12',
             jsr305                     : 'com.google.code.findbugs:jsr305:2.0.1',
             kotlinStdLib               : "org.jetbrains.kotlin:kotlin-stdlib:${versions.kotlin}",
+            kotlinCoroutinesCore       : "org.jetbrains.kotlinx:kotlinx-coroutines-core:${versions.kotlinCoroutines}",
+            kotlinCoroutinesAndroid    : "org.jetbrains.kotlinx:kotlinx-coroutines-android:${versions.kotlinCoroutines}",
             mockitoCore                : 'org.mockito:mockito-core:1.10.19',
             okhttp                     : "com.squareup.okhttp3:okhttp:${versions.okhttp}",
             okhttpLoggingInterceptor   : "com.squareup.okhttp3:logging-interceptor:${versions.okhttp}",

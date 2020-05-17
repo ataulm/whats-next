@@ -7,7 +7,7 @@ import dagger.Component
         dependencies = [AppComponent::class]
 )
 @FeatureScope
-interface SearchComponent {
+internal interface SearchComponent {
 
     fun inject(activity: SearchActivity)
 

@@ -2,7 +2,12 @@ package com.ataulm.whatsnext.api
 
 import com.google.gson.annotations.SerializedName
 import io.reactivex.Single
-import retrofit2.http.*
+import retrofit2.http.Field
+import retrofit2.http.FormUrlEncoded
+import retrofit2.http.GET
+import retrofit2.http.POST
+import retrofit2.http.Path
+import retrofit2.http.Query
 
 @Target(AnnotationTarget.FUNCTION)
 annotation class RequiresAuthenticatedUser
@@ -11,11 +16,11 @@ interface LetterboxdApi {
 
     @FormUrlEncoded
     @POST("auth/token")
-    fun fetchAuthToken(
+    suspend fun fetchAuthToken(
             @Field("username") username: String,
             @Field("password") password: String,
             @Field("grant_type") grantType: String = "password"
-    ): Single<AuthTokenApiResponse>
+    ): AuthTokenApiResponse
 
     @GET("search")
     fun search(@Query("input") searchTerm: String): Single<ApiSearchResponse>

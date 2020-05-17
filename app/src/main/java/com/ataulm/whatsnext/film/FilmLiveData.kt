@@ -9,7 +9,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 
-class FilmLiveData(val service: WhatsNextService, val filmId: String) : MutableLiveData<Film>() {
+internal class FilmLiveData(val service: WhatsNextService, val filmId: String) : MutableLiveData<Film>() {
 
     private var disposable: Disposable? = null
 

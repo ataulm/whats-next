@@ -7,7 +7,7 @@ import dagger.Component
         dependencies = [AppComponent::class]
 )
 @FeatureScope
-interface SignInComponent {
+internal interface SignInComponent {
 
     fun inject(activity: SignInActivity)
 
