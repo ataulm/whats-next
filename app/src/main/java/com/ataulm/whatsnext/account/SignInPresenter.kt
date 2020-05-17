@@ -1,11 +1,12 @@
 package com.ataulm.whatsnext.account
 
-import com.ataulm.whatsnext.ErrorTrackingDisposableObserver
 import com.ataulm.whatsnext.Token
 import com.ataulm.whatsnext.WhatsNextService
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 internal class SignInPresenter(
         private val service: WhatsNextService,
@@ -20,22 +21,23 @@ internal class SignInPresenter(
     }
 
     private val onClickSignInCallback = SignInScreen.Callback { username, password ->
-        disposable = service.login(username, password)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe { screen.showLoading() }
-                .subscribeWith(
-                        object : ErrorTrackingDisposableObserver<Token>() {
-                            override fun onNext(token: Token) {
-                                callback.onTokenReceieved(username, token)
-                            }
-
-                            override fun onError(e: Throwable) {
-                                super.onError(e)
-                                screen.showErrorSigningIn()
-                            }
-                        }
-                )
+        // hmm no, usually we'd use viewModelScope, but what about when we're doing this from a rando presenter?
+        GlobalScope.launch {
+            withContext(Dispatchers.Main) {
+                screen.showLoading()
+            }
+            withContext(Dispatchers.IO) {
+                // how do we do error handling in coroutines?
+                try {
+                    val token = service.login(username, password)
+                    withContext(Dispatchers.Main) {
+                        callback.onTokenReceieved(username, token)
+                    }
+                } catch (e: Exception) {
+                    screen.showErrorSigningIn()
+                }
+            }
+        }
     }
 
     fun stopPresenting() {

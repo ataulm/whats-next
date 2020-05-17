@@ -2,14 +2,12 @@ package com.ataulm.whatsnext
 
 import com.ataulm.whatsnext.api.ApiFilm
 import com.ataulm.whatsnext.api.ApiFilmRelationship
-import com.ataulm.whatsnext.api.AuthTokenApiResponse
 import com.ataulm.whatsnext.api.FilmRelationshipConverter
 import com.ataulm.whatsnext.api.FilmSummaryConverter
 import com.ataulm.whatsnext.api.LetterboxdApi
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.functions.BiFunction
-import io.reactivex.functions.Function
 import java.util.*
 
 internal class WhatsNextService(
@@ -18,14 +16,9 @@ internal class WhatsNextService(
         private val filmRelationshipConverter: FilmRelationshipConverter
 ) {
 
-    fun login(username: String, password: String): Observable<Token> {
-        return letterboxdApi.fetchAuthToken(username, password)
-                .toObservable()
-                .map(toToken())
-    }
-
-    private fun toToken(): Function<AuthTokenApiResponse, Token> = Function { (accessToken, refreshToken) ->
-        Token(accessToken, refreshToken)
+    suspend fun login(username: String, password: String): Token {
+        val authTokenApiResponse = letterboxdApi.fetchAuthToken(username, password)
+        return Token(authTokenApiResponse.accessToken, authTokenApiResponse.refreshToken)
     }
 
     fun search(searchTerm: String): Observable<List<FilmSummary>> {
