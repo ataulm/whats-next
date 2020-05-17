@@ -34,7 +34,9 @@ internal class SignInPresenter(
                         callback.onTokenReceieved(username, token)
                     }
                 } catch (e: Exception) {
-                    screen.showErrorSigningIn()
+                    withContext(Dispatchers.Main) {
+                        screen.showErrorSigningIn()
+                    }
                 }
             }
         }
