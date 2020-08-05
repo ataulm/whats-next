@@ -3,10 +3,7 @@ package com.ataulm.whatsnext.search
 import android.os.Bundle
 import android.view.View
 import androidx.core.view.doOnLayout
-import com.ataulm.whatsnext.BaseActivity
-import com.ataulm.whatsnext.FilmSummary
-import com.ataulm.whatsnext.R
-import com.ataulm.whatsnext.WhatsNextService
+import com.ataulm.whatsnext.*
 import com.ataulm.whatsnext.di.DaggerSearchComponent
 import com.ataulm.whatsnext.di.appComponent
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -18,8 +15,13 @@ class SearchActivity : BaseActivity() {
     @Inject
     internal lateinit var whatsNextService: WhatsNextService
     private lateinit var presenter: SearchPresenter
-    private lateinit var displayer: SearchDisplayer
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<View>
+
+    private val filmSummariesAdapter = FilmSummariesAdapter(object : FilmSummaryViewHolder.Callback {
+        override fun onClick(filmSummary: FilmSummary) {
+            presenter.onClick(filmSummary)
+        }
+    })
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,34 +31,28 @@ class SearchActivity : BaseActivity() {
                 .inject(this)
         setContentView(R.layout.activity_search)
 
+        val navigator = navigator()
+        signInButton.setOnClickListener { navigator.navigateToSignIn() }
+
         bottomSheetBehavior = BottomSheetBehavior.from(searchBottomSheet)
         searchFieldContainer.doOnLayout { bottomSheetBehavior.peekHeight = searchFieldContainer.height }
 
-        val navigator = navigator()
         presenter = SearchPresenter(whatsNextService, navigator)
-        displayer = SearchDisplayer(searchEditText, searchRecyclerView, bottomSheetBehavior)
-
-        signInButton.setOnClickListener { navigator.navigateToSignIn() }
-    }
-
-    override fun onStart() {
-        super.onStart()
-        displayer.attach(object : SearchDisplayer.Callback {
-            override fun onClick(filmSummary: FilmSummary) {
-                presenter.onClick(filmSummary)
-            }
-
-            override fun onSearch(searchTerm: String) {
+        searchRecyclerView.adapter = filmSummariesAdapter
+        searchEditText.setOnEditorActionListener { _, _, _ ->
+            val searchTerm = searchEditText.text.toString().trim()
+            if (searchTerm.isNotEmpty()) {
                 presenter.onSearch(searchTerm) { filmSummaries ->
-                    displayer.display(filmSummaries)
+                    filmSummariesAdapter.submitList(filmSummaries)
+                    bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
                 }
             }
-        })
+            true
+        }
     }
 
     override fun onStop() {
         presenter.stopPresenting()
-        displayer.detachCallback()
         super.onStop()
     }
 

@@ -6,8 +6,7 @@ import androidx.recyclerview.widget.ListAdapter
 import com.ataulm.whatsnext.FilmSummaryViewHolder.Companion.inflateView
 
 class FilmSummariesAdapter(
-        private val callback: FilmSummaryViewHolder.Callback,
-        private val filmSummaries: List<FilmSummary>
+        private val callback: FilmSummaryViewHolder.Callback
 ) : ListAdapter<FilmSummary, FilmSummaryViewHolder>(Differ) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FilmSummaryViewHolder {
@@ -15,7 +14,7 @@ class FilmSummariesAdapter(
     }
 
     override fun onBindViewHolder(holder: FilmSummaryViewHolder, position: Int) {
-        val filmSummary = filmSummaries[position]
+        val filmSummary = getItem(position)
         holder.bind(filmSummary, callback)
     }
 
