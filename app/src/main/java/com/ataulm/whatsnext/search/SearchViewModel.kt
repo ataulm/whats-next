@@ -47,10 +47,9 @@ internal class SearchViewModel(private val service: WhatsNextService) : ViewMode
         _navigationEvents.value = Event(filmSummary)
     }
 
-    fun onStop() {
-        if (disposable != null) {
-            disposable!!.dispose()
-        }
+    override fun onCleared() {
+        super.onCleared()
+        disposable?.dispose()
     }
 }
 

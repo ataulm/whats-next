@@ -58,11 +58,6 @@ class SearchActivity : BaseActivity() {
         })
     }
 
-    override fun onStop() {
-        viewModel.onStop()
-        super.onStop()
-    }
-
     override fun onBackPressed() {
         if (bottomSheetBehavior.state == BottomSheetBehavior.STATE_EXPANDED) {
             bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
