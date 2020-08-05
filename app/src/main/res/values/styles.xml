@@ -1,5 +1,11 @@
 <resources>
 
-  <style name="Theme.WhatsNext" parent="Theme.MaterialComponents.Light.NoActionBar" />
+  <style name="Platform.V23.Theme.WhatsNext" parent="Theme.MaterialComponents.Light.NoActionBar" />
+
+  <style name="Platform.Theme.WhatsNext" parent="Platform.V23.Theme.WhatsNext" />
+
+  <style name="Base.Theme.WhatsNext" parent="Platform.Theme.WhatsNext" />
+
+  <style name="Theme.WhatsNext" parent="Base.Theme.WhatsNext" />
 
 </resources>
