@@ -4,10 +4,8 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ataulm.whatsnext.FilmSummariesAdapter;
@@ -56,18 +54,12 @@ class SearchDisplayer {
     }
 
     void display(List<FilmSummary> filmSummaries) {
-        if (resultsRecyclerView.getLayoutManager() == null) {
-            resultsRecyclerView.setLayoutManager(new LinearLayoutManager(resultsRecyclerView.getContext()));
-        }
-
         FilmSummariesAdapter adapter = (FilmSummariesAdapter) resultsRecyclerView.getAdapter();
         if (adapter == null) {
             adapter = new FilmSummariesAdapter(filmSummaryCallback, filmSummaries);
             resultsRecyclerView.setAdapter(adapter);
-        } else {
-            // TODO: diff utils?
-            adapter.update(filmSummaries);
         }
+        adapter.submitList(filmSummaries);
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
     }
 
@@ -79,16 +71,6 @@ class SearchDisplayer {
             }
         }
     };
-
-    private Toast toast;
-
-    void toastAlreadySignedIn() {
-        if (toast != null) {
-            toast.cancel();
-        }
-        toast = Toast.makeText(resultsRecyclerView.getContext(), "already signed in!", Toast.LENGTH_SHORT);
-        toast.show();
-    }
 
     interface Callback {
 
