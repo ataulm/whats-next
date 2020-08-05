@@ -13,13 +13,13 @@ import javax.inject.Inject
 class SearchActivity : BaseActivity() {
 
     @Inject
-    internal lateinit var whatsNextService: WhatsNextService
-    private lateinit var presenter: SearchPresenter
+    internal lateinit var presenter: SearchPresenter
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<View>
 
+    private val navigator = navigator()
     private val filmSummariesAdapter = FilmSummariesAdapter(object : FilmSummaryViewHolder.Callback {
         override fun onClick(filmSummary: FilmSummary) {
-            presenter.onClick(filmSummary)
+            navigator.navigateToFilm(filmSummary.ids.letterboxd)
         }
     })
 
@@ -31,13 +31,11 @@ class SearchActivity : BaseActivity() {
                 .inject(this)
         setContentView(R.layout.activity_search)
 
-        val navigator = navigator()
         signInButton.setOnClickListener { navigator.navigateToSignIn() }
 
         bottomSheetBehavior = BottomSheetBehavior.from(searchBottomSheet)
         searchFieldContainer.doOnLayout { bottomSheetBehavior.peekHeight = searchFieldContainer.height }
 
-        presenter = SearchPresenter(whatsNextService, navigator)
         searchRecyclerView.adapter = filmSummariesAdapter
         searchEditText.setOnEditorActionListener { _, _, _ ->
             val searchTerm = searchEditText.text.toString().trim()

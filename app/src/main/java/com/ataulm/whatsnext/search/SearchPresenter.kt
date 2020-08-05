@@ -3,15 +3,13 @@ package com.ataulm.whatsnext.search
 import android.util.Log
 import com.ataulm.whatsnext.ErrorTrackingDisposableObserver
 import com.ataulm.whatsnext.FilmSummary
-import com.ataulm.whatsnext.Navigator
 import com.ataulm.whatsnext.WhatsNextService
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 
 internal class SearchPresenter(
-        private val service: WhatsNextService,
-        private val navigator: Navigator
+        private val service: WhatsNextService
 ) {
 
     private var disposable: Disposable? = null
@@ -33,10 +31,6 @@ internal class SearchPresenter(
                             }
                         }
                 )
-    }
-
-    fun onClick(filmSummary: FilmSummary) {
-        navigator.navigateToFilm(filmSummary.ids.letterboxd)
     }
 
     fun stopPresenting() {
