@@ -3,6 +3,7 @@ package com.ataulm.whatsnext.search
 import android.os.Bundle
 import android.view.View
 import androidx.core.view.doOnLayout
+import com.ataulm.support.DataObserver
 import com.ataulm.whatsnext.*
 import com.ataulm.whatsnext.di.DaggerSearchComponent
 import com.ataulm.whatsnext.di.appComponent
@@ -13,7 +14,7 @@ import javax.inject.Inject
 class SearchActivity : BaseActivity() {
 
     @Inject
-    internal lateinit var presenter: SearchPresenter
+    internal lateinit var viewModel: SearchViewModel
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<View>
 
     private val navigator = navigator()
@@ -40,17 +41,19 @@ class SearchActivity : BaseActivity() {
         searchEditText.setOnEditorActionListener { _, _, _ ->
             val searchTerm = searchEditText.text.toString().trim()
             if (searchTerm.isNotEmpty()) {
-                presenter.onSearch(searchTerm) { filmSummaries ->
-                    filmSummariesAdapter.submitList(filmSummaries)
-                    bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
-                }
+                viewModel.onSearch(searchTerm)
             }
             true
         }
+
+        viewModel.films.observe(this, DataObserver<List<FilmSummary>> { filmSummaries ->
+            filmSummariesAdapter.submitList(filmSummaries)
+            bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+        })
     }
 
     override fun onStop() {
-        presenter.stopPresenting()
+        viewModel.onStop()
         super.onStop()
     }
 

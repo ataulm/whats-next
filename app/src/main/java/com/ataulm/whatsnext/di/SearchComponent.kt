@@ -2,7 +2,7 @@ package com.ataulm.whatsnext.di
 
 import com.ataulm.whatsnext.WhatsNextService
 import com.ataulm.whatsnext.search.SearchActivity
-import com.ataulm.whatsnext.search.SearchPresenter
+import com.ataulm.whatsnext.search.SearchViewModel
 import dagger.Component
 import dagger.Module
 import dagger.Provides
@@ -32,7 +32,7 @@ internal object SearchModule {
 
     @JvmStatic
     @Provides
-    fun searchPresenter(whatsNextService: WhatsNextService): SearchPresenter {
-        return SearchPresenter(whatsNextService)
+    fun searchPresenter(whatsNextService: WhatsNextService): SearchViewModel {
+        return SearchViewModel(whatsNextService)
     }
 }
