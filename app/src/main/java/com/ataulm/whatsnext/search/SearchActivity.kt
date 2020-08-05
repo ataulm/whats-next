@@ -27,6 +27,7 @@ class SearchActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         DaggerSearchComponent.builder()
+                .activity(this)
                 .appComponent(appComponent())
                 .build()
                 .inject(this)
