@@ -49,7 +49,6 @@ dependencies {
     implementation libraries.androidxCoreKtx
     implementation libraries.androidxMaterial
     implementation libraries.androidxRecyclerView
-    implementation libraries.androidxLegacySupportV13
     implementation libraries.dagger
     kapt libraries.daggerCompiler
     implementation libraries.glide
