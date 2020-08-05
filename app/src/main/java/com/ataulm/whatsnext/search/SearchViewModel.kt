@@ -5,9 +5,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.ataulm.support.Event
 import com.ataulm.whatsnext.ErrorTrackingDisposableObserver
 import com.ataulm.whatsnext.FilmSummary
 import com.ataulm.whatsnext.WhatsNextService
+import com.ataulm.whatsnext.di.FilmId
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
@@ -16,6 +18,9 @@ internal class SearchViewModel(private val service: WhatsNextService) : ViewMode
 
     private val _films = MutableLiveData<List<FilmSummary>>()
     val films: LiveData<List<FilmSummary>> = _films
+
+    private val _navigationEvents = MutableLiveData<Event<FilmSummary>>()
+    val navigationEvents: LiveData<Event<FilmSummary>> = _navigationEvents
 
     private var disposable: Disposable? = null
 
@@ -36,6 +41,10 @@ internal class SearchViewModel(private val service: WhatsNextService) : ViewMode
                             }
                         }
                 )
+    }
+
+    fun onClick(filmSummary: FilmSummary) {
+        _navigationEvents.value = Event(filmSummary)
     }
 
     fun onStop() {

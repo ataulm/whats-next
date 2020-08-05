@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.view.doOnLayout
 import com.ataulm.support.DataObserver
+import com.ataulm.support.EventObserver
 import com.ataulm.whatsnext.*
 import com.ataulm.whatsnext.di.DaggerSearchComponent
 import com.ataulm.whatsnext.di.appComponent
@@ -20,7 +21,7 @@ class SearchActivity : BaseActivity() {
     private val navigator = navigator()
     private val filmSummariesAdapter = FilmSummariesAdapter(object : FilmSummaryViewHolder.Callback {
         override fun onClick(filmSummary: FilmSummary) {
-            navigator.navigateToFilm(filmSummary.ids.letterboxd)
+            viewModel.onClick(filmSummary)
         }
     })
 
@@ -50,6 +51,10 @@ class SearchActivity : BaseActivity() {
         viewModel.films.observe(this, DataObserver<List<FilmSummary>> { filmSummaries ->
             filmSummariesAdapter.submitList(filmSummaries)
             bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+        })
+
+        viewModel.navigationEvents.observe(this, EventObserver { filmSummary ->
+            navigator.navigateToFilm(filmSummary.ids.letterboxd)
         })
     }
 
