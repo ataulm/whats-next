@@ -4,9 +4,7 @@ import androidx.lifecycle.*
 import com.ataulm.support.Event
 import com.ataulm.whatsnext.FilmSummary
 import com.ataulm.whatsnext.WhatsNextService
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 internal class SearchViewModel(private val service: WhatsNextService) : ViewModel() {
 
@@ -19,9 +17,7 @@ internal class SearchViewModel(private val service: WhatsNextService) : ViewMode
     fun onSearch(searchTerm: String) {
         viewModelScope.launch {
             val results = service.search(searchTerm)
-            withContext(Dispatchers.Main) {
-                _films.value = results
-            }
+            _films.value = results
         }
     }
 

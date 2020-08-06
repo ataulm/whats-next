@@ -4,6 +4,8 @@ import com.ataulm.whatsnext.api.*
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.functions.BiFunction
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.util.*
 
 internal class WhatsNextService(
@@ -18,16 +20,18 @@ internal class WhatsNextService(
     }
 
     suspend fun search(searchTerm: String): List<FilmSummary> {
-        val apiSearchResponse = letterboxdApi.search(searchTerm)
-        val filmSummaries: MutableList<FilmSummary> = ArrayList(apiSearchResponse.searchItems.size)
-        for (searchItem in apiSearchResponse.searchItems) {
-            if ("FilmSearchItem" != searchItem.type) {
-                continue
+        return withContext(Dispatchers.IO) {
+            val apiSearchResponse = letterboxdApi.search(searchTerm)
+            val filmSummaries: MutableList<FilmSummary> = ArrayList(apiSearchResponse.searchItems.size)
+            for (searchItem in apiSearchResponse.searchItems) {
+                if ("FilmSearchItem" != searchItem.type) {
+                    continue
+                }
+                val filmSummary = filmSummaryConverter.convert(searchItem.filmSummary)
+                filmSummaries.add(filmSummary)
             }
-            val filmSummary = filmSummaryConverter.convert(searchItem.filmSummary)
-            filmSummaries.add(filmSummary)
+            filmSummaries
         }
-        return filmSummaries
     }
 
     fun film(letterboxdId: String): Observable<Film> {
