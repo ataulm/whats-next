@@ -23,7 +23,7 @@ interface LetterboxdApi {
     ): AuthTokenApiResponse
 
     @GET("search")
-    fun search(@Query("input") searchTerm: String): Single<ApiSearchResponse>
+    suspend fun search(@Query("input") searchTerm: String): ApiSearchResponse
 
     @GET("film/{id}")
     fun film(@Path("id") letterboxdId: String): Single<ApiFilm>

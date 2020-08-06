@@ -1,6 +1,6 @@
 package com.ataulm.whatsnext.di
 
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import com.ataulm.whatsnext.WhatsNextService
 import com.ataulm.whatsnext.search.SearchActivity
 import com.ataulm.whatsnext.search.SearchViewModel
@@ -40,6 +40,6 @@ internal object SearchModule {
     @Provides
     fun viewModel(activity: SearchActivity, whatsNextService: WhatsNextService): SearchViewModel {
         val viewModelFactory = SearchViewModelFactory(whatsNextService)
-        return ViewModelProviders.of(activity, viewModelFactory).get(SearchViewModel::class.java)
+        return ViewModelProvider(activity, viewModelFactory).get(SearchViewModel::class.java)
     }
 }

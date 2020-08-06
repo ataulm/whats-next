@@ -41,7 +41,7 @@ android {
 }
 
 dependencies {
-    implementation libraries.androidxLifecycleExtensions
+    implementation libraries.androidxLifecycleViewModelKtx
     kapt libraries.androidxLifecycleCompiler
     implementation libraries.androidxAppCompat
     implementation libraries.androidxConstraintLayout
