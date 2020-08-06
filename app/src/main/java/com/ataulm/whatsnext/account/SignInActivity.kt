@@ -16,7 +16,7 @@ class SignInActivity : BaseActivity() {
 
     @Inject
     internal lateinit var whatsNextService: WhatsNextService
-    private var presenter: SignInPresenter? = null
+    private lateinit var presenter: SignInPresenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,13 +31,13 @@ class SignInActivity : BaseActivity() {
                 sign_in_edittext_password,
                 sign_in_button,
                 sign_in_textview_info
-        );
+        )
+
         if (BuildConfig.DEBUG) {
             screen.setCredentials(BuildConfig.LETTERBOXD_USERNAME, BuildConfig.LETTERBOXD_PASSWORD)
         }
 
         presenter = SignInPresenter(whatsNextService, screen, callback)
-
     }
 
     private val callback = object : SignInPresenter.Callback {
@@ -47,13 +47,8 @@ class SignInActivity : BaseActivity() {
         }
     }
 
-    override fun onStart() {
-        super.onStart()
-        presenter!!.startPresenting()
-    }
-
-    override fun onStop() {
-        presenter!!.stopPresenting()
-        super.onStop()
+    override fun onDestroy() {
+        presenter.onDestroy()
+        super.onDestroy()
     }
 }

@@ -1,13 +1,11 @@
 package com.ataulm.whatsnext
 
-import com.ataulm.whatsnext.api.ApiFilm
-import com.ataulm.whatsnext.api.ApiFilmRelationship
-import com.ataulm.whatsnext.api.FilmRelationshipConverter
-import com.ataulm.whatsnext.api.FilmSummaryConverter
-import com.ataulm.whatsnext.api.LetterboxdApi
+import com.ataulm.whatsnext.api.*
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.functions.BiFunction
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.util.*
 
 internal class WhatsNextService(
@@ -17,24 +15,25 @@ internal class WhatsNextService(
 ) {
 
     suspend fun login(username: String, password: String): Token {
-        val authTokenApiResponse = letterboxdApi.fetchAuthToken(username, password)
-        return Token(authTokenApiResponse.accessToken, authTokenApiResponse.refreshToken)
+        return withContext(Dispatchers.IO) {
+            val authTokenApiResponse = letterboxdApi.fetchAuthToken(username, password)
+            Token(authTokenApiResponse.accessToken, authTokenApiResponse.refreshToken)
+        }
     }
 
-    fun search(searchTerm: String): Observable<List<FilmSummary>> {
-        return letterboxdApi.search(searchTerm)
-                .toObservable()
-                .map { apiSearchResponse ->
-                    val filmSummaries: MutableList<FilmSummary> = ArrayList(apiSearchResponse.searchItems.size)
-                    for (searchItem in apiSearchResponse.searchItems) {
-                        if ("FilmSearchItem" != searchItem.type) {
-                            continue
-                        }
-                        val filmSummary = filmSummaryConverter.convert(searchItem.filmSummary)
-                        filmSummaries.add(filmSummary)
-                    }
-                    filmSummaries
+    suspend fun search(searchTerm: String): List<FilmSummary> {
+        return withContext(Dispatchers.IO) {
+            val apiSearchResponse = letterboxdApi.search(searchTerm)
+            val filmSummaries: MutableList<FilmSummary> = ArrayList(apiSearchResponse.searchItems.size)
+            for (searchItem in apiSearchResponse.searchItems) {
+                if ("FilmSearchItem" != searchItem.type) {
+                    continue
                 }
+                val filmSummary = filmSummaryConverter.convert(searchItem.filmSummary)
+                filmSummaries.add(filmSummary)
+            }
+            filmSummaries
+        }
     }
 
     fun film(letterboxdId: String): Observable<Film> {
@@ -51,5 +50,3 @@ internal class WhatsNextService(
     }
 
 }
-
-internal class UserRequiresSignInException : RuntimeException()

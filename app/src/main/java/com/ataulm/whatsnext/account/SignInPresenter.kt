@@ -2,11 +2,7 @@ package com.ataulm.whatsnext.account
 
 import com.ataulm.whatsnext.Token
 import com.ataulm.whatsnext.WhatsNextService
-import io.reactivex.disposables.Disposable
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 
 internal class SignInPresenter(
         private val service: WhatsNextService,
@@ -14,36 +10,26 @@ internal class SignInPresenter(
         private val callback: Callback
 ) {
 
-    private var disposable: Disposable? = null
-
-    fun startPresenting() {
-        screen.attach(onClickSignInCallback)
-    }
+    private val presenterScope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
 
     private val onClickSignInCallback = SignInScreen.Callback { username, password ->
-        // hmm no, usually we'd use viewModelScope, but what about when we're doing this from a rando presenter?
-        GlobalScope.launch {
-            withContext(Dispatchers.Main) {
-                screen.showLoading()
-            }
-            withContext(Dispatchers.IO) {
-                // how do we do error handling in coroutines?
-                try {
-                    val token = service.login(username, password)
-                    withContext(Dispatchers.Main) {
-                        callback.onTokenReceieved(username, token)
-                    }
-                } catch (e: Exception) {
-                    withContext(Dispatchers.Main) {
-                        screen.showErrorSigningIn()
-                    }
-                }
+        presenterScope.launch {
+            screen.showLoading()
+            try {
+                val token = service.login(username, password)
+                callback.onTokenReceieved(username, token)
+            } catch (e: Exception) {
+                screen.showErrorSigningIn()
             }
         }
     }
 
-    fun stopPresenting() {
-        disposable?.dispose()
+    init {
+        screen.attach(onClickSignInCallback)
+    }
+
+    fun onDestroy() {
+        presenterScope.cancel()
     }
 
     interface Callback {

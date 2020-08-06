@@ -1,18 +1,10 @@
 package com.ataulm.whatsnext.search
 
-import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.*
 import com.ataulm.support.Event
-import com.ataulm.whatsnext.ErrorTrackingDisposableObserver
 import com.ataulm.whatsnext.FilmSummary
 import com.ataulm.whatsnext.WhatsNextService
-import com.ataulm.whatsnext.di.FilmId
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.launch
 
 internal class SearchViewModel(private val service: WhatsNextService) : ViewModel() {
 
@@ -22,34 +14,15 @@ internal class SearchViewModel(private val service: WhatsNextService) : ViewMode
     private val _navigationEvents = MutableLiveData<Event<FilmSummary>>()
     val navigationEvents: LiveData<Event<FilmSummary>> = _navigationEvents
 
-    private var disposable: Disposable? = null
-
     fun onSearch(searchTerm: String) {
-        disposable?.dispose()
-        disposable = service.search(searchTerm)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(
-                        object : ErrorTrackingDisposableObserver<List<FilmSummary>>() {
-                            override fun onNext(filmSummaries: List<FilmSummary>) {
-                                Log.d("!!!", "onNext $filmSummaries")
-                                _films.value = filmSummaries
-                            }
-
-                            override fun onComplete() {
-                                Log.d("!!!", "onComplete")
-                            }
-                        }
-                )
+        viewModelScope.launch {
+            val results = service.search(searchTerm)
+            _films.value = results
+        }
     }
 
     fun onClick(filmSummary: FilmSummary) {
         _navigationEvents.value = Event(filmSummary)
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        disposable?.dispose()
     }
 }
 

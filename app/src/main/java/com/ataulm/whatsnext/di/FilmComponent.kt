@@ -1,6 +1,6 @@
 package com.ataulm.whatsnext.di;
 
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import com.ataulm.whatsnext.film.FilmActivity
 import com.ataulm.whatsnext.film.FilmViewModel
 import com.ataulm.whatsnext.film.FilmViewModelProvider
@@ -40,7 +40,7 @@ internal object FilmModule {
 
     @JvmStatic
     @Provides
-    fun viewModel(activity: FilmActivity, factory: FilmViewModelProvider) = ViewModelProviders.of(activity, factory)
+    fun viewModel(activity: FilmActivity, factory: FilmViewModelProvider) = ViewModelProvider(activity, factory)
             .get(FilmViewModel::class.java)
 }
 
