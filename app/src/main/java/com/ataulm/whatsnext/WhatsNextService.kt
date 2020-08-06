@@ -48,5 +48,3 @@ internal class WhatsNextService(
     }
 
 }
-
-internal class UserRequiresSignInException : RuntimeException()
