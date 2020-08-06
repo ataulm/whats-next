@@ -15,8 +15,10 @@ internal class WhatsNextService(
 ) {
 
     suspend fun login(username: String, password: String): Token {
-        val authTokenApiResponse = letterboxdApi.fetchAuthToken(username, password)
-        return Token(authTokenApiResponse.accessToken, authTokenApiResponse.refreshToken)
+        return withContext(Dispatchers.IO) {
+            val authTokenApiResponse = letterboxdApi.fetchAuthToken(username, password)
+            Token(authTokenApiResponse.accessToken, authTokenApiResponse.refreshToken)
+        }
     }
 
     suspend fun search(searchTerm: String): List<FilmSummary> {
