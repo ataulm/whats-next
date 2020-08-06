@@ -2,7 +2,6 @@ package com.ataulm.whatsnext.account
 
 import com.ataulm.whatsnext.Token
 import com.ataulm.whatsnext.WhatsNextService
-import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -13,8 +12,6 @@ internal class SignInPresenter(
         private val screen: SignInScreen,
         private val callback: Callback
 ) {
-
-    private var disposable: Disposable? = null
 
     fun startPresenting() {
         screen.attach(onClickSignInCallback)
@@ -43,7 +40,7 @@ internal class SignInPresenter(
     }
 
     fun stopPresenting() {
-        disposable?.dispose()
+        // TODO: cancel coroutines
     }
 
     interface Callback {
