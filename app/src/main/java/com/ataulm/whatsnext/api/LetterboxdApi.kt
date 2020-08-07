@@ -25,9 +25,47 @@ interface LetterboxdApi {
     @RequiresAuthenticatedUser
     @GET("film/{id}/me")
     suspend fun filmRelationship(@Path("id") letterboxdId: String): ApiFilmRelationship
+
+    @RequiresAuthenticatedUser
+    @PATCH("film/{id}/me")
+    suspend fun updateFilmRelationship(
+            @Path("id") letterboxdId: String,
+            @Body request: ApiFilmRelationshipUpdateRequest
+    ): ApiFilmRelationshipUpdateResponse
 }
 
 data class AuthTokenApiResponse(
         @SerializedName("access_token") val accessToken: String,
         @SerializedName("refresh_token") val refreshToken: String
+)
+
+data class ApiFilmRelationshipUpdateRequest(
+        @SerializedName("watched") val watched: Boolean,
+        @SerializedName("liked") val liked: Boolean,
+        @SerializedName("inWatchlist") val inWatchlist: Boolean,
+        /**
+         * Accepts values between 0.5 and 5.0, with increments of 0.5, or null (to remove the
+         * rating). If set, [watched] is assumed to be true.
+         */
+        @SerializedName("rating") val rating: Double?
+)
+
+data class ApiFilmRelationshipUpdateResponse(
+        @SerializedName("data") val data: ApiFilmRelationship,
+        @SerializedName("messages") val messages: List<ApiFilmRelationshipUpdateMessage>
+)
+
+data class ApiFilmRelationshipUpdateMessage(
+        /**
+         * {Error, Success}
+         */
+        @SerializedName("type") val type: String,
+        /**
+         * {InvalidRatingValue, UnableToRemoveWatch}
+         */
+        @SerializedName("code") val code: String,
+        /**
+         * The error message text in human-readable form.
+         */
+        @SerializedName("title") val title: String
 )
