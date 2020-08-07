@@ -27,11 +27,7 @@ class SearchActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        DaggerSearchComponent.builder()
-                .activity(this)
-                .appComponent(appComponent())
-                .build()
-                .inject(this)
+        injectDependencies()
         setContentView(R.layout.activity_search)
 
         signInButton.setOnClickListener { navigator.navigateToSignIn() }
@@ -66,4 +62,12 @@ class SearchActivity : BaseActivity() {
             super.onBackPressed()
         }
     }
+}
+
+private fun SearchActivity.injectDependencies() {
+    DaggerSearchComponent.builder()
+            .activity(this)
+            .appComponent(appComponent())
+            .build()
+            .inject(this)
 }
