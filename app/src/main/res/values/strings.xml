@@ -1,10 +1,11 @@
 <resources>
 
-  <string name="duration">Duration</string>
-  <string name="genres">Genres</string>
-  <string name="minutes_format">%1$smin</string>
-  <string name="hours_minutes_format">%1$shr %2$smin</string>
-  <string name="cast">Cast</string>
-  <string name="crew">Crew</string>
+    <string name="duration">Duration</string>
+    <string name="genres">Genres</string>
+    <string name="minutes_format">%1$smin</string>
+    <string name="hours_minutes_format">%1$shr %2$smin</string>
+    <string name="cast">Cast</string>
+    <string name="crew">Crew</string>
+    <string name="menu_search_letterboxd_account">Letterboxd account</string>
 
 </resources>

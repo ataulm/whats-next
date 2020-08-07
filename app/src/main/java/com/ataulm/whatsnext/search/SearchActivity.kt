@@ -30,9 +30,16 @@ class SearchActivity : BaseActivity() {
         injectDependencies()
         setContentView(R.layout.activity_search)
 
-        signInButton.setOnClickListener { navigator.navigateToSignIn() }
+        searchToolbar.setOnMenuItemClickListener {
+            if (it.itemId == R.id.searchLetterboxdAccount) {
+                navigator.navigateToSignIn()
+                return@setOnMenuItemClickListener true
+            }
+            return@setOnMenuItemClickListener false
+        }
 
         bottomSheetBehavior = BottomSheetBehavior.from(searchBottomSheet)
+        bottomSheetBehavior.isDraggable = false
         searchFieldContainer.doOnLayout { bottomSheetBehavior.peekHeight = searchFieldContainer.height }
 
         searchRecyclerView.adapter = filmSummariesAdapter
@@ -46,6 +53,7 @@ class SearchActivity : BaseActivity() {
 
         viewModel.films.observe(this, DataObserver<List<FilmSummary>> { filmSummaries ->
             filmSummariesAdapter.submitList(filmSummaries)
+            bottomSheetBehavior.isDraggable = true
             bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
         })
 

@@ -5,17 +5,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <Button
-        android:id="@+id/signInButton"
-        android:layout_width="wrap_content"
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/searchToolbar"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Sign in" />
+        app:menu="@menu/search" />
 
     <LinearLayout
         android:id="@+id/searchBottomSheet"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="?attr/colorSurface"
+        android:background="?attr/colorPrimarySurface"
         android:elevation="8dp"
         android:orientation="vertical"
         app:behavior_hideable="false"
