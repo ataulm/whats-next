@@ -2,7 +2,6 @@ package com.ataulm.whatsnext.film
 
 import android.os.Bundle
 import com.ataulm.support.DataObserver
-import com.ataulm.support.Toaster
 import com.ataulm.whatsnext.BaseActivity
 import com.ataulm.whatsnext.BuildConfig
 import com.ataulm.whatsnext.Film
@@ -22,28 +21,21 @@ class FilmActivity : BaseActivity() {
         injectDependencies()
         setContentView(R.layout.activity_film)
 
-        val displayer = FilmDisplayer(
-                titleTextView,
-                watchedCheckBox,
-                likeCheckBox,
-                ratingBar
-        )
-
-        displayer.attach(object : FilmDisplayer.Callback {
-            override fun onClickMarkAsWatched() {
-                Toaster.display("on click mark as watched")
-                // TODO: call viewModel.onClickMarkAsWatched() here?
-            }
-
-            override fun onClickMarkAsNotWatched() {
-                Toaster.display("on click mark as not watched")
-                // TODO: call viewModel.onClickMarkAsNotWatched() here?
-            }
-        })
-
         viewModel.film.observe(this, DataObserver<Film> {
-            displayer.display(it)
+            display(it)
         })
+    }
+
+    // TODO: checkboxes/ratings don't do anything yet
+    private fun display(film: Film) {
+        titleTextView.text = if (film.summary.year != null) {
+            "${film.summary.name} (${film.summary.year})"
+        } else {
+            film.summary.name
+        }
+        likeCheckBox.isChecked = film.relationship.liked
+        watchedCheckBox.isChecked = film.relationship.watched
+        ratingBar.rating = film.relationship.rating.toFloat()
     }
 
     companion object {
