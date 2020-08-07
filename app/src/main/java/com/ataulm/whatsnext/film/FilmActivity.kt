@@ -1,7 +1,7 @@
 package com.ataulm.whatsnext.film
 
 import android.os.Bundle
-import androidx.lifecycle.Observer
+import com.ataulm.support.DataObserver
 import com.ataulm.support.Toaster
 import com.ataulm.whatsnext.BaseActivity
 import com.ataulm.whatsnext.BuildConfig
@@ -41,19 +41,14 @@ class FilmActivity : BaseActivity() {
             }
         })
 
-        viewModel.film.observe(this, object : Observer<Film> {
-            override fun onChanged(film: Film?) {
-                if (film != null) {
-                    displayer.display(film)
-                }
-            }
+        viewModel.film.observe(this, DataObserver<Film> {
+            displayer.display(it)
         })
     }
 
     companion object {
 
-        @JvmField
-        val EXTRA_FILM_ID = BuildConfig.APPLICATION_ID + ".EXTRA_FILM_ID"
+        const val EXTRA_FILM_ID = BuildConfig.APPLICATION_ID + ".EXTRA_FILM_ID"
     }
 }
 

@@ -14,39 +14,30 @@ internal class WhatsNextService(
         private val filmRelationshipConverter: FilmRelationshipConverter
 ) {
 
-    suspend fun login(username: String, password: String): Token {
-        return withContext(Dispatchers.IO) {
-            val authTokenApiResponse = letterboxdApi.fetchAuthToken(username, password)
-            Token(authTokenApiResponse.accessToken, authTokenApiResponse.refreshToken)
-        }
+    suspend fun login(username: String, password: String) = withContext(Dispatchers.IO) {
+        val authTokenApiResponse = letterboxdApi.fetchAuthToken(username, password)
+        Token(authTokenApiResponse.accessToken, authTokenApiResponse.refreshToken)
     }
 
-    suspend fun search(searchTerm: String): List<FilmSummary> {
-        return withContext(Dispatchers.IO) {
-            val apiSearchResponse = letterboxdApi.search(searchTerm)
-            val filmSummaries: MutableList<FilmSummary> = ArrayList(apiSearchResponse.searchItems.size)
-            for (searchItem in apiSearchResponse.searchItems) {
-                if ("FilmSearchItem" != searchItem.type) {
-                    continue
-                }
-                val filmSummary = filmSummaryConverter.convert(searchItem.filmSummary)
-                filmSummaries.add(filmSummary)
+    suspend fun search(searchTerm: String) = withContext(Dispatchers.IO) {
+        val apiSearchResponse = letterboxdApi.search(searchTerm)
+        val filmSummaries: MutableList<FilmSummary> = ArrayList(apiSearchResponse.searchItems.size)
+        for (searchItem in apiSearchResponse.searchItems) {
+            if ("FilmSearchItem" != searchItem.type) {
+                continue
             }
-            filmSummaries
+            val filmSummary = filmSummaryConverter.convert(searchItem.filmSummary)
+            filmSummaries.add(filmSummary)
         }
+        filmSummaries
     }
 
-    fun film(letterboxdId: String): Observable<Film> {
-        return Single.zip(
-                letterboxdApi.film(letterboxdId),
-                letterboxdApi.filmRelationship(letterboxdId),
-                BiFunction<ApiFilm, ApiFilmRelationship, Film> { apiFilm, apiFilmRelationship ->
-                    Film(
-                            filmSummaryConverter.convert(apiFilm),
-                            filmRelationshipConverter.convert(apiFilmRelationship)
-                    )
-                }
-        ).toObservable()
+    suspend fun film(letterboxdId: String) = withContext(Dispatchers.IO) {
+        val apiFilm = letterboxdApi.film(letterboxdId)
+        val apiFilmRelationship = letterboxdApi.filmRelationship(letterboxdId)
+        Film(
+                filmSummaryConverter.convert(apiFilm),
+                filmRelationshipConverter.convert(apiFilmRelationship)
+        )
     }
-
 }
