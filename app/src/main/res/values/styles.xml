@@ -1,11 +1,16 @@
 <resources>
 
-  <style name="Platform.V23.Theme.WhatsNext" parent="Theme.MaterialComponents.Light.NoActionBar" />
+    <style name="Platform.V23.Theme.WhatsNext" parent="Theme.MaterialComponents.Light.NoActionBar" />
 
-  <style name="Platform.Theme.WhatsNext" parent="Platform.V23.Theme.WhatsNext" />
+    <style name="Platform.Theme.WhatsNext" parent="Platform.V23.Theme.WhatsNext" />
 
-  <style name="Base.Theme.WhatsNext" parent="Platform.Theme.WhatsNext" />
+    <style name="Base.Theme.WhatsNext" parent="Platform.Theme.WhatsNext">
+        <item name="android:windowBackground">?android:attr/colorBackground</item>
+    </style>
 
-  <style name="Theme.WhatsNext" parent="Base.Theme.WhatsNext" />
+    <style name="Theme.WhatsNext" parent="Base.Theme.WhatsNext">
+        <item name="android:colorBackground">?attr/colorPrimarySurface</item>
+        <item name="colorOnBackground">?attr/colorOnPrimarySurface</item>
+    </style>
 
 </resources>

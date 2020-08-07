@@ -27,16 +27,19 @@ class SearchActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        DaggerSearchComponent.builder()
-                .activity(this)
-                .appComponent(appComponent())
-                .build()
-                .inject(this)
+        injectDependencies()
         setContentView(R.layout.activity_search)
 
-        signInButton.setOnClickListener { navigator.navigateToSignIn() }
+        searchToolbar.setOnMenuItemClickListener {
+            if (it.itemId == R.id.searchLetterboxdAccount) {
+                navigator.navigateToSignIn()
+                return@setOnMenuItemClickListener true
+            }
+            return@setOnMenuItemClickListener false
+        }
 
         bottomSheetBehavior = BottomSheetBehavior.from(searchBottomSheet)
+        bottomSheetBehavior.isDraggable = false
         searchFieldContainer.doOnLayout { bottomSheetBehavior.peekHeight = searchFieldContainer.height }
 
         searchRecyclerView.adapter = filmSummariesAdapter
@@ -50,6 +53,7 @@ class SearchActivity : BaseActivity() {
 
         viewModel.films.observe(this, DataObserver<List<FilmSummary>> { filmSummaries ->
             filmSummariesAdapter.submitList(filmSummaries)
+            bottomSheetBehavior.isDraggable = true
             bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
         })
 
@@ -66,4 +70,12 @@ class SearchActivity : BaseActivity() {
             super.onBackPressed()
         }
     }
+}
+
+private fun SearchActivity.injectDependencies() {
+    DaggerSearchComponent.builder()
+            .activity(this)
+            .appComponent(appComponent())
+            .build()
+            .inject(this)
 }

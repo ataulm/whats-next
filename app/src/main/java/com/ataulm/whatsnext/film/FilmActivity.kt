@@ -19,16 +19,7 @@ class FilmActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (!intent.hasExtra(EXTRA_FILM_ID)) {
-            throw IllegalStateException("how you open FilmActivity without a film id?")
-        }
-        val filmId = intent.getStringExtra(EXTRA_FILM_ID)!!
-        DaggerFilmComponent.builder()
-                .activity(this)
-                .with(filmId)
-                .appComponent(appComponent())
-                .build()
-                .inject(this)
+        injectDependencies()
         setContentView(R.layout.activity_film)
 
         val displayer = FilmDisplayer(
@@ -64,4 +55,16 @@ class FilmActivity : BaseActivity() {
         @JvmField
         val EXTRA_FILM_ID = BuildConfig.APPLICATION_ID + ".EXTRA_FILM_ID"
     }
+}
+
+private fun FilmActivity.injectDependencies() {
+    val filmId = checkNotNull(intent.getStringExtra(FilmActivity.EXTRA_FILM_ID)) {
+        "how you open FilmActivity without a film id?"
+    }
+    DaggerFilmComponent.builder()
+            .activity(this)
+            .with(filmId)
+            .appComponent(appComponent())
+            .build()
+            .inject(this)
 }

@@ -11,19 +11,22 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAppearance="?attr/textAppearanceHeadline5"
+        android:textColor="?attr/colorOnBackground"
         tools:text="The Iron Giant (1999)" />
 
     <CheckBox
         android:id="@+id/watchedCheckBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Watched" />
+        android:text="Watched"
+        android:textColor="?attr/colorOnBackground" />
 
     <CheckBox
         android:id="@+id/likeCheckBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Like" />
+        android:text="Like"
+        android:textColor="?attr/colorOnBackground" />
 
     <RatingBar
         android:id="@+id/ratingBar"
