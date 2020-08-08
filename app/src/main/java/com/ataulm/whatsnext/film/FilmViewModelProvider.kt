@@ -13,7 +13,6 @@ internal class FilmViewModelProvider @Inject constructor(
 
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        val film = FilmLiveData(service, filmId)
-        return FilmViewModel(film) as T
+        return FilmViewModel(filmId, service) as T
     }
 }

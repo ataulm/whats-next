@@ -1,8 +1,7 @@
 package com.ataulm.whatsnext.film
 
 import android.os.Bundle
-import androidx.lifecycle.Observer
-import com.ataulm.support.Toaster
+import com.ataulm.support.DataObserver
 import com.ataulm.whatsnext.BaseActivity
 import com.ataulm.whatsnext.BuildConfig
 import com.ataulm.whatsnext.Film
@@ -22,38 +21,38 @@ class FilmActivity : BaseActivity() {
         injectDependencies()
         setContentView(R.layout.activity_film)
 
-        val displayer = FilmDisplayer(
-                titleTextView,
-                watchedCheckBox,
-                likeCheckBox,
-                ratingBar
-        )
-
-        displayer.attach(object : FilmDisplayer.Callback {
-            override fun onClickMarkAsWatched() {
-                Toaster.display("on click mark as watched")
-                // TODO: call viewModel.onClickMarkAsWatched() here?
-            }
-
-            override fun onClickMarkAsNotWatched() {
-                Toaster.display("on click mark as not watched")
-                // TODO: call viewModel.onClickMarkAsNotWatched() here?
-            }
+        viewModel.film.observe(this, DataObserver<Film> {
+            display(it)
         })
+    }
 
-        viewModel.film.observe(this, object : Observer<Film> {
-            override fun onChanged(film: Film?) {
-                if (film != null) {
-                    displayer.display(film)
-                }
+    private fun display(film: Film) {
+        titleTextView.text = if (film.summary.year != null) {
+            "${film.summary.name} (${film.summary.year})"
+        } else {
+            film.summary.name
+        }
+
+        likeCheckBox.setOnCheckedChangeListener(null)
+        watchedCheckBox.setOnCheckedChangeListener(null)
+        ratingBar.onRatingBarChangeListener = null
+
+        likeCheckBox.isChecked = film.relationship.liked
+        watchedCheckBox.isChecked = film.relationship.watched
+        ratingBar.rating = film.relationship.rating.toFloat() ?: 0f
+
+        likeCheckBox.setOnCheckedChangeListener { _, liked -> viewModel.onClickLiked(liked) }
+        watchedCheckBox.setOnCheckedChangeListener { _, watched -> viewModel.onClickWatched(watched) }
+        ratingBar.setOnRatingBarChangeListener { _, rating, fromUser ->
+            if (fromUser) {
+                viewModel.onClickRating(rating)
             }
-        })
+        }
     }
 
     companion object {
 
-        @JvmField
-        val EXTRA_FILM_ID = BuildConfig.APPLICATION_ID + ".EXTRA_FILM_ID"
+        const val EXTRA_FILM_ID = BuildConfig.APPLICATION_ID + ".EXTRA_FILM_ID"
     }
 }
 
