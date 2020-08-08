@@ -1,9 +1,7 @@
 package com.ataulm.whatsnext
 
-import com.ataulm.whatsnext.api.ApiFilmRelationshipUpdateRequest
-import com.ataulm.whatsnext.api.FilmRelationshipConverter
-import com.ataulm.whatsnext.api.FilmSummaryConverter
-import com.ataulm.whatsnext.api.LetterboxdApi
+import androidx.paging.PagingSource
+import com.ataulm.whatsnext.api.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.util.*
@@ -17,6 +15,10 @@ internal class WhatsNextService(
     suspend fun login(username: String, password: String) = withContext(Dispatchers.IO) {
         val authTokenApiResponse = letterboxdApi.fetchAuthToken(username, password)
         Token(authTokenApiResponse.accessToken, authTokenApiResponse.refreshToken)
+    }
+
+    fun popularFilmsThisWeek(): PagingSource<String, FilmSummary> {
+        return PopularFilmsThisWeekPagingSource(letterboxdApi, filmSummaryConverter)
     }
 
     suspend fun search(searchTerm: String) = withContext(Dispatchers.IO) {
@@ -48,17 +50,18 @@ internal class WhatsNextService(
             inWatchlist: Boolean,
             rating: FilmRating
     ) = withContext(Dispatchers.IO) {
-        letterboxdApi.updateFilmRelationship(
+        val apiFilmRelationshipUpdateResponse = letterboxdApi.updateFilmRelationship(
                 letterboxdId,
                 request = ApiFilmRelationshipUpdateRequest(
                         watched = watched,
-                        liked = liked ,
+                        liked = liked,
                         inWatchlist = inWatchlist,
                         rating = rating.toApiValue()
                 )
         )
+        // TODO: this is wasteful - the filmSummary won't have changed.
         val apiFilm = letterboxdApi.film(letterboxdId)
-        val apiFilmRelationship = letterboxdApi.filmRelationship(letterboxdId)
+        val apiFilmRelationship = apiFilmRelationshipUpdateResponse.data
         Film(
                 filmSummaryConverter.convert(apiFilm),
                 filmRelationshipConverter.convert(apiFilmRelationship)
@@ -83,5 +86,23 @@ private fun FilmRating.toApiValue(): String {
         FilmRating.FOUR -> "4"
         FilmRating.FOUR_HALF -> "4.5"
         FilmRating.FIVE -> "5"
+    }
+}
+
+private class PopularFilmsThisWeekPagingSource(
+        private val letterboxdApi: LetterboxdApi,
+        private val filmSummaryConverter: FilmSummaryConverter
+) : PagingSource<String, FilmSummary>() {
+
+    override suspend fun load(params: LoadParams<String>): LoadResult<String, FilmSummary> {
+        val response = letterboxdApi.popularFilmsThisWeek(
+                cursor = params.key,
+                perPage = params.loadSize
+        )
+        return LoadResult.Page(
+                data = response.items.map { filmSummaryConverter.convert(it) },
+                prevKey = null, // API only allows paging forwards
+                nextKey = response.cursor
+        )
     }
 }

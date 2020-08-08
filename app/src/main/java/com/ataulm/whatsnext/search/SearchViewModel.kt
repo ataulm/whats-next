@@ -1,9 +1,13 @@
 package com.ataulm.whatsnext.search
 
 import androidx.lifecycle.*
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
 import com.ataulm.support.Event
 import com.ataulm.whatsnext.FilmSummary
 import com.ataulm.whatsnext.WhatsNextService
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
 internal class SearchViewModel(private val service: WhatsNextService) : ViewModel() {
@@ -23,6 +27,12 @@ internal class SearchViewModel(private val service: WhatsNextService) : ViewMode
 
     fun onClick(filmSummary: FilmSummary) {
         _navigationEvents.value = Event(filmSummary)
+    }
+
+    fun pagedPopularFilms(): Flow<PagingData<FilmSummary>> {
+        val popularFilmsPagingSource = service.popularFilmsThisWeek()
+        val pager = Pager(config = PagingConfig(pageSize = 9)) { popularFilmsPagingSource }
+        return pager.flow
     }
 }
 
