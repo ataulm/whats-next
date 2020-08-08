@@ -48,6 +48,7 @@ dependencies {
     implementation libraries.androidxCoordinatorLayout
     implementation libraries.androidxCoreKtx
     implementation libraries.androidxMaterial
+    implementation libraries.androidxPagingRuntime
     implementation libraries.androidxRecyclerView
     debugImplementation libraries.chucker
     releaseImplementation libraries.chuckerNoOp

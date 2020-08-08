@@ -8,6 +8,13 @@ annotation class RequiresAuthenticatedUser
 
 interface LetterboxdApi {
 
+    @GET("films")
+    suspend fun popularFilmsThisWeek(
+            @Query("cursor") cursor: String?,
+            @Query("perPage") perPage: Int,
+            @Query("sort") sort: String = "FilmPopularityThisWeek"
+    ): ApiPopularFilmsThisWeekResponse
+
     @FormUrlEncoded
     @POST("auth/token")
     suspend fun fetchAuthToken(
@@ -39,6 +46,11 @@ data class AuthTokenApiResponse(
         @SerializedName("refresh_token") val refreshToken: String
 )
 
+data class ApiPopularFilmsThisWeekResponse(
+        @SerializedName("next") val cursor: String? = null,
+        @SerializedName("items") val items: List<ApiFilmSummary>
+)
+
 data class ApiFilmRelationshipUpdateRequest(
         @SerializedName("watched") val watched: Boolean,
         @SerializedName("liked") val liked: Boolean,
@@ -51,21 +63,5 @@ data class ApiFilmRelationshipUpdateRequest(
 )
 
 data class ApiFilmRelationshipUpdateResponse(
-        @SerializedName("data") val data: ApiFilmRelationship,
-        @SerializedName("messages") val messages: List<ApiFilmRelationshipUpdateMessage>
-)
-
-data class ApiFilmRelationshipUpdateMessage(
-        /**
-         * {Error, Success}
-         */
-        @SerializedName("type") val type: String,
-        /**
-         * {InvalidRatingValue, UnableToRemoveWatch}
-         */
-        @SerializedName("code") val code: String,
-        /**
-         * The error message text in human-readable form.
-         */
-        @SerializedName("title") val title: String
+        @SerializedName("data") val data: ApiFilmRelationship
 )

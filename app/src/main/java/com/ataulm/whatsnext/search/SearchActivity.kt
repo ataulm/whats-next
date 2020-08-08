@@ -2,7 +2,11 @@ package com.ataulm.whatsnext.search
 
 import android.os.Bundle
 import android.view.View
+import android.view.ViewGroup
 import androidx.core.view.doOnLayout
+import androidx.lifecycle.lifecycleScope
+import androidx.paging.PagingDataAdapter
+import androidx.recyclerview.widget.DiffUtil
 import com.ataulm.support.DataObserver
 import com.ataulm.support.EventObserver
 import com.ataulm.whatsnext.*
@@ -10,6 +14,8 @@ import com.ataulm.whatsnext.di.DaggerSearchComponent
 import com.ataulm.whatsnext.di.appComponent
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import kotlinx.android.synthetic.main.activity_search.*
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class SearchActivity : BaseActivity() {
@@ -19,11 +25,13 @@ class SearchActivity : BaseActivity() {
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<View>
 
     private val navigator = navigator()
-    private val filmSummariesAdapter = FilmSummariesAdapter(object : FilmSummaryViewHolder.Callback {
+    private val filmSummaryCallback = object : FilmSummaryViewHolder.Callback {
         override fun onClick(filmSummary: FilmSummary) {
             viewModel.onClick(filmSummary)
         }
-    })
+    }
+    private val popularFilmsAdapter = PopularFilmsThisWeekAdapter(filmSummaryCallback)
+    private val filmSummariesAdapter = FilmSummariesAdapter(filmSummaryCallback)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,6 +51,7 @@ class SearchActivity : BaseActivity() {
         searchFieldContainer.doOnLayout { bottomSheetBehavior.peekHeight = searchFieldContainer.height }
 
         searchRecyclerView.adapter = filmSummariesAdapter
+        popularFilmsThisWeekRecyclerView.adapter = popularFilmsAdapter
         searchEditText.setOnEditorActionListener { _, _, _ ->
             val searchTerm = searchEditText.text.toString().trim()
             if (searchTerm.isNotEmpty()) {
@@ -56,6 +65,10 @@ class SearchActivity : BaseActivity() {
             bottomSheetBehavior.isDraggable = true
             bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
         })
+
+        lifecycleScope.launch {
+            viewModel.pagedPopularFilms().collectLatest { popularFilmsAdapter.submitData(it) }
+        }
 
         viewModel.navigationEvents.observe(this, EventObserver { filmSummary ->
             navigator.navigateToFilm(filmSummary.ids.letterboxd)
@@ -78,4 +91,28 @@ private fun SearchActivity.injectDependencies() {
             .appComponent(appComponent())
             .build()
             .inject(this)
+}
+
+private class PopularFilmsThisWeekAdapter(
+        private val callback: FilmSummaryViewHolder.Callback
+) : PagingDataAdapter<FilmSummary, FilmSummaryViewHolder>(FilmDiffer) {
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FilmSummaryViewHolder {
+        return FilmSummaryViewHolder.inflateView(parent)
+    }
+
+    override fun onBindViewHolder(holder: FilmSummaryViewHolder, position: Int) {
+        getItem(position)?.let { holder.bind(it, callback) }
+    }
+
+    object FilmDiffer : DiffUtil.ItemCallback<FilmSummary>() {
+
+        override fun areItemsTheSame(oldItem: FilmSummary, newItem: FilmSummary): Boolean {
+            return oldItem.ids.letterboxd == newItem.ids.letterboxd
+        }
+
+        override fun areContentsTheSame(oldItem: FilmSummary, newItem: FilmSummary): Boolean {
+            return oldItem == newItem
+        }
+    }
 }
