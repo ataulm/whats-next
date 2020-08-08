@@ -1,9 +1,9 @@
 package com.ataulm.whatsnext
 
-import com.ataulm.whatsnext.api.*
-import io.reactivex.Observable
-import io.reactivex.Single
-import io.reactivex.functions.BiFunction
+import com.ataulm.whatsnext.api.ApiFilmRelationshipUpdateRequest
+import com.ataulm.whatsnext.api.FilmRelationshipConverter
+import com.ataulm.whatsnext.api.FilmSummaryConverter
+import com.ataulm.whatsnext.api.LetterboxdApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.util.*
@@ -39,5 +39,49 @@ internal class WhatsNextService(
                 filmSummaryConverter.convert(apiFilm),
                 filmRelationshipConverter.convert(apiFilmRelationship)
         )
+    }
+
+    suspend fun updateFilmRelationship(
+            letterboxdId: String,
+            watched: Boolean,
+            liked: Boolean,
+            inWatchlist: Boolean,
+            rating: FilmRating
+    ) = withContext(Dispatchers.IO) {
+        letterboxdApi.updateFilmRelationship(
+                letterboxdId,
+                request = ApiFilmRelationshipUpdateRequest(
+                        watched = watched,
+                        liked = liked ,
+                        inWatchlist = inWatchlist,
+                        rating = rating.toApiValue()
+                )
+        )
+        val apiFilm = letterboxdApi.film(letterboxdId)
+        val apiFilmRelationship = letterboxdApi.filmRelationship(letterboxdId)
+        Film(
+                filmSummaryConverter.convert(apiFilm),
+                filmRelationshipConverter.convert(apiFilmRelationship)
+        )
+    }
+}
+
+/**
+ * Using String so that we can send `"null"` as a value (valid for the API). `null` as in
+ * "not present" will be stripped out by Retrofit.
+ */
+private fun FilmRating.toApiValue(): String {
+    return when (this) {
+        FilmRating.UNRATED -> "null"
+        FilmRating.HALF -> "0.5"
+        FilmRating.ONE -> "1"
+        FilmRating.ONE_HALF -> "1.5"
+        FilmRating.TWO -> "2"
+        FilmRating.TWO_HALF -> "2.5"
+        FilmRating.THREE -> "3"
+        FilmRating.THREE_HALF -> "3.5"
+        FilmRating.FOUR -> "4"
+        FilmRating.FOUR_HALF -> "4.5"
+        FilmRating.FIVE -> "5"
     }
 }

@@ -26,16 +26,28 @@ class FilmActivity : BaseActivity() {
         })
     }
 
-    // TODO: checkboxes/ratings don't do anything yet
     private fun display(film: Film) {
         titleTextView.text = if (film.summary.year != null) {
             "${film.summary.name} (${film.summary.year})"
         } else {
             film.summary.name
         }
+
+        likeCheckBox.setOnCheckedChangeListener(null)
+        watchedCheckBox.setOnCheckedChangeListener(null)
+        ratingBar.onRatingBarChangeListener = null
+
         likeCheckBox.isChecked = film.relationship.liked
         watchedCheckBox.isChecked = film.relationship.watched
-        ratingBar.rating = film.relationship.rating.toFloat()
+        ratingBar.rating = film.relationship.rating.toFloat() ?: 0f
+
+        likeCheckBox.setOnCheckedChangeListener { _, liked -> viewModel.onClickLiked(liked) }
+        watchedCheckBox.setOnCheckedChangeListener { _, watched -> viewModel.onClickWatched(watched) }
+        ratingBar.setOnRatingBarChangeListener { _, rating, fromUser ->
+            if (fromUser) {
+                viewModel.onClickRating(rating)
+            }
+        }
     }
 
     companion object {

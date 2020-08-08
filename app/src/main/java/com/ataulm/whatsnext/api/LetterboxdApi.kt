@@ -47,7 +47,7 @@ data class ApiFilmRelationshipUpdateRequest(
          * Accepts values between 0.5 and 5.0, with increments of 0.5, or null (to remove the
          * rating). If set, [watched] is assumed to be true.
          */
-        @SerializedName("rating") val rating: Double?
+        @SerializedName("rating") val rating: String
 )
 
 data class ApiFilmRelationshipUpdateResponse(

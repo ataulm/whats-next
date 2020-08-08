@@ -1,5 +1,7 @@
 package com.ataulm.whatsnext.api;
 
+import androidx.annotation.Nullable;
+
 import com.google.gson.annotations.SerializedName;
 
 public class ApiFilmRelationship {
@@ -13,6 +15,7 @@ public class ApiFilmRelationship {
     @SerializedName("inWatchlist")
     public boolean inWatchlist;
 
+    @Nullable
     @SerializedName("rating")
-    public double rating;
+    public Float rating;
 }

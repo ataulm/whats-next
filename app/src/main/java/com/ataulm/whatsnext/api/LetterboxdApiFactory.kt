@@ -7,6 +7,7 @@ import com.ataulm.whatsnext.TokensStore
 import com.chuckerteam.chucker.api.ChuckerInterceptor
 import okhttp3.*
 import okhttp3.logging.HttpLoggingInterceptor
+import okio.Buffer
 import retrofit2.Call
 import retrofit2.Invocation
 import retrofit2.Retrofit
@@ -103,18 +104,12 @@ private class AddAuthorizationHeaderInterceptor(private val apiSecret: String, p
     }
 
     private fun Request.generateHashedSignature(): String {
-        val urlEncodedBody = (body as? FormBody)?.toUrlEncodedString() ?: ""
+        val urlEncodedBody = body?.toUrlEncodedString() ?: ""
         val preHashedSignature = "${method.toUpperCase(Locale.US)}\u0000$url\u0000$urlEncodedBody"
         return HmacSha256.generateHash(apiSecret, preHashedSignature).toLowerCase(Locale.US)
     }
 
-    private fun FormBody.toUrlEncodedString(): String {
-        val pairs = ArrayList<String>()
-        for (i in 0 until size) {
-            pairs.add(encodedName(i) + "=" + encodedValue(i))
-        }
-        return pairs.joinToString(separator = "&")
-    }
+    private fun RequestBody.toUrlEncodedString() = Buffer().apply { writeTo(this) }.readUtf8()
 }
 
 /**
