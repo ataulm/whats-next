@@ -1,8 +1,10 @@
 package com.ataulm.whatsnext.api
 
+import android.app.Application
 import com.ataulm.support.Clock
 import com.ataulm.whatsnext.Token
 import com.ataulm.whatsnext.TokensStore
+import com.chuckerteam.chucker.api.ChuckerInterceptor
 import okhttp3.*
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
@@ -22,6 +24,7 @@ class LetterboxdApiFactory(
         private val apiKey: String,
         private val apiSecret: String,
         private val tokensStore: TokensStore,
+        private val application: Application,
         private val clock: Clock,
         private val enableHttpLogging: Boolean
 ) {
@@ -30,7 +33,7 @@ class LetterboxdApiFactory(
         val gsonConverterFactory = GsonConverterFactory.create()
 
         val refreshAccessTokenApi = Retrofit.Builder()
-                .client(OkHttpClient.Builder().addCommonNetworkInterceptors().build())
+                .client(OkHttpClient.Builder().addCommonInterceptors().build())
                 .addConverterFactory(gsonConverterFactory)
                 .baseUrl(LETTERBOXD_BASE_URL)
                 .build()
@@ -40,7 +43,7 @@ class LetterboxdApiFactory(
                 .client(OkHttpClient.Builder()
                         // it's important that this one is set first, since it relies on the other to set the Auth header when a request is retried (after refreshing access token)
                         .addInterceptor(RefreshAccessTokenInterceptor(refreshAccessTokenApi, tokensStore))
-                        .addCommonNetworkInterceptors()
+                        .addCommonInterceptors()
                         .build())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .addConverterFactory(gsonConverterFactory)
@@ -49,7 +52,7 @@ class LetterboxdApiFactory(
                 .create(LetterboxdApi::class.java)
     }
 
-    private fun OkHttpClient.Builder.addCommonNetworkInterceptors(): OkHttpClient.Builder {
+    private fun OkHttpClient.Builder.addCommonInterceptors(): OkHttpClient.Builder {
         addNetworkInterceptor(AddApiKeyQueryParameterInterceptor(apiKey, clock))
         addNetworkInterceptor(AddAuthorizationHeaderInterceptor(apiSecret, tokensStore))
         if (enableHttpLogging) {
@@ -57,6 +60,7 @@ class LetterboxdApiFactory(
             httpLoggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
             addNetworkInterceptor(httpLoggingInterceptor)
         }
+        addInterceptor(ChuckerInterceptor(application))
         return this
     }
 }

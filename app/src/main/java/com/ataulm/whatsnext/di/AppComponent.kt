@@ -39,17 +39,18 @@ internal object AppModule {
     @Provides
     fun whatsNextService(application: Application): WhatsNextService {
         val tokensStore = tokensStore(application)
-        val letterboxdApi = letterboxdApi(tokensStore)
+        val letterboxdApi = letterboxdApi(application, tokensStore)
         val filmSummaryConverter = FilmSummaryConverter()
         val filmRelationshipConverter = FilmRelationshipConverter()
         return WhatsNextService(letterboxdApi, filmSummaryConverter, filmRelationshipConverter)
     }
 
-   private fun letterboxdApi(tokensStore: TokensStore): LetterboxdApi {
+   private fun letterboxdApi(application: Application, tokensStore: TokensStore): LetterboxdApi {
         return LetterboxdApiFactory(
                 apiKey = BuildConfig.LETTERBOXD_KEY,
                 apiSecret = BuildConfig.LETTERBOXD_SECRET,
                 tokensStore = tokensStore,
+                application = application,
                 clock = Clock(),
                 enableHttpLogging = BuildConfig.DEBUG
         ).createRemote()

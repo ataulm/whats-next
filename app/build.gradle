@@ -49,6 +49,8 @@ dependencies {
     implementation libraries.androidxCoreKtx
     implementation libraries.androidxMaterial
     implementation libraries.androidxRecyclerView
+    debugImplementation libraries.chucker
+    releaseImplementation libraries.chuckerNoOp
     implementation libraries.dagger
     kapt libraries.daggerCompiler
     implementation libraries.glide
