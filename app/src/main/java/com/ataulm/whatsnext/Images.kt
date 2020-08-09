@@ -1,8 +1,10 @@
 package com.ataulm.whatsnext
 
+import androidx.annotation.Px
+
 data class Images(private val images: List<Image>) {
 
-    fun bestFor(desiredWidth: Int): Image? {
+    fun bestFor(@Px desiredWidth: Int): Image? {
         if (images.isEmpty()) {
             return null
         }
@@ -10,7 +12,7 @@ data class Images(private val images: List<Image>) {
             if (bothBiggerThanDesired(currentImage, nextImage, desiredWidth)) {
                 return smallestOf(currentImage, nextImage)
             }
-            return largestOf(currentImage, nextImage)
+            largestOf(currentImage, nextImage)
         }
     }
 
