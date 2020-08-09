@@ -4,14 +4,27 @@ import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.Px
+import coil.api.load
 import kotlinx.android.synthetic.main.view_film_summary.view.*
 
 class FilmSummaryViewHolder internal constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
+    init {
+        itemView.imageView.clipToOutline = true
+        itemView.backgroundView.clipToOutline = true
+    }
+
     fun bind(filmSummary: FilmSummary, callback: Callback) {
         itemView.setOnClickListener { callback.onClick(filmSummary) }
         itemView.contentDescription = filmSummary.name + " (" + filmSummary.year + ")"
-        itemView.film_summary_text_name.text = filmSummary.name + " (" + filmSummary.year + ")"
+        itemView.titleView.text = filmSummary.name + " (" + filmSummary.year + ")"
+        itemView.imageView.load(filmSummary.imageUrl(itemView.imageView.width))
+    }
+
+    private fun FilmSummary.imageUrl(@Px width: Int): String? {
+        val image = backdrop.bestFor(width) ?: poster.bestFor(width)
+        return image?.url
     }
 
     interface Callback {
