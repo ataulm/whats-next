@@ -4,9 +4,9 @@ import android.content.Context
 import androidx.constraintlayout.widget.ConstraintLayout
 import android.util.AttributeSet
 import android.view.View
+import coil.api.load
 import com.ataulm.whatsnext.FilmSummary
 import com.ataulm.whatsnext.R
-import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.merge_film_details_info.view.*
 import java.util.concurrent.TimeUnit
 
@@ -59,9 +59,8 @@ class FilmDetailsInfoWidget constructor(context: Context, attrs: AttributeSet) :
             film_details_info_text_label_genres.visibility = GONE
         }
 
-        Glide.with(film_details_info_image_poster.context)
+        film_details_info_image_poster
                 .load(filmSummary.poster.bestFor(film_details_info_image_poster.width)?.url)
-                .into(film_details_info_image_poster)
     }
 
     // TODO: this should be ready as `String?` in a viewmodel
