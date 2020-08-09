@@ -10,7 +10,7 @@ import javax.inject.Inject
 class SignInActivity : BaseActivity() {
 
     @Inject
-    internal lateinit var whatsNextService: WhatsNextService
+    internal lateinit var whatsNextRepository: WhatsNextRepository
     private lateinit var presenter: SignInPresenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,7 +29,7 @@ class SignInActivity : BaseActivity() {
             screen.setCredentials(BuildConfig.LETTERBOXD_USERNAME, BuildConfig.LETTERBOXD_PASSWORD)
         }
 
-        presenter = SignInPresenter(whatsNextService, screen, callback)
+        presenter = SignInPresenter(whatsNextRepository, screen, callback)
     }
 
     private val callback = object : SignInPresenter.Callback {

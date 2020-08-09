@@ -6,7 +6,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.util.*
 
-internal class WhatsNextService(
+internal class WhatsNextRepository(
         private val letterboxdApi: LetterboxdApi,
         private val filmSummaryConverter: FilmSummaryConverter,
         private val filmRelationshipConverter: FilmRelationshipConverter

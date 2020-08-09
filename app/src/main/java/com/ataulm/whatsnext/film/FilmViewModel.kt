@@ -6,14 +6,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ataulm.whatsnext.Film
 import com.ataulm.whatsnext.FilmRating
-import com.ataulm.whatsnext.WhatsNextService
+import com.ataulm.whatsnext.WhatsNextRepository
 import com.ataulm.whatsnext.di.FilmId
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 internal class FilmViewModel(
         @FilmId private val filmId: String,
-        private val whatsNextService: WhatsNextService
+        private val whatsNextRepository: WhatsNextRepository
 ) : ViewModel() {
 
     private val _film = MutableLiveData<Film>()
@@ -27,7 +27,7 @@ internal class FilmViewModel(
 
     init {
         viewModelScope.launch {
-            val film = whatsNextService.film(filmId)
+            val film = whatsNextRepository.film(filmId)
             cacheUpdatedRelationshipThenEmit(film)
         }
     }
@@ -70,7 +70,7 @@ internal class FilmViewModel(
         latestFilmRelationshipJob?.cancel()
 
         latestFilmRelationshipJob = viewModelScope.launch {
-            val film = whatsNextService.updateFilmRelationship(
+            val film = whatsNextRepository.updateFilmRelationship(
                     letterboxdId = filmId,
                     watched = watched,
                     liked = liked,

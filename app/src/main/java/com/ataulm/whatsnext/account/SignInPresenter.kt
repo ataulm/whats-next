@@ -1,11 +1,11 @@
 package com.ataulm.whatsnext.account
 
 import com.ataulm.whatsnext.Token
-import com.ataulm.whatsnext.WhatsNextService
+import com.ataulm.whatsnext.WhatsNextRepository
 import kotlinx.coroutines.*
 
 internal class SignInPresenter(
-        private val service: WhatsNextService,
+        private val repository: WhatsNextRepository,
         private val screen: SignInScreen,
         private val callback: Callback
 ) {
@@ -16,7 +16,7 @@ internal class SignInPresenter(
         presenterScope.launch {
             screen.showLoading()
             try {
-                val token = service.login(username, password)
+                val token = repository.login(username, password)
                 callback.onTokenReceieved(username, token)
             } catch (e: Exception) {
                 screen.showErrorSigningIn()

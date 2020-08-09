@@ -6,11 +6,11 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.ataulm.support.Event
 import com.ataulm.whatsnext.FilmSummary
-import com.ataulm.whatsnext.WhatsNextService
+import com.ataulm.whatsnext.WhatsNextRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
-internal class SearchViewModel(private val service: WhatsNextService) : ViewModel() {
+internal class SearchViewModel(private val repository: WhatsNextRepository) : ViewModel() {
 
     private val _films = MutableLiveData<List<FilmSummary>>()
     val films: LiveData<List<FilmSummary>> = _films
@@ -20,7 +20,7 @@ internal class SearchViewModel(private val service: WhatsNextService) : ViewMode
 
     fun onSearch(searchTerm: String) {
         viewModelScope.launch {
-            val results = service.search(searchTerm)
+            val results = repository.search(searchTerm)
             _films.value = results
         }
     }
@@ -30,14 +30,14 @@ internal class SearchViewModel(private val service: WhatsNextService) : ViewMode
     }
 
     fun pagedPopularFilms(): Flow<PagingData<FilmSummary>> {
-        val popularFilmsPagingSource = service.popularFilmsThisWeek()
+        val popularFilmsPagingSource = repository.popularFilmsThisWeek()
         val pager = Pager(config = PagingConfig(pageSize = 9)) { popularFilmsPagingSource }
         return pager.flow
     }
 }
 
-internal class SearchViewModelFactory(private val service: WhatsNextService) : ViewModelProvider.Factory {
+internal class SearchViewModelFactory(private val repository: WhatsNextRepository) : ViewModelProvider.Factory {
 
     @Suppress("UNCHECKED_CAST")
-    override fun <T : ViewModel?> create(modelClass: Class<T>) = SearchViewModel(service) as T
+    override fun <T : ViewModel?> create(modelClass: Class<T>) = SearchViewModel(repository) as T
 }

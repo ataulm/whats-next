@@ -4,7 +4,7 @@ import android.app.Application
 import com.ataulm.support.Clock
 import com.ataulm.whatsnext.BuildConfig
 import com.ataulm.whatsnext.TokensStore
-import com.ataulm.whatsnext.WhatsNextService
+import com.ataulm.whatsnext.WhatsNextRepository
 import com.ataulm.whatsnext.api.FilmRelationshipConverter
 import com.ataulm.whatsnext.api.FilmSummaryConverter
 import com.ataulm.whatsnext.api.LetterboxdApi
@@ -20,7 +20,7 @@ import javax.inject.Singleton
 @Singleton
 internal interface AppComponent {
 
-    fun whatsNextService(): WhatsNextService
+    fun whatsNextService(): WhatsNextRepository
 
     @Component.Builder
     interface Builder {
@@ -37,12 +37,12 @@ internal object AppModule {
 
     @JvmStatic
     @Provides
-    fun whatsNextService(application: Application): WhatsNextService {
+    fun whatsNextService(application: Application): WhatsNextRepository {
         val tokensStore = tokensStore(application)
         val letterboxdApi = letterboxdApi(application, tokensStore)
         val filmSummaryConverter = FilmSummaryConverter()
         val filmRelationshipConverter = FilmRelationshipConverter()
-        return WhatsNextService(letterboxdApi, filmSummaryConverter, filmRelationshipConverter)
+        return WhatsNextRepository(letterboxdApi, filmSummaryConverter, filmRelationshipConverter)
     }
 
    private fun letterboxdApi(application: Application, tokensStore: TokensStore): LetterboxdApi {
