@@ -4,20 +4,19 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.ataulm.whatsnext.Film
-import com.ataulm.whatsnext.FilmRating
-import com.ataulm.whatsnext.WhatsNextRepository
+import com.ataulm.whatsnext.*
 import com.ataulm.whatsnext.di.FilmId
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 internal class FilmViewModel(
         @FilmId private val filmId: String,
-        private val whatsNextRepository: WhatsNextRepository
+        private val whatsNextRepository: WhatsNextRepository,
+        private val tokensStore: TokensStore
 ) : ViewModel() {
 
-    private val _film = MutableLiveData<Film>()
-    val film: LiveData<Film> = _film
+    private val _filmDetails = MutableLiveData<FilmDetailsUiModel>()
+    val filmDetails: LiveData<FilmDetailsUiModel> = _filmDetails
 
     private var watched = false
     private var liked = false
@@ -27,18 +26,22 @@ internal class FilmViewModel(
 
     init {
         viewModelScope.launch {
-            val film = whatsNextRepository.film(filmId)
-            cacheUpdatedRelationshipThenEmit(film)
+            val filmSummary = whatsNextRepository.filmSummary(filmId)
+            _filmDetails.value = FilmDetailsUiModel(filmSummary)
+            if (tokensStore.userIsSignedIn()) {
+                val filmRelationship = whatsNextRepository.filmRelationship(filmId)
+                cacheUpdatedRelationshipThenEmit(filmRelationship)
+            }
         }
     }
 
-    private fun cacheUpdatedRelationshipThenEmit(film: Film) {
-        watched = film.relationship.watched
-        liked = film.relationship.liked
-        inWatchlist = film.relationship.inWatchlist
-        rating = film.relationship.rating
+    private fun cacheUpdatedRelationshipThenEmit(filmRelationship: FilmRelationship) {
+        watched = filmRelationship.watched
+        liked = filmRelationship.liked
+        inWatchlist = filmRelationship.inWatchlist
+        rating = filmRelationship.rating
 
-        _film.value = film
+        _filmDetails.value = _filmDetails.value!!.copy(filmRelationship = filmRelationship)
     }
 
     fun onClickWatched(watched: Boolean) {
@@ -70,14 +73,19 @@ internal class FilmViewModel(
         latestFilmRelationshipJob?.cancel()
 
         latestFilmRelationshipJob = viewModelScope.launch {
-            val film = whatsNextRepository.updateFilmRelationship(
+            val updatedFilmRelationship = whatsNextRepository.updateFilmRelationship(
                     letterboxdId = filmId,
                     watched = watched,
                     liked = liked,
                     inWatchlist = inWatchlist,
                     rating = rating
             )
-            cacheUpdatedRelationshipThenEmit(film)
+            cacheUpdatedRelationshipThenEmit(updatedFilmRelationship)
         }
     }
+
+    data class FilmDetailsUiModel(
+            val filmSummary: FilmSummary,
+            val filmRelationship: FilmRelationship? = null
+    )
 }

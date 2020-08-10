@@ -9,7 +9,10 @@ import com.ataulm.whatsnext.api.FilmRelationshipConverter
 import com.ataulm.whatsnext.api.FilmSummaryConverter
 import com.ataulm.whatsnext.api.LetterboxdApi
 import com.ataulm.whatsnext.api.LetterboxdApiFactory
-import dagger.*
+import dagger.BindsInstance
+import dagger.Component
+import dagger.Module
+import dagger.Provides
 import javax.inject.Singleton
 
 @Component(
@@ -21,6 +24,7 @@ import javax.inject.Singleton
 internal interface AppComponent {
 
     fun whatsNextService(): WhatsNextRepository
+    fun tokensStore(): TokensStore
 
     @Component.Builder
     interface Builder {
@@ -37,15 +41,14 @@ internal object AppModule {
 
     @JvmStatic
     @Provides
-    fun whatsNextService(application: Application): WhatsNextRepository {
-        val tokensStore = tokensStore(application)
+    fun whatsNextService(tokensStore: TokensStore, application: Application): WhatsNextRepository {
         val letterboxdApi = letterboxdApi(application, tokensStore)
         val filmSummaryConverter = FilmSummaryConverter()
         val filmRelationshipConverter = FilmRelationshipConverter()
         return WhatsNextRepository(letterboxdApi, filmSummaryConverter, filmRelationshipConverter)
     }
 
-   private fun letterboxdApi(application: Application, tokensStore: TokensStore): LetterboxdApi {
+    private fun letterboxdApi(application: Application, tokensStore: TokensStore): LetterboxdApi {
         return LetterboxdApiFactory(
                 apiKey = BuildConfig.LETTERBOXD_KEY,
                 apiSecret = BuildConfig.LETTERBOXD_SECRET,
@@ -56,5 +59,7 @@ internal object AppModule {
         ).createRemote()
     }
 
-   private fun tokensStore(application: Application) = TokensStore.create(application)
+    @JvmStatic
+    @Provides
+    fun tokensStore(application: Application) = TokensStore.create(application)
 }

@@ -1,13 +1,14 @@
 package com.ataulm.whatsnext.film
 
 import android.os.Bundle
+import android.view.View
 import com.ataulm.support.DataObserver
 import com.ataulm.whatsnext.BaseActivity
 import com.ataulm.whatsnext.BuildConfig
-import com.ataulm.whatsnext.Film
 import com.ataulm.whatsnext.R
 import com.ataulm.whatsnext.di.DaggerFilmComponent
 import com.ataulm.whatsnext.di.appComponent
+import com.ataulm.whatsnext.film.FilmViewModel.FilmDetailsUiModel
 import kotlinx.android.synthetic.main.activity_film.*
 import javax.inject.Inject
 
@@ -21,32 +22,42 @@ class FilmActivity : BaseActivity() {
         injectDependencies()
         setContentView(R.layout.activity_film)
 
-        viewModel.film.observe(this, DataObserver<Film> {
+        viewModel.filmDetails.observe(this, DataObserver<FilmDetailsUiModel> {
             display(it)
         })
     }
 
-    private fun display(film: Film) {
-        titleTextView.text = if (film.summary.year != null) {
-            "${film.summary.name} (${film.summary.year})"
+    private fun display(film: FilmDetailsUiModel) {
+        titleTextView.text = if (film.filmSummary.year != null) {
+            "${film.filmSummary.name} (${film.filmSummary.year})"
         } else {
-            film.summary.name
+            film.filmSummary.name
         }
 
-        likeCheckBox.setOnCheckedChangeListener(null)
-        watchedCheckBox.setOnCheckedChangeListener(null)
-        ratingBar.onRatingBarChangeListener = null
+        if (film.filmRelationship != null) {
+            likeCheckBox.setOnCheckedChangeListener(null)
+            watchedCheckBox.setOnCheckedChangeListener(null)
+            ratingBar.onRatingBarChangeListener = null
 
-        likeCheckBox.isChecked = film.relationship.liked
-        watchedCheckBox.isChecked = film.relationship.watched
-        ratingBar.rating = film.relationship.rating.toFloat() ?: 0f
+            likeCheckBox.isChecked = film.filmRelationship.liked
+            watchedCheckBox.isChecked = film.filmRelationship.watched
+            ratingBar.rating = film.filmRelationship.rating.toFloat()
 
-        likeCheckBox.setOnCheckedChangeListener { _, liked -> viewModel.onClickLiked(liked) }
-        watchedCheckBox.setOnCheckedChangeListener { _, watched -> viewModel.onClickWatched(watched) }
-        ratingBar.setOnRatingBarChangeListener { _, rating, fromUser ->
-            if (fromUser) {
-                viewModel.onClickRating(rating)
+            likeCheckBox.setOnCheckedChangeListener { _, liked -> viewModel.onClickLiked(liked) }
+            watchedCheckBox.setOnCheckedChangeListener { _, watched -> viewModel.onClickWatched(watched) }
+            ratingBar.setOnRatingBarChangeListener { _, rating, fromUser ->
+                if (fromUser) {
+                    viewModel.onClickRating(rating)
+                }
             }
+
+            likeCheckBox.visibility = View.VISIBLE
+            watchedCheckBox.visibility = View.VISIBLE
+            ratingBar.visibility = View.VISIBLE
+        } else {
+            likeCheckBox.visibility = View.GONE
+            watchedCheckBox.visibility = View.GONE
+            ratingBar.visibility = View.GONE
         }
     }
 
