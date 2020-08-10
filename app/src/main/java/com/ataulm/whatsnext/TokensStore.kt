@@ -19,6 +19,8 @@ class TokensStore private constructor(private val preferences: SharedPreferences
                 .apply()
     }
 
+    fun userIsSignedIn() = token != null
+
     val token: Token?
         get() {
             if (preferences.contains(KEY_ACCESS_TOKEN_VALUE) && preferences.contains(KEY_REFRESH_TOKEN_VALUE)) {
