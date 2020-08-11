@@ -1,15 +1,15 @@
 package com.ataulm.whatsnext.film
 
 import android.content.Context
-import androidx.core.view.ViewCompat
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.RecyclerView.Adapter
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import androidx.core.view.ViewCompat
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.Adapter
 import com.ataulm.whatsnext.R
 import kotlinx.android.synthetic.main.merge_people_widget.view.*
 import kotlinx.android.synthetic.main.view_item_people.view.*
@@ -45,6 +45,10 @@ class PeopleWidget constructor(context: Context, attrs: AttributeSet) : LinearLa
     }
 
     private class PeopleAdapter(private val people: List<PersonViewModel>) : Adapter<PersonViewHolder>() {
+
+        init {
+            stateRestorationPolicy = StateRestorationPolicy.PREVENT_WHEN_EMPTY
+        }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PersonViewHolder {
             return PersonViewHolder.create(parent)
