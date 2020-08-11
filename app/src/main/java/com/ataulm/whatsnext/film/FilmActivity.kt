@@ -29,7 +29,11 @@ class FilmActivity : BaseActivity() {
     }
 
     private fun display(film: FilmDetailsUiModel) {
-        filmDetailsInfoWidget.bind(film.filmSummary)
+        if (film.film == null) {
+            filmDetailsInfoWidget.bind(film.filmSummary)
+        } else {
+            filmDetailsInfoWidget.bind(film.film)
+        }
 
         if (film.filmRelationship != null) {
             likeCheckBox.setOnCheckedChangeListener(null)

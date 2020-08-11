@@ -9,13 +9,8 @@ internal class FilmSummaryConverter {
                 ids(apiFilmSummary),
                 apiFilmSummary.name,
                 apiFilmSummary.releaseYear.toString(),
-                apiFilmSummary.runtimeMinutes,
-                apiFilmSummary.tagline,
-                apiFilmSummary.description,
                 images(apiFilmSummary.poster),
-                genres(apiFilmSummary),
-                cast(apiFilmSummary),
-                crew(apiFilmSummary)
+                apiFilmSummary.directors?.map { Person(it.id, it.name) } ?: emptyList()
         )
     }
 
@@ -31,31 +26,5 @@ internal class FilmSummaryConverter {
             return Images(emptyList())
         }
         return Images(apiImage.sizes.map { Image(it.width, it.height, it.url) })
-    }
-
-    private fun genres(apiFilmSummary: ApiFilmSummary): List<String> {
-        apiFilmSummary.genres?.let {
-            return it.map { apiGenre -> apiGenre.name }
-        }
-        return emptyList()
-    }
-
-    private fun cast(apiFilmSummary: ApiFilmSummary): List<Actor> {
-        return apiFilmSummary.contributions
-                ?.filter { it.type == "Actor" }
-                ?.flatMap { it.contributors }
-                ?.map { Actor(it.characterName, Person(it.id, it.name)) }
-                .orEmpty()
-    }
-
-    private fun crew(apiFilmSummary: ApiFilmSummary): List<Contributor> {
-        return apiFilmSummary.contributions
-                ?.filterNot { it.type == "Actor" }
-                ?.flatMap { contributors(it.type, it.contributors) }
-                .orEmpty()
-    }
-
-    private fun contributors(type: String, apiContributors: List<ApiContributor>): List<Contributor> {
-        return apiContributors.map { Contributor(type, Person(it.id, it.name)) }
     }
 }

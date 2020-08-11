@@ -5,10 +5,10 @@ import com.ataulm.support.Clock
 import com.ataulm.whatsnext.BuildConfig
 import com.ataulm.whatsnext.TokensStore
 import com.ataulm.whatsnext.WhatsNextRepository
+import com.ataulm.whatsnext.api.*
+import com.ataulm.whatsnext.api.FilmConverter
 import com.ataulm.whatsnext.api.FilmRelationshipConverter
 import com.ataulm.whatsnext.api.FilmSummaryConverter
-import com.ataulm.whatsnext.api.LetterboxdApi
-import com.ataulm.whatsnext.api.LetterboxdApiFactory
 import dagger.BindsInstance
 import dagger.Component
 import dagger.Module
@@ -44,8 +44,9 @@ internal object AppModule {
     fun whatsNextService(tokensStore: TokensStore, application: Application): WhatsNextRepository {
         val letterboxdApi = letterboxdApi(application, tokensStore)
         val filmSummaryConverter = FilmSummaryConverter()
+        val filmConverter = FilmConverter()
         val filmRelationshipConverter = FilmRelationshipConverter()
-        return WhatsNextRepository(letterboxdApi, filmSummaryConverter, filmRelationshipConverter)
+        return WhatsNextRepository(letterboxdApi, filmSummaryConverter, filmConverter, filmRelationshipConverter)
     }
 
     private fun letterboxdApi(application: Application, tokensStore: TokensStore): LetterboxdApi {
