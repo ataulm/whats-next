@@ -12,37 +12,17 @@ public class ApiFilmSummary {
     public String name;
 
     @Nullable
-    @SerializedName("tagline")
-    public String tagline;
-
-    @Nullable
-    @SerializedName("description")
-    public String description;
-
-    @Nullable
     @SerializedName("releaseYear")
     public Integer releaseYear;
 
     @Nullable
-    @SerializedName("runTime")
-    public Integer runtimeMinutes;
+    @SerializedName("directors")
+    public List<ApiContributor> directors;
 
     @Nullable
     @SerializedName("poster")
     public ApiImage poster;
 
-    @Nullable
-    @SerializedName("backdrop")
-    public ApiImage backdrop;
-
     @SerializedName("links")
     public List<ApiLink> links;
-
-    @Nullable
-    @SerializedName("genres")
-    public List<ApiGenre> genres;
-
-    @Nullable
-    @SerializedName("contributions")
-    public List<ApiContribution> contributions;
 }

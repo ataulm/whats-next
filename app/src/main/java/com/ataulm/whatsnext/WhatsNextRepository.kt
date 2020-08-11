@@ -1,10 +1,10 @@
 package com.ataulm.whatsnext
 
 import androidx.paging.PagingSource
-import com.ataulm.whatsnext.api.ApiFilmRelationshipUpdateRequest
+import com.ataulm.whatsnext.api.*
+import com.ataulm.whatsnext.api.FilmConverter
 import com.ataulm.whatsnext.api.FilmRelationshipConverter
 import com.ataulm.whatsnext.api.FilmSummaryConverter
-import com.ataulm.whatsnext.api.LetterboxdApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.util.*
@@ -12,6 +12,7 @@ import java.util.*
 internal class WhatsNextRepository(
         private val letterboxdApi: LetterboxdApi,
         private val filmSummaryConverter: FilmSummaryConverter,
+        private val filmConverter: FilmConverter,
         private val filmRelationshipConverter: FilmRelationshipConverter
 ) {
 
@@ -37,9 +38,9 @@ internal class WhatsNextRepository(
         filmSummaries
     }
 
-    suspend fun filmSummary(letterboxdId: String) = withContext(Dispatchers.IO) {
+    suspend fun film(letterboxdId: String) = withContext(Dispatchers.IO) {
         val apiFilm = letterboxdApi.film(letterboxdId)
-        filmSummaryConverter.convert(apiFilm)
+        filmConverter.convert(apiFilm)
     }
 
     suspend fun filmRelationship(letterboxdId: String) = withContext(Dispatchers.IO) {

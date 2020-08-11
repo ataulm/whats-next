@@ -1,8 +1,11 @@
 package com.ataulm.whatsnext
 
+import android.os.Parcelable
 import androidx.annotation.Px
+import kotlinx.android.parcel.Parcelize
 
-data class Images(private val images: List<Image>) {
+@Parcelize
+data class Images(private val images: List<Image>): Parcelable {
 
     fun bestFor(@Px desiredWidth: Int): Image? {
         if (images.isEmpty()) {

@@ -1,3 +1,7 @@
 package com.ataulm.whatsnext
 
-data class Ids(val letterboxd: String, val imdb: String?, val tmdb: String?)
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
+
+@Parcelize
+data class Ids(val letterboxd: String, val imdb: String?, val tmdb: String?) : Parcelable

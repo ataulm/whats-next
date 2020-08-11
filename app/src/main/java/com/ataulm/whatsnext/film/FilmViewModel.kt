@@ -5,12 +5,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ataulm.whatsnext.*
-import com.ataulm.whatsnext.di.FilmId
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 internal class FilmViewModel(
-        @FilmId private val filmId: String,
+        private val filmSummary: FilmSummary,
         private val whatsNextRepository: WhatsNextRepository,
         private val tokensStore: TokensStore
 ) : ViewModel() {
@@ -26,10 +25,12 @@ internal class FilmViewModel(
 
     init {
         viewModelScope.launch {
-            val filmSummary = whatsNextRepository.filmSummary(filmId)
             _filmDetails.value = FilmDetailsUiModel(filmSummary)
+            _filmDetails.value = whatsNextRepository.film(filmSummary.ids.letterboxd).let { film ->
+                _filmDetails.value!!.copy(film = film)
+            }
             if (tokensStore.userIsSignedIn()) {
-                val filmRelationship = whatsNextRepository.filmRelationship(filmId)
+                val filmRelationship = whatsNextRepository.filmRelationship(filmSummary.ids.letterboxd)
                 cacheUpdatedRelationshipThenEmit(filmRelationship)
             }
         }
@@ -74,7 +75,7 @@ internal class FilmViewModel(
 
         latestFilmRelationshipJob = viewModelScope.launch {
             val updatedFilmRelationship = whatsNextRepository.updateFilmRelationship(
-                    letterboxdId = filmId,
+                    letterboxdId = filmSummary.ids.letterboxd,
                     watched = watched,
                     liked = liked,
                     inWatchlist = inWatchlist,
@@ -86,6 +87,7 @@ internal class FilmViewModel(
 
     data class FilmDetailsUiModel(
             val filmSummary: FilmSummary,
+            val film: Film? = null,
             val filmRelationship: FilmRelationship? = null
     )
 }

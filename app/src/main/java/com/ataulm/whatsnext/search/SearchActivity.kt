@@ -71,7 +71,7 @@ class SearchActivity : BaseActivity() {
         }
 
         viewModel.navigationEvents.observe(this, EventObserver { filmSummary ->
-            navigator.navigateToFilm(filmSummary.ids.letterboxd)
+            navigator.navigateToFilm(filmSummary)
         })
     }
 
