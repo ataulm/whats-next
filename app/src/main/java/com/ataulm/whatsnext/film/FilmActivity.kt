@@ -29,11 +29,7 @@ class FilmActivity : BaseActivity() {
     }
 
     private fun display(film: FilmDetailsUiModel) {
-        titleTextView.text = if (film.filmSummary.year != null) {
-            "${film.filmSummary.name} (${film.filmSummary.year})"
-        } else {
-            film.filmSummary.name
-        }
+        filmDetailsInfoWidget.bind(film.filmSummary)
 
         if (film.filmRelationship != null) {
             likeCheckBox.setOnCheckedChangeListener(null)

@@ -6,13 +6,10 @@
     android:orientation="vertical"
     android:padding="16dp">
 
-    <TextView
-        android:id="@+id/titleTextView"
+    <com.ataulm.whatsnext.film.FilmDetailsInfoWidget
+        android:id="@+id/filmDetailsInfoWidget"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textAppearance="?attr/textAppearanceHeadline5"
-        android:textColor="?attr/colorOnBackground"
-        tools:text="The Iron Giant (1999)" />
+        android:layout_height="wrap_content" />
 
     <CheckBox
         android:id="@+id/watchedCheckBox"

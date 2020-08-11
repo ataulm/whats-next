@@ -18,7 +18,7 @@ class FilmDetailsInfoWidget constructor(context: Context, attrs: AttributeSet) :
     }
 
     fun bind(filmSummary: FilmSummary) {
-        film_details_info_text_title
+        film_details_info_text_title.text = filmSummary.name
 
         releaseYearText(filmSummary)?.let {
             film_details_info_text_release_year_director.text = it
