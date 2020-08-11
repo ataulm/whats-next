@@ -13,7 +13,6 @@ internal class FilmSummaryConverter {
                 apiFilmSummary.tagline,
                 apiFilmSummary.description,
                 images(apiFilmSummary.poster),
-                images(apiFilmSummary.backdrop),
                 genres(apiFilmSummary),
                 cast(apiFilmSummary),
                 crew(apiFilmSummary)

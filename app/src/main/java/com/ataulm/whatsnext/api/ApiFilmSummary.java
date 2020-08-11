@@ -31,10 +31,6 @@ public class ApiFilmSummary {
     @SerializedName("poster")
     public ApiImage poster;
 
-    @Nullable
-    @SerializedName("backdrop")
-    public ApiImage backdrop;
-
     @SerializedName("links")
     public List<ApiLink> links;
 

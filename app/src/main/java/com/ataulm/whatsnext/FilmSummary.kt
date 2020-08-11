@@ -8,7 +8,6 @@ data class FilmSummary(
         val tagline: String?,
         val description: String?,
         val poster: Images,
-        val backdrop: Images,
         val genres: List<String>,
         val cast: List<Actor>,
         val crew: List<Contributor>
