@@ -97,6 +97,10 @@ private class PopularFilmsThisWeekAdapter(
         private val callback: FilmSummaryViewHolder.Callback
 ) : PagingDataAdapter<FilmSummary, FilmSummaryViewHolder>(FilmDiffer) {
 
+    init {
+        stateRestorationPolicy = StateRestorationPolicy.PREVENT_WHEN_EMPTY
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FilmSummaryViewHolder {
         return FilmSummaryViewHolder.inflateView(parent)
     }

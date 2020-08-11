@@ -9,6 +9,10 @@ class FilmSummariesAdapter(
         private val callback: FilmSummaryViewHolder.Callback
 ) : ListAdapter<FilmSummary, FilmSummaryViewHolder>(Differ) {
 
+    init {
+        stateRestorationPolicy = StateRestorationPolicy.PREVENT_WHEN_EMPTY
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FilmSummaryViewHolder {
         return inflateView(parent)
     }
