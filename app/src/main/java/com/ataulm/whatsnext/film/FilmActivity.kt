@@ -5,6 +5,7 @@ import android.view.View
 import com.ataulm.support.DataObserver
 import com.ataulm.whatsnext.BaseActivity
 import com.ataulm.whatsnext.BuildConfig
+import com.ataulm.whatsnext.FilmSummary
 import com.ataulm.whatsnext.R
 import com.ataulm.whatsnext.di.DaggerFilmComponent
 import com.ataulm.whatsnext.di.appComponent
@@ -63,17 +64,17 @@ class FilmActivity : BaseActivity() {
 
     companion object {
 
-        const val EXTRA_FILM_ID = BuildConfig.APPLICATION_ID + ".EXTRA_FILM_ID"
+        const val EXTRA_FILM_SUMMARY = BuildConfig.APPLICATION_ID + ".EXTRA_FILM_SUMMARY"
     }
 }
 
 private fun FilmActivity.injectDependencies() {
-    val filmId = checkNotNull(intent.getStringExtra(FilmActivity.EXTRA_FILM_ID)) {
+    val filmSummary = checkNotNull(intent.getParcelableExtra(FilmActivity.EXTRA_FILM_SUMMARY) as? FilmSummary) {
         "how you open FilmActivity without a film id?"
     }
     DaggerFilmComponent.builder()
             .activity(this)
-            .with(filmId)
+            .with(filmSummary)
             .appComponent(appComponent())
             .build()
             .inject(this)

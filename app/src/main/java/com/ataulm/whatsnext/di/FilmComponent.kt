@@ -1,14 +1,14 @@
 package com.ataulm.whatsnext.di;
 
 import androidx.lifecycle.ViewModelProvider
+import com.ataulm.whatsnext.FilmSummary
 import com.ataulm.whatsnext.film.FilmActivity
 import com.ataulm.whatsnext.film.FilmViewModel
-import com.ataulm.whatsnext.film.FilmViewModelProvider
+import com.ataulm.whatsnext.film.FilmViewModelProviderFactory
 import dagger.BindsInstance
 import dagger.Component
 import dagger.Module
 import dagger.Provides
-import javax.inject.Qualifier
 
 @Component(
         modules = [
@@ -27,7 +27,7 @@ internal interface FilmComponent {
         fun activity(activity: FilmActivity): Builder
 
         @BindsInstance
-        fun with(@FilmId filmId: String): Builder
+        fun with(filmSummary: FilmSummary): Builder
 
         fun appComponent(appComponent: AppComponent): Builder
 
@@ -40,10 +40,6 @@ internal object FilmModule {
 
     @JvmStatic
     @Provides
-    fun viewModel(activity: FilmActivity, factory: FilmViewModelProvider) = ViewModelProvider(activity, factory)
+    fun viewModel(activity: FilmActivity, factory: FilmViewModelProviderFactory) = ViewModelProvider(activity, factory)
             .get(FilmViewModel::class.java)
 }
-
-@Qualifier
-@Retention(AnnotationRetention.RUNTIME)
-annotation class FilmId

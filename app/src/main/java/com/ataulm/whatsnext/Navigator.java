@@ -20,9 +20,9 @@ public class Navigator {
         activity.startActivity(intent);
     }
 
-    public void navigateToFilm(String letterBoxd) {
+    public void navigateToFilm(FilmSummary filmSummary) {
         Intent intent = new Intent(activity, FilmActivity.class);
-        intent.putExtra(FilmActivity.EXTRA_FILM_ID, letterBoxd);
+        intent.putExtra(FilmActivity.EXTRA_FILM_SUMMARY, filmSummary);
         activity.startActivity(intent);
     }
 
