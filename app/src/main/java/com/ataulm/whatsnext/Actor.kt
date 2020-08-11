@@ -1,3 +1,7 @@
 package com.ataulm.whatsnext
 
-data class Actor(val character: String?, val person: Person)
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
+
+@Parcelize
+data class Actor(val character: String?, val person: Person): Parcelable
