@@ -26,11 +26,11 @@ internal class FilmViewModel(
     init {
         viewModelScope.launch {
             _filmDetails.value = FilmDetailsUiModel(filmSummary)
-            _filmDetails.value = whatsNextRepository.film(filmSummary.ids.letterboxd).let { film ->
-                _filmDetails.value!!.copy(film = film)
-            }
+            val filmId = filmSummary.ids.letterboxd
+            _filmDetails.value = whatsNextRepository.film(filmId).let { _filmDetails.value!!.copy(film = it) }
+            _filmDetails.value = whatsNextRepository.filmStats(filmId).let { _filmDetails.value!!.copy(filmStats = it) }
             if (tokensStore.userIsSignedIn()) {
-                val filmRelationship = whatsNextRepository.filmRelationship(filmSummary.ids.letterboxd)
+                val filmRelationship = whatsNextRepository.filmRelationship(filmId)
                 cacheUpdatedRelationshipThenEmit(filmRelationship)
             }
         }
@@ -88,6 +88,7 @@ internal class FilmViewModel(
     data class FilmDetailsUiModel(
             val filmSummary: FilmSummary,
             val film: Film? = null,
-            val filmRelationship: FilmRelationship? = null
+            val filmRelationship: FilmRelationship? = null,
+            val filmStats: FilmStats? = null
     )
 }
