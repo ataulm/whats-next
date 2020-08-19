@@ -35,6 +35,13 @@ class FilmActivity : BaseActivity() {
             filmDetailsInfoWidget.bind(film.film)
         }
 
+        if (film.filmStats == null) {
+            ratingsWidget.visibility = View.GONE
+        } else {
+            ratingsWidget.show(film.filmStats)
+            ratingsWidget.visibility = View.VISIBLE
+        }
+
         if (film.filmRelationship != null) {
             likeCheckBox.setOnCheckedChangeListener(null)
             watchedCheckBox.setOnCheckedChangeListener(null)

@@ -4,17 +4,21 @@ import com.ataulm.whatsnext.FilmStats
 
 internal class FilmStatsConverter {
 
-    fun convert(apiFilmStatistics: ApiFilmStatistics) = FilmStats(
-            rating = apiFilmStatistics.rating,
-            counts = counts(apiFilmStatistics.counts),
-            ratingsHistogram = ratingsHistogram(apiFilmStatistics.ratingsHistogram)
-    )
+    fun convert(apiFilmStatistics: ApiFilmStatistics): FilmStats? {
+        if (apiFilmStatistics.rating == null) {
+            return null
+        }
+        return FilmStats(
+                rating = apiFilmStatistics.rating,
+                counts = counts(apiFilmStatistics.counts),
+                ratingsHistogram = ratingsHistogram(apiFilmStatistics.ratingsHistogram)
+        )
+    }
 
     private fun counts(apiFilmStatisticsCounts: ApiFilmStatisticsCounts) = apiFilmStatisticsCounts.let {
         FilmStats.Counts(
                 watches = it.watches,
-                likes = it.likes,
-                ratings = it.ratings
+                likes = it.likes
         )
     }
 

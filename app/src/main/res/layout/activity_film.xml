@@ -11,6 +11,11 @@
         android:layout_height="wrap_content"
         android:animateLayoutChanges="true" />
 
+    <com.ataulm.whatsnext.film.RatingsWidget
+        android:id="@+id/ratingsWidget"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
     <CheckBox
         android:id="@+id/watchedCheckBox"
         android:layout_width="match_parent"

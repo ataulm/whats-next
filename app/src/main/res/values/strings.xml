@@ -7,5 +7,8 @@
     <string name="cast">Cast</string>
     <string name="crew">Crew</string>
     <string name="menu_search_letterboxd_account">Letterboxd account</string>
+    <string name="ratings">Ratings</string>
+    <string name="rating">%f ★</string>
+    <string name="rating_bar_content_description">Around %d percent rated %f</string>
 
 </resources>
