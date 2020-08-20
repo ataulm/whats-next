@@ -16,9 +16,19 @@ class RatingsWidget(context: Context, attrs: AttributeSet) : ConstraintLayout(co
     }
 
     fun show(filmStats: FilmStats) {
-        ratingTextView.text = resources.getString(R.string.rating, filmStats.rating.roundToOneDp())
+        val rating = filmStats.rating.toNumberStars()
+        ratingTextView.text = resources.getString(R.string.rating, rating)
+        ratingTextView.contentDescription = resources.getQuantityString(
+                R.plurals.rating_content_description_stars,
+                filmStats.rating.toInt(),
+                rating
+        )
         ratingsDistributionWidget.show(filmStats.ratingsHistogram)
     }
 
-    private fun Float.roundToOneDp() = String.format("%.1f", this)
+    private fun Float.toNumberStars() = if (this == this.toInt().toFloat()) {
+        this.toInt().toString()
+    } else {
+        "%.1f".format(this)
+    }
 }

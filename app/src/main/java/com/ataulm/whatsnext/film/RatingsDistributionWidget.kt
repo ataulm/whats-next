@@ -67,15 +67,36 @@ class RatingsDistributionWidget(context: Context, attrs: AttributeSet) : View(co
         @Suppress("DEPRECATION") // setBoundsInParent is required by [ExploreByTouchHelper]
         override fun onPopulateNodeForVirtualView(virtualViewId: Int, node: AccessibilityNodeInfoCompat) {
             node.className = RatingsDistributionWidget::class.simpleName
-
             val histogram = this@RatingsDistributionWidget.ratingsHistogram ?: return
-            val bar = histogram[virtualViewId]
-            val frequency = bar.weight.toNearest5Percent()
-            val rating = bar.rating
-            node.contentDescription = resources.getString(R.string.rating_bar_content_description, frequency, rating)
+
+            node.contentDescription = histogram.createContentDescriptionFor(histogram[virtualViewId])
 
             updateBoundsForInterval(virtualViewId, histogram)
             node.setBoundsInParent(intervalBounds)
+        }
+
+        private fun List<RatingsHistogramBar>.createContentDescriptionFor(bar: RatingsHistogramBar): String {
+            val quantity = bar.rating.toInt() // for "1 star" vs "X stars"
+            val frequency = frequency(bar)
+            val rating = bar.rating.toNumberStars()
+            return resources.getQuantityString(
+                    R.plurals.rating_bar_content_description,
+                    quantity,
+                    frequency,
+                    rating
+            )
+        }
+
+        private fun List<RatingsHistogramBar>.frequency(bar: RatingsHistogramBar): Int {
+            val total = sumBy { it.count }
+            val count = bar.count.toFloat()
+            return (count / total).toNearest5Percent()
+        }
+
+        private fun Float.toNumberStars() = if (this == this.toInt().toFloat()) {
+            this.toInt().toString()
+        } else {
+            "%.1f".format(this)
         }
 
         private fun Float.toNearest5Percent(): Int {
