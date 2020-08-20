@@ -29,6 +29,9 @@ interface LetterboxdApi {
     @GET("film/{id}")
     suspend fun film(@Path("id") letterboxdId: String): ApiFilm
 
+    @GET("film/{id}/statistics")
+    suspend fun filmStats(@Path("id") letterboxdId: String): ApiFilmStatistics
+
     @RequiresAuthenticatedUser
     @GET("film/{id}/me")
     suspend fun filmRelationship(@Path("id") letterboxdId: String): ApiFilmRelationship
@@ -49,6 +52,23 @@ data class AuthTokenApiResponse(
 data class ApiPopularFilmsThisWeekResponse(
         @SerializedName("next") val cursor: String? = null,
         @SerializedName("items") val items: List<ApiFilmSummary>
+)
+
+data class ApiFilmStatistics(
+        @SerializedName("rating") val rating: Float? = null,
+        @SerializedName("counts") val counts: ApiFilmStatisticsCounts,
+        @SerializedName("ratingsHistogram") val ratingsHistogram: List<ApiRatingsHistogramBar>
+)
+
+data class ApiFilmStatisticsCounts(
+        @SerializedName("watches") val watches: Int,
+        @SerializedName("likes") val likes: Int
+)
+
+data class ApiRatingsHistogramBar(
+        @SerializedName("rating") val rating: Float,
+        @SerializedName("normalizedWeight") val weight: Float,
+        @SerializedName("count") val count: Int
 )
 
 data class ApiFilmRelationshipUpdateRequest(

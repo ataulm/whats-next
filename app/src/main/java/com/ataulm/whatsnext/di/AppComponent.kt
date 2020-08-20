@@ -42,11 +42,13 @@ internal object AppModule {
     @JvmStatic
     @Provides
     fun whatsNextService(tokensStore: TokensStore, application: Application): WhatsNextRepository {
-        val letterboxdApi = letterboxdApi(application, tokensStore)
-        val filmSummaryConverter = FilmSummaryConverter()
-        val filmConverter = FilmConverter()
-        val filmRelationshipConverter = FilmRelationshipConverter()
-        return WhatsNextRepository(letterboxdApi, filmSummaryConverter, filmConverter, filmRelationshipConverter)
+        return WhatsNextRepository(
+                letterboxdApi = letterboxdApi(application, tokensStore),
+                filmSummaryConverter = FilmSummaryConverter(),
+                filmConverter = FilmConverter(),
+                filmRelationshipConverter = FilmRelationshipConverter(),
+                filmStatsConverter = FilmStatsConverter()
+        )
     }
 
     private fun letterboxdApi(application: Application, tokensStore: TokensStore): LetterboxdApi {

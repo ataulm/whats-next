@@ -13,7 +13,8 @@ internal class WhatsNextRepository(
         private val letterboxdApi: LetterboxdApi,
         private val filmSummaryConverter: FilmSummaryConverter,
         private val filmConverter: FilmConverter,
-        private val filmRelationshipConverter: FilmRelationshipConverter
+        private val filmRelationshipConverter: FilmRelationshipConverter,
+        private val filmStatsConverter: FilmStatsConverter
 ) {
 
     suspend fun login(username: String, password: String) = withContext(Dispatchers.IO) {
@@ -46,6 +47,11 @@ internal class WhatsNextRepository(
     suspend fun filmRelationship(letterboxdId: String) = withContext(Dispatchers.IO) {
         val apiFilmRelationship = letterboxdApi.filmRelationship(letterboxdId)
         filmRelationshipConverter.convert(apiFilmRelationship)
+    }
+
+    suspend fun filmStats(letterboxdId: String) = withContext(Dispatchers.IO) {
+        val apiFilmStatistics = letterboxdApi.filmStats(letterboxdId)
+        filmStatsConverter.convert(apiFilmStatistics)
     }
 
     suspend fun updateFilmRelationship(
