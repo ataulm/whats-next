@@ -67,6 +67,26 @@
 
         </LinearLayout>
 
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_vertical_50"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.5" />
+
+        <ImageView
+            android:id="@+id/posterImageView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:adjustViewBounds="true"
+            android:background="@drawable/rounded_corners_mask"
+            android:importantForAccessibility="no"
+            app:layout_constraintEnd_toStartOf="@id/guideline_vertical_50"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/filmStatsGroup"
+            tools:layout_height="244dp" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.ataulm.whatsnext.film.FilmDetailsInfoWidget

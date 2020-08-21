@@ -2,6 +2,7 @@ package com.ataulm.whatsnext.film
 
 import android.os.Bundle
 import android.view.View
+import coil.api.load
 import com.ataulm.support.DataObserver
 import com.ataulm.whatsnext.BaseActivity
 import com.ataulm.whatsnext.BuildConfig
@@ -11,6 +12,7 @@ import com.ataulm.whatsnext.di.DaggerFilmComponent
 import com.ataulm.whatsnext.di.appComponent
 import com.ataulm.whatsnext.film.FilmViewModel.FilmDetailsUiModel
 import kotlinx.android.synthetic.main.activity_film.*
+import kotlinx.android.synthetic.main.merge_film_details_info.view.*
 import java.text.DecimalFormat
 import javax.inject.Inject
 
@@ -46,11 +48,16 @@ class FilmActivity : BaseActivity() {
 
             ratingsDistributionWidget.show(film.filmStats.ratingsHistogram)
 
+            // TODO: can we do this in a custom layout inflater such that it works in XML?
             filmStatsGroup.clipToOutline = true
             filmStatsGroup.visibility = View.VISIBLE
         } else {
             filmStatsGroup.visibility = View.GONE
         }
+
+        posterImageView.clipToOutline = true
+        posterImageView
+                .load(film.poster.bestFor(posterImageView.width)?.url)
 
         if (film.film == null) {
             filmDetailsInfoWidget.bind(film.filmSummary)

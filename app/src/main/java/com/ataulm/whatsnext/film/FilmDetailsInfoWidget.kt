@@ -58,9 +58,6 @@ class FilmDetailsInfoWidget constructor(context: Context, attrs: AttributeSet) :
             film_details_info_text_genres.visibility = GONE
             film_details_info_text_label_genres.visibility = GONE
         }
-
-        film_details_info_image_poster
-                .load(film.poster.bestFor(film_details_info_image_poster.width)?.url)
     }
 
     fun bind(filmSummary: FilmSummary) {
@@ -78,9 +75,6 @@ class FilmDetailsInfoWidget constructor(context: Context, attrs: AttributeSet) :
         film_details_info_text_label_duration.visibility = GONE
         film_details_info_text_genres.visibility = GONE
         film_details_info_text_label_genres.visibility = GONE
-
-        film_details_info_image_poster
-                .load(filmSummary.poster.bestFor(film_details_info_image_poster.width)?.url)
     }
 
     private fun durationText(film: Film): String? {
