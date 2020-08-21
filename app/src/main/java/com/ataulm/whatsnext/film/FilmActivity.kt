@@ -4,15 +4,13 @@ import android.os.Bundle
 import android.view.View
 import coil.api.load
 import com.ataulm.support.DataObserver
-import com.ataulm.whatsnext.BaseActivity
-import com.ataulm.whatsnext.BuildConfig
-import com.ataulm.whatsnext.FilmSummary
-import com.ataulm.whatsnext.R
+import com.ataulm.whatsnext.*
 import com.ataulm.whatsnext.di.DaggerFilmComponent
 import com.ataulm.whatsnext.di.appComponent
 import com.ataulm.whatsnext.film.FilmViewModel.FilmDetailsUiModel
 import kotlinx.android.synthetic.main.activity_film.*
 import java.text.DecimalFormat
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class FilmActivity : BaseActivity() {
@@ -65,6 +63,24 @@ class FilmActivity : BaseActivity() {
         posterImageView.clipToOutline = true
         posterImageView
                 .load(film.poster.bestFor(posterImageView.width)?.url)
+
+        durationText(film.film)?.let {
+            durationTextView.text = it
+            durationTextView.visibility = View.VISIBLE
+            durationLabelTextView.visibility = View.VISIBLE
+        } ?: run {
+            durationTextView.visibility = View.GONE
+            durationLabelTextView.visibility = View.GONE
+        }
+
+        genresText(film.film)?.let {
+            genresTextView.text = it
+            genresTextView.visibility = View.VISIBLE
+            genresLabelTextView.visibility = View.VISIBLE
+        } ?: run {
+            genresTextView.visibility = View.GONE
+            genresLabelTextView.visibility = View.GONE
+        }
 
         if (film.film != null) {
             filmDetailsInfoWidget.bind(film.film)
@@ -127,6 +143,27 @@ class FilmActivity : BaseActivity() {
         toInt().toString()
     } else {
         "%.1f".format(this)
+    }
+
+    private fun durationText(film: Film?): String? {
+        return film?.runtimeMinutes?.let {
+            if (TimeUnit.MINUTES.toHours(it.toLong()) > 0) {
+                val hours = TimeUnit.MINUTES.toHours(it.toLong())
+                val minutes = it.toLong() - TimeUnit.HOURS.toMinutes(hours)
+                resources.getString(R.string.film_details_duration_hours_and_minutes_format, hours.toString(), minutes.toString())
+            } else {
+                resources.getString(R.string.film_details_duration_minutes_format, it.toString())
+            }
+        }
+    }
+
+    private fun genresText(film: Film?): String? {
+        if (film == null) return null
+        return if (film.genres.isNotEmpty()) {
+            film.genres.joinToString(", ")
+        } else {
+            null
+        }
     }
 
     companion object {

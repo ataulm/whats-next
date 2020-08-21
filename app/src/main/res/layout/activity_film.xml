@@ -99,6 +99,57 @@
             app:layout_constraintTop_toBottomOf="@id/filmStatsGroup"
             tools:layout_height="244dp" />
 
+        <TextView
+            android:id="@+id/durationLabelTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="8dp"
+            android:text="@string/film_details_label_duration"
+            android:textAllCaps="true"
+            android:textColor="?attr/colorOnBackground"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/guideline_vertical_50"
+            app:layout_constraintTop_toTopOf="@id/posterImageView" />
+
+        <TextView
+            android:id="@+id/durationTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:textColor="?attr/colorOnBackground"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="@id/durationLabelTextView"
+            app:layout_constraintStart_toStartOf="@id/durationLabelTextView"
+            app:layout_constraintTop_toBottomOf="@+id/durationLabelTextView"
+            tools:text="1hr 26min" />
+
+        <TextView
+            android:id="@+id/genresLabelTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/film_details_label_genres"
+            android:textAllCaps="true"
+            android:textColor="?attr/colorOnBackground"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="@id/durationLabelTextView"
+            app:layout_constraintStart_toStartOf="@id/durationLabelTextView"
+            app:layout_constraintTop_toBottomOf="@+id/durationTextView" />
+
+        <TextView
+            android:id="@+id/genresTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:textColor="?attr/colorOnBackground"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="@id/durationLabelTextView"
+            app:layout_constraintStart_toStartOf="@id/durationLabelTextView"
+            app:layout_constraintTop_toBottomOf="@+id/genresLabelTextView"
+            tools:text="Family, Animation, Science Fiction, Fantasy, Adventure" />
+
+
         <LinearLayout
             android:id="@+id/removeThisCrap"
             android:layout_width="match_parent"
