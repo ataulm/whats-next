@@ -19,13 +19,12 @@ class FilmDetailsInfoWidget constructor(context: Context, attrs: AttributeSet) :
     }
 
     fun bind(film: Film) {
-        film_details_info_text_title.text = film.name
-
-        releaseYearText(film)?.let {
-            film_details_info_text_release_year_director.text = it
-            film_details_info_text_release_year_director.visibility = VISIBLE
-        } ?: run {
-            film_details_info_text_release_year_director.visibility = GONE
+        val director = film.crew.find { contributor -> contributor.type == "Director" }?.person?.name
+        if (director != null) {
+            film_details_info_text_director.text = director
+            film_details_info_text_director.visibility = VISIBLE
+        } else {
+            film_details_info_text_director.visibility = GONE
         }
 
         film.tagline?.let {
@@ -65,13 +64,12 @@ class FilmDetailsInfoWidget constructor(context: Context, attrs: AttributeSet) :
     }
 
     fun bind(filmSummary: FilmSummary) {
-        film_details_info_text_title.text = filmSummary.name
-
-        releaseYearText(filmSummary)?.let {
-            film_details_info_text_release_year_director.text = it
-            film_details_info_text_release_year_director.visibility = VISIBLE
-        } ?: run {
-            film_details_info_text_release_year_director.visibility = GONE
+        val director = filmSummary.directors.firstOrNull()?.name
+        if (director != null) {
+            film_details_info_text_director.text = director
+            film_details_info_text_director.visibility = VISIBLE
+        } else {
+            film_details_info_text_director.visibility = GONE
         }
 
         film_details_info_text_tagline.visibility = GONE
@@ -83,26 +81,6 @@ class FilmDetailsInfoWidget constructor(context: Context, attrs: AttributeSet) :
 
         film_details_info_image_poster
                 .load(filmSummary.poster.bestFor(film_details_info_image_poster.width)?.url)
-    }
-
-    private fun releaseYearText(film: Film): String? {
-        film.crew.find { contributor -> contributor.type == "Director" }?.person?.name?.let { directorName ->
-            film.year?.let { year ->
-                return resources.getString(R.string.film_details_release_year_director_format, year, directorName)
-            }
-            return directorName
-        }
-        return film.year
-    }
-
-    private fun releaseYearText(filmSummary: FilmSummary): String? {
-        filmSummary.directors.firstOrNull()?.name?.let { directorName ->
-            filmSummary.year?.let { year ->
-                return resources.getString(R.string.film_details_release_year_director_format, year, directorName)
-            }
-            return directorName
-        }
-        return filmSummary.year
     }
 
     private fun durationText(film: Film): String? {

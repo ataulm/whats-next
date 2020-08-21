@@ -17,7 +17,7 @@
         tools:layout_height="144dp" />
 
     <TextView
-        android:id="@+id/film_details_info_text_title"
+        android:id="@+id/film_details_info_text_director"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -25,19 +25,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/film_details_info_image_poster"
-        tools:text="The Iron Giant" />
-
-    <TextView
-        android:id="@+id/film_details_info_text_release_year_director"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:textColor="?attr/colorOnBackground"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/film_details_info_image_poster"
-        app:layout_constraintTop_toBottomOf="@+id/film_details_info_text_title"
+        app:layout_constraintTop_toTopOf="parent"
         tools:text="1999 | Brad Bird" />
 
     <TextView

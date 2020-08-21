@@ -9,6 +9,7 @@
     <string name="menu_search_letterboxd_account">Letterboxd account</string>
     <string name="ratings">Ratings</string>
     <string name="rating">%s ★</string>
+    <string name="title_and_year">%1$s (%2$s)</string>
 
     <plurals name="rating_bar_content_description">
         <item quantity="one">%d percent rated %s star</item>

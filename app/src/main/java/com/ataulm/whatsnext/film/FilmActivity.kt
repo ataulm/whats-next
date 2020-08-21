@@ -29,6 +29,12 @@ class FilmActivity : BaseActivity() {
     }
 
     private fun display(film: FilmDetailsUiModel) {
+        titleTextView.text = if (film.releaseYear != null) {
+            getString(R.string.title_and_year, film.title, film.releaseYear)
+        } else {
+            film.title
+        }
+
         if (film.film == null) {
             filmDetailsInfoWidget.bind(film.filmSummary)
         } else {

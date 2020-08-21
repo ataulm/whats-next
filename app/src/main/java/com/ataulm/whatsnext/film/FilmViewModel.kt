@@ -86,9 +86,21 @@ internal class FilmViewModel(
     }
 
     data class FilmDetailsUiModel(
+            val title: String,
+            val releaseYear: String?,
+            val poster: Images,
             val filmSummary: FilmSummary,
             val film: Film? = null,
             val filmRelationship: FilmRelationship? = null,
             val filmStats: FilmStats? = null
-    )
+    ) {
+        companion object {
+            operator fun invoke(filmSummary: FilmSummary) = FilmDetailsUiModel(
+                    title = filmSummary.name,
+                    releaseYear = filmSummary.year,
+                    poster = filmSummary.poster,
+                    filmSummary = filmSummary
+            )
+        }
+    }
 }
