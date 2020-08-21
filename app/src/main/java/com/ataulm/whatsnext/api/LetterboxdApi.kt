@@ -62,7 +62,8 @@ data class ApiFilmStatistics(
 
 data class ApiFilmStatisticsCounts(
         @SerializedName("watches") val watches: Int,
-        @SerializedName("likes") val likes: Int
+        @SerializedName("likes") val likes: Int,
+        @SerializedName("ratings") val ratings: Int
 )
 
 data class ApiRatingsHistogramBar(

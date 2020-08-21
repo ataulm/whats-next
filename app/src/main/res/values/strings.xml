@@ -7,8 +7,12 @@
     <string name="cast">Cast</string>
     <string name="crew">Crew</string>
     <string name="menu_search_letterboxd_account">Letterboxd account</string>
-    <string name="ratings">Ratings</string>
-    <string name="rating">%s ★</string>
+    <string name="stars">%s ★</string>
+    <plurals name="stars_content_description">
+        <item quantity="one">%s star</item>
+        <item quantity="other">%s stars</item>
+    </plurals>
+    <string name="ratings">(%s)</string>
     <string name="title_and_year">%1$s (%2$s)</string>
 
     <plurals name="rating_bar_content_description">
@@ -16,9 +20,5 @@
         <item quantity="other">%d percent rated %s stars</item>
     </plurals>
 
-    <plurals name="rating_content_description_stars">
-        <item quantity="one">%s star</item>
-        <item quantity="other">%s stars</item>
-    </plurals>
 
 </resources>

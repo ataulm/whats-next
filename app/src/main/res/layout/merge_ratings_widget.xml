@@ -10,7 +10,6 @@
         android:id="@+id/ratingTitleTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/ratings"
         android:textColor="?attr/colorOnBackground"
         android:textSize="20sp"
         app:layout_constraintEnd_toStartOf="@id/ratingTextView"

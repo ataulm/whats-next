@@ -17,9 +17,9 @@ class RatingsWidget(context: Context, attrs: AttributeSet) : ConstraintLayout(co
 
     fun show(filmStats: FilmStats) {
         val rating = filmStats.rating.toNumberStars()
-        ratingTextView.text = resources.getString(R.string.rating, rating)
+        ratingTextView.text = resources.getString(R.string.stars, rating)
         ratingTextView.contentDescription = resources.getQuantityString(
-                R.plurals.rating_content_description_stars,
+                R.plurals.stars_content_description,
                 filmStats.rating.toInt(),
                 rating
         )

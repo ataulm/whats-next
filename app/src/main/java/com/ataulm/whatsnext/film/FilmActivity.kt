@@ -11,6 +11,7 @@ import com.ataulm.whatsnext.di.DaggerFilmComponent
 import com.ataulm.whatsnext.di.appComponent
 import com.ataulm.whatsnext.film.FilmViewModel.FilmDetailsUiModel
 import kotlinx.android.synthetic.main.activity_film.*
+import java.text.DecimalFormat
 import javax.inject.Inject
 
 class FilmActivity : BaseActivity() {
@@ -35,17 +36,26 @@ class FilmActivity : BaseActivity() {
             film.title
         }
 
+        if (film.filmStats != null) {
+            ratingTextView.text = film.filmStats.rating.stars()
+            // same as text but it chooses between star/stars correctly!
+            ratingTextView.contentDescription = film.filmStats.rating.starsContentDesc()
+
+            val formattedRatings = DecimalFormat("#,###").format(film.filmStats.counts.ratings)
+            ratingsCountTextView.text = getString(R.string.ratings, formattedRatings)
+
+            ratingsDistributionWidget.show(film.filmStats.ratingsHistogram)
+
+            filmStatsGroup.clipToOutline = true
+            filmStatsGroup.visibility = View.VISIBLE
+        } else {
+            filmStatsGroup.visibility = View.GONE
+        }
+
         if (film.film == null) {
             filmDetailsInfoWidget.bind(film.filmSummary)
         } else {
             filmDetailsInfoWidget.bind(film.film)
-        }
-
-        if (film.filmStats == null) {
-            ratingsWidget.visibility = View.GONE
-        } else {
-            ratingsWidget.show(film.filmStats)
-            ratingsWidget.visibility = View.VISIBLE
         }
 
         if (film.filmRelationship != null) {
@@ -73,6 +83,23 @@ class FilmActivity : BaseActivity() {
             watchedCheckBox.visibility = View.GONE
             ratingBar.visibility = View.GONE
         }
+    }
+
+    private fun Float.stars() = getString(R.string.stars, formattedNumberOfStars())
+
+    private fun Float.starsContentDesc() = resources.getQuantityString(
+            R.plurals.stars_content_description,
+            toInt(),
+            formattedNumberOfStars()
+    )
+
+    /**
+     * Returns rating as string, formatted X or X.X (e.g. 4 or 4.5)
+     */
+    private fun Float.formattedNumberOfStars() = if (this == toInt().toFloat()) {
+        toInt().toString()
+    } else {
+        "%.1f".format(this)
     }
 
     companion object {

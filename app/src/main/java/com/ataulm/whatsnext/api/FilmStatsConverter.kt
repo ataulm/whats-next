@@ -18,7 +18,8 @@ internal class FilmStatsConverter {
     private fun counts(apiFilmStatisticsCounts: ApiFilmStatisticsCounts) = apiFilmStatisticsCounts.let {
         FilmStats.Counts(
                 watches = it.watches,
-                likes = it.likes
+                likes = it.likes,
+                ratings = it.ratings
         )
     }
 
