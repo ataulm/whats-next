@@ -23,6 +23,17 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:text="Parasite (2019)" />
 
+        <TextView
+            android:id="@+id/directedByTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textColor="?attr/colorOnBackground"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/titleTextView"
+            tools:text="Directed by Bong Joon-ho" />
+
         <LinearLayout
             android:id="@+id/filmStatsGroup"
             android:layout_width="0dp"
@@ -33,7 +44,7 @@
             android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/titleTextView">
+            app:layout_constraintTop_toBottomOf="@id/directedByTextView">
 
             <LinearLayout
                 android:id="@+id/ratingsTextGroup"

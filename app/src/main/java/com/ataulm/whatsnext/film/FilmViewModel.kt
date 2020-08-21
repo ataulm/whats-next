@@ -89,6 +89,7 @@ internal class FilmViewModel(
             val title: String,
             val releaseYear: String?,
             val poster: Images,
+            val directors: List<String>,
             val filmSummary: FilmSummary,
             val film: Film? = null,
             val filmRelationship: FilmRelationship? = null,
@@ -99,6 +100,7 @@ internal class FilmViewModel(
                     title = filmSummary.name,
                     releaseYear = filmSummary.year,
                     poster = filmSummary.poster,
+                    directors = filmSummary.directors.map { it.name },
                     filmSummary = filmSummary
             )
         }

@@ -4,9 +4,7 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
-import coil.api.load
 import com.ataulm.whatsnext.Film
-import com.ataulm.whatsnext.FilmSummary
 import com.ataulm.whatsnext.R
 import kotlinx.android.synthetic.main.merge_film_details_info.view.*
 import java.util.concurrent.TimeUnit
@@ -19,14 +17,6 @@ class FilmDetailsInfoWidget constructor(context: Context, attrs: AttributeSet) :
     }
 
     fun bind(film: Film) {
-        val director = film.crew.find { contributor -> contributor.type == "Director" }?.person?.name
-        if (director != null) {
-            film_details_info_text_director.text = director
-            film_details_info_text_director.visibility = VISIBLE
-        } else {
-            film_details_info_text_director.visibility = GONE
-        }
-
         film.tagline?.let {
             film_details_info_text_tagline.text = it
             film_details_info_text_tagline.visibility = VISIBLE
@@ -58,23 +48,6 @@ class FilmDetailsInfoWidget constructor(context: Context, attrs: AttributeSet) :
             film_details_info_text_genres.visibility = GONE
             film_details_info_text_label_genres.visibility = GONE
         }
-    }
-
-    fun bind(filmSummary: FilmSummary) {
-        val director = filmSummary.directors.firstOrNull()?.name
-        if (director != null) {
-            film_details_info_text_director.text = director
-            film_details_info_text_director.visibility = VISIBLE
-        } else {
-            film_details_info_text_director.visibility = GONE
-        }
-
-        film_details_info_text_tagline.visibility = GONE
-        film_details_info_text_description.visibility = GONE
-        film_details_info_text_duration.visibility = GONE
-        film_details_info_text_label_duration.visibility = GONE
-        film_details_info_text_genres.visibility = GONE
-        film_details_info_text_label_genres.visibility = GONE
     }
 
     private fun durationText(film: Film): String? {

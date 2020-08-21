@@ -12,7 +12,6 @@ import com.ataulm.whatsnext.di.DaggerFilmComponent
 import com.ataulm.whatsnext.di.appComponent
 import com.ataulm.whatsnext.film.FilmViewModel.FilmDetailsUiModel
 import kotlinx.android.synthetic.main.activity_film.*
-import kotlinx.android.synthetic.main.merge_film_details_info.view.*
 import java.text.DecimalFormat
 import javax.inject.Inject
 
@@ -38,6 +37,14 @@ class FilmActivity : BaseActivity() {
             film.title
         }
 
+        val directors = film.directors()
+        if (directors != null) {
+            directedByTextView.text = getString(R.string.directed_by, directors)
+            directedByTextView.visibility = View.VISIBLE
+        } else {
+            directedByTextView.visibility = View.GONE
+        }
+
         if (film.filmStats != null) {
             ratingTextView.text = film.filmStats.rating.stars()
             // same as text but it chooses between star/stars correctly!
@@ -59,9 +66,7 @@ class FilmActivity : BaseActivity() {
         posterImageView
                 .load(film.poster.bestFor(posterImageView.width)?.url)
 
-        if (film.film == null) {
-            filmDetailsInfoWidget.bind(film.filmSummary)
-        } else {
+        if (film.film != null) {
             filmDetailsInfoWidget.bind(film.film)
         }
 
@@ -90,6 +95,21 @@ class FilmActivity : BaseActivity() {
             watchedCheckBox.visibility = View.GONE
             ratingBar.visibility = View.GONE
         }
+    }
+
+    private fun FilmDetailsUiModel.directors(): String? {
+        if (directors.isEmpty()) return null
+        if (directors.size == 1) return directors.first()
+        val builder = StringBuilder()
+        for (i in directors.indices) {
+            val nextPart = when (i) {
+                0 -> directors[0]
+                directors.size - 1 -> " & ${directors[i]}"
+                else -> ", ${directors[i]}"
+            }
+            builder.append(nextPart)
+        }
+        return builder.toString()
     }
 
     private fun Float.stars() = getString(R.string.stars, formattedNumberOfStars())
