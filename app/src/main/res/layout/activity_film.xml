@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp">
+    android:fillViewport="true"
+    android:orientation="vertical">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:padding="16dp">
 
         <TextView
             android:id="@+id/titleTextView"
@@ -87,36 +88,45 @@
             app:layout_constraintTop_toBottomOf="@id/filmStatsGroup"
             tools:layout_height="244dp" />
 
+        <LinearLayout
+            android:id="@+id/removeThisCrap"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:orientation="vertical"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/posterImageView">
+
+            <com.ataulm.whatsnext.film.FilmDetailsInfoWidget
+                android:id="@+id/filmDetailsInfoWidget"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:animateLayoutChanges="true" />
+
+            <CheckBox
+                android:id="@+id/watchedCheckBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Watched"
+                android:textColor="?attr/colorOnBackground"
+                android:visibility="gone" />
+
+            <CheckBox
+                android:id="@+id/likeCheckBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Like"
+                android:textColor="?attr/colorOnBackground"
+                android:visibility="gone" />
+
+            <RatingBar
+                android:id="@+id/ratingBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:max="5"
+                android:stepSize="0.5"
+                android:visibility="gone" />
+
+        </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <com.ataulm.whatsnext.film.FilmDetailsInfoWidget
-        android:id="@+id/filmDetailsInfoWidget"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:animateLayoutChanges="true" />
-
-    <CheckBox
-        android:id="@+id/watchedCheckBox"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Watched"
-        android:textColor="?attr/colorOnBackground"
-        android:visibility="gone" />
-
-    <CheckBox
-        android:id="@+id/likeCheckBox"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Like"
-        android:textColor="?attr/colorOnBackground"
-        android:visibility="gone" />
-
-    <RatingBar
-        android:id="@+id/ratingBar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:max="5"
-        android:stepSize="0.5"
-        android:visibility="gone" />
-
-</LinearLayout>
+</androidx.core.widget.NestedScrollView>
