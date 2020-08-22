@@ -50,6 +50,7 @@ class FilmActivity : BaseActivity() {
 
             val formattedRatings = DecimalFormat("#,###").format(film.filmStats.counts.ratings)
             ratingsCountTextView.text = getString(R.string.ratings, formattedRatings)
+            ratingsCountTextView.contentDescription = getString(R.string.ratings_content_description, formattedRatings)
 
             ratingsDistributionWidget.show(film.filmStats.ratingsHistogram)
 
