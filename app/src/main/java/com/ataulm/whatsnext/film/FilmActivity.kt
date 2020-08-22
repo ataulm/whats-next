@@ -37,10 +37,12 @@ class FilmActivity : BaseActivity() {
 
         val directors = film.directors()
         if (directors != null) {
-            directedByTextView.text = getString(R.string.directed_by, directors)
-            directedByTextView.visibility = View.VISIBLE
+            directorsTextView.text = directors
+            directorsLabelTextView.visibility = View.VISIBLE
+            directorsTextView.visibility = View.VISIBLE
         } else {
-            directedByTextView.visibility = View.GONE
+            directorsLabelTextView.visibility = View.GONE
+            directorsTextView.visibility = View.GONE
         }
 
         if (film.filmStats != null) {
@@ -85,8 +87,18 @@ class FilmActivity : BaseActivity() {
             genresLabelTextView.visibility = View.GONE
         }
 
-        if (film.film != null) {
-            filmDetailsInfoWidget.bind(film.film)
+        film.film?.tagline?.let {
+            taglineTextView.text = it
+            taglineTextView.visibility = View.VISIBLE
+        } ?: run {
+            taglineTextView.visibility = View.GONE
+        }
+
+        film.film?.description?.let {
+            descriptionTextView.text = it
+            descriptionTextView.visibility = View.VISIBLE
+        } ?: run {
+            descriptionTextView.visibility = View.GONE
         }
 
         if (film.filmRelationship != null) {

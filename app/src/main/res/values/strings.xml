@@ -14,7 +14,6 @@
     </plurals>
     <string name="ratings">(%s)</string>
     <string name="ratings_content_description">rated by %s people</string>
-    <string name="directed_by">Directed by %s</string>
     <string name="title_and_year">%1$s (%2$s)</string>
 
     <plurals name="rating_bar_content_description">

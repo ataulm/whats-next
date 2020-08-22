@@ -1,5 +1,6 @@
 <resources>
 
+    <string name="film_details_label_directors">Directed by</string>
     <string name="film_details_label_duration">@string/duration</string>
     <string name="film_details_label_genres">@string/genre</string>
     <string name="film_details_release_year_director_format">%1$s | %2$s</string>

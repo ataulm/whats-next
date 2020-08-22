@@ -23,17 +23,6 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:text="Parasite (2019)" />
 
-        <TextView
-            android:id="@+id/directedByTextView"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:textColor="?attr/colorOnBackground"
-            android:textSize="16sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/titleTextView"
-            tools:text="Directed by Bong Joon-ho" />
-
         <LinearLayout
             android:id="@+id/filmStatsGroup"
             android:layout_width="0dp"
@@ -45,7 +34,7 @@
             android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/directedByTextView">
+            app:layout_constraintTop_toBottomOf="@id/titleTextView">
 
             <LinearLayout
                 android:id="@+id/ratingsTextGroup"
@@ -103,11 +92,11 @@
             tools:layout_height="244dp" />
 
         <TextView
-            android:id="@+id/durationLabelTextView"
+            android:id="@+id/directorsLabelTextView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="16dp"
-            android:text="@string/film_details_label_duration"
+            android:text="@string/film_details_label_directors"
             android:textAllCaps="true"
             android:textColor="?attr/colorOnBackground"
             android:textSize="14sp"
@@ -116,14 +105,38 @@
             app:layout_constraintTop_toTopOf="@id/posterImageView" />
 
         <TextView
+            android:id="@+id/directorsTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textColor="?attr/colorOnBackground"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="@id/directorsLabelTextView"
+            app:layout_constraintStart_toStartOf="@id/directorsLabelTextView"
+            app:layout_constraintTop_toBottomOf="@id/directorsLabelTextView"
+            tools:text="Bong Joon-ho" />
+
+        <TextView
+            android:id="@+id/durationLabelTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/film_details_label_duration"
+            android:textAllCaps="true"
+            android:textColor="?attr/colorOnBackground"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="@id/directorsLabelTextView"
+            app:layout_constraintStart_toStartOf="@id/directorsLabelTextView"
+            app:layout_constraintTop_toBottomOf="@+id/directorsTextView" />
+
+        <TextView
             android:id="@+id/durationTextView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
             android:textColor="?attr/colorOnBackground"
             android:textSize="20sp"
-            app:layout_constraintEnd_toEndOf="@id/durationLabelTextView"
-            app:layout_constraintStart_toStartOf="@id/durationLabelTextView"
+            app:layout_constraintEnd_toEndOf="@id/directorsLabelTextView"
+            app:layout_constraintStart_toStartOf="@id/directorsLabelTextView"
             app:layout_constraintTop_toBottomOf="@+id/durationLabelTextView"
             tools:text="1hr 26min" />
 
@@ -136,8 +149,8 @@
             android:textAllCaps="true"
             android:textColor="?attr/colorOnBackground"
             android:textSize="14sp"
-            app:layout_constraintEnd_toEndOf="@id/durationLabelTextView"
-            app:layout_constraintStart_toStartOf="@id/durationLabelTextView"
+            app:layout_constraintEnd_toEndOf="@id/directorsLabelTextView"
+            app:layout_constraintStart_toStartOf="@id/directorsLabelTextView"
             app:layout_constraintTop_toBottomOf="@+id/durationTextView" />
 
         <TextView
@@ -147,26 +160,53 @@
             android:layout_marginTop="4dp"
             android:textColor="?attr/colorOnBackground"
             android:textSize="20sp"
-            app:layout_constraintEnd_toEndOf="@id/durationLabelTextView"
-            app:layout_constraintStart_toStartOf="@id/durationLabelTextView"
+            app:layout_constraintEnd_toEndOf="@id/directorsLabelTextView"
+            app:layout_constraintStart_toStartOf="@id/directorsLabelTextView"
             app:layout_constraintTop_toBottomOf="@+id/genresLabelTextView"
             tools:text="Family, Animation, Science Fiction, Fantasy, Adventure" />
 
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/posterGenresBarrier"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:barrierDirection="bottom"
+            app:constraint_referenced_ids="posterImageView,genresTextView" />
+
+        <TextView
+            android:id="@+id/taglineTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:textColor="?attr/colorOnBackground"
+            android:textSize="24sp"
+            android:textStyle="italic"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/posterGenresBarrier"
+            app:lineHeight="32sp"
+            tools:text="It came from outer space!" />
+
+        <TextView
+            android:id="@+id/descriptionTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:textColor="?attr/colorOnBackground"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/taglineTextView"
+            app:lineHeight="36sp"
+            tools:text="In the small town of Rockwell, Maine in October 1957, a giant metal machine befriends a nine-year-old boy and ultimately finds its humanity by unselfishly saving people from their own fears and prejudices." />
 
         <LinearLayout
-            android:id="@+id/removeThisCrap"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:orientation="vertical"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/posterImageView">
-
-            <com.ataulm.whatsnext.film.FilmDetailsInfoWidget
-                android:id="@+id/filmDetailsInfoWidget"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:animateLayoutChanges="true" />
+            app:layout_constraintTop_toBottomOf="@id/descriptionTextView">
 
             <CheckBox
                 android:id="@+id/watchedCheckBox"
