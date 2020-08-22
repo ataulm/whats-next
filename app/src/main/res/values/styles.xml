@@ -4,7 +4,9 @@
 
     <style name="Platform.Theme.WhatsNext" parent="Platform.V23.Theme.WhatsNext" />
 
-    <style name="Base.Theme.WhatsNext" parent="Platform.Theme.WhatsNext" />
+    <style name="Base.Theme.WhatsNext" parent="Platform.Theme.WhatsNext">
+        <item name="viewInflaterClass">com.ataulm.whatsnext.WhatsNextViewInflater</item>
+    </style>
 
     <style name="Theme.WhatsNext" parent="Base.Theme.WhatsNext" />
 

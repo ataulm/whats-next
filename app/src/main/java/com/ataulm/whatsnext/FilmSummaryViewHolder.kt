@@ -9,11 +9,6 @@ import kotlinx.android.synthetic.main.view_film_summary.view.*
 
 class FilmSummaryViewHolder internal constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-    init {
-        itemView.imageView.clipToOutline = true
-        itemView.backgroundView.clipToOutline = true
-    }
-
     fun bind(filmSummary: FilmSummary, callback: Callback) {
         itemView.setOnClickListener { callback.onClick(filmSummary) }
         itemView.contentDescription = filmSummary.name + " (" + filmSummary.year + ")"
