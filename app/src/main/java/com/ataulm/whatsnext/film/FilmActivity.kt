@@ -56,8 +56,6 @@ class FilmActivity : BaseActivity() {
 
             ratingsDistributionWidget.show(film.filmStats.ratingsHistogram)
 
-            // TODO: can we do this in a custom layout inflater such that it works in XML?
-            filmStatsGroup.clipToOutline = true
             ratingsTextGroup.visibility = View.VISIBLE
             ratingsDistributionWidget.visibility = View.VISIBLE
         } else {
@@ -65,7 +63,6 @@ class FilmActivity : BaseActivity() {
             ratingsDistributionWidget.visibility = View.INVISIBLE
         }
 
-        posterImageView.clipToOutline = true
         posterImageView
                 .load(film.poster.bestFor(posterImageView.width)?.url)
 

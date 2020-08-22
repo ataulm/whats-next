@@ -23,9 +23,6 @@ class WhatsNextViewInflater : MaterialComponentsViewInflater() {
     private fun <T : View> T.applySetClipToOutline(context: Context, attrs: AttributeSet?): T {
         val a = context.obtainStyledAttributes(attrs, R.styleable.View, 0, 0)
         clipToOutline = a.getBoolean(R.styleable.View_clipToOutline, false)
-        if (clipToOutline) {
-            println("")
-        }
         a.recycle()
         return this
     }
