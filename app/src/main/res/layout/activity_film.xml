@@ -39,6 +39,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
+            android:animateLayoutChanges="true"
             android:background="@drawable/border_1dp_rounded_corners_12dp"
             android:backgroundTint="?attr/colorOnBackground"
             android:orientation="horizontal"
@@ -51,7 +52,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="12dp">
+                android:padding="12dp"
+                android:visibility="invisible">
 
                 <TextView
                     android:id="@+id/ratingTextView"
@@ -75,7 +77,8 @@
             <com.ataulm.whatsnext.film.RatingsDistributionWidget
                 android:id="@+id/ratingsDistributionWidget"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"
+                android:visibility="invisible" />
 
         </LinearLayout>
 

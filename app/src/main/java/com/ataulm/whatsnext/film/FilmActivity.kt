@@ -56,9 +56,11 @@ class FilmActivity : BaseActivity() {
 
             // TODO: can we do this in a custom layout inflater such that it works in XML?
             filmStatsGroup.clipToOutline = true
-            filmStatsGroup.visibility = View.VISIBLE
+            ratingsTextGroup.visibility = View.VISIBLE
+            ratingsDistributionWidget.visibility = View.VISIBLE
         } else {
-            filmStatsGroup.visibility = View.GONE
+            ratingsTextGroup.visibility = View.INVISIBLE
+            ratingsDistributionWidget.visibility = View.INVISIBLE
         }
 
         posterImageView.clipToOutline = true
