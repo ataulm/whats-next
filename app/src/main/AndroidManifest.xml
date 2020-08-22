@@ -10,21 +10,15 @@
     android:label="@string/app_name"
     android:theme="@style/Theme.WhatsNext">
 
-    <activity android:name=".search.SearchActivity" />
-    <activity android:name=".account.SignInActivity" />
-    <activity android:name=".film.FilmActivity" />
-
-    <activity-alias
-      android:name=".launcher"
-      android:targetActivity=".search.SearchActivity">
-
+    <activity android:name=".search.SearchActivity">
       <intent-filter>
         <action android:name="android.intent.action.MAIN" />
         <category android:name="android.intent.category.LAUNCHER" />
       </intent-filter>
+    </activity>
 
-    </activity-alias>
-
+    <activity android:name=".account.SignInActivity" />
+    <activity android:name=".film.FilmActivity" />
   </application>
 
 </manifest>

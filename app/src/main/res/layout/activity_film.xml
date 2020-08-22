@@ -1,43 +1,237 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp">
+    android:fillViewport="true"
+    android:orientation="vertical">
 
-    <com.ataulm.whatsnext.film.FilmDetailsInfoWidget
-        android:id="@+id/filmDetailsInfoWidget"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:animateLayoutChanges="true" />
+        android:padding="16dp">
 
-    <com.ataulm.whatsnext.film.RatingsWidget
-        android:id="@+id/ratingsWidget"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/titleTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textColor="?attr/colorOnBackground"
+            android:textSize="44sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Parasite (2019)" />
 
-    <CheckBox
-        android:id="@+id/watchedCheckBox"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Watched"
-        android:textColor="?attr/colorOnBackground"
-        android:visibility="gone" />
+        <LinearLayout
+            android:id="@+id/filmStatsGroup"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:animateLayoutChanges="true"
+            android:background="@drawable/border_1dp_rounded_corners_12dp"
+            android:backgroundTint="?attr/colorOnBackground"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/titleTextView">
 
-    <CheckBox
-        android:id="@+id/likeCheckBox"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Like"
-        android:textColor="?attr/colorOnBackground"
-        android:visibility="gone" />
+            <LinearLayout
+                android:id="@+id/ratingsTextGroup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="12dp"
+                android:visibility="invisible">
 
-    <RatingBar
-        android:id="@+id/ratingBar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:max="5"
-        android:stepSize="0.5"
-        android:visibility="gone" />
+                <TextView
+                    android:id="@+id/ratingTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:textColor="?attr/colorOnBackground"
+                    android:textSize="24sp"
+                    tools:text="4.5 ★" />
 
-</LinearLayout>
+                <TextView
+                    android:id="@+id/ratingsCountTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:textColor="?attr/colorOnBackground"
+                    tools:text="(516k)" />
+
+            </LinearLayout>
+
+            <com.ataulm.whatsnext.film.RatingsDistributionWidget
+                android:id="@+id/ratingsDistributionWidget"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="invisible" />
+
+        </LinearLayout>
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_vertical_50"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.5" />
+
+        <ImageView
+            android:id="@+id/posterImageView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:adjustViewBounds="true"
+            android:background="@drawable/rounded_corners_mask"
+            android:importantForAccessibility="no"
+            app:layout_constraintEnd_toStartOf="@id/guideline_vertical_50"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/filmStatsGroup"
+            tools:layout_height="244dp" />
+
+        <TextView
+            android:id="@+id/directorsLabelTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:text="@string/film_details_label_directors"
+            android:textAllCaps="true"
+            android:textColor="?attr/colorOnBackground"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/guideline_vertical_50"
+            app:layout_constraintTop_toTopOf="@id/posterImageView" />
+
+        <TextView
+            android:id="@+id/directorsTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textColor="?attr/colorOnBackground"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="@id/directorsLabelTextView"
+            app:layout_constraintStart_toStartOf="@id/directorsLabelTextView"
+            app:layout_constraintTop_toBottomOf="@id/directorsLabelTextView"
+            tools:text="Bong Joon-ho" />
+
+        <TextView
+            android:id="@+id/durationLabelTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/film_details_label_duration"
+            android:textAllCaps="true"
+            android:textColor="?attr/colorOnBackground"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="@id/directorsLabelTextView"
+            app:layout_constraintStart_toStartOf="@id/directorsLabelTextView"
+            app:layout_constraintTop_toBottomOf="@+id/directorsTextView" />
+
+        <TextView
+            android:id="@+id/durationTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:textColor="?attr/colorOnBackground"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="@id/directorsLabelTextView"
+            app:layout_constraintStart_toStartOf="@id/directorsLabelTextView"
+            app:layout_constraintTop_toBottomOf="@+id/durationLabelTextView"
+            tools:text="1hr 26min" />
+
+        <TextView
+            android:id="@+id/genresLabelTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/film_details_label_genres"
+            android:textAllCaps="true"
+            android:textColor="?attr/colorOnBackground"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="@id/directorsLabelTextView"
+            app:layout_constraintStart_toStartOf="@id/directorsLabelTextView"
+            app:layout_constraintTop_toBottomOf="@+id/durationTextView" />
+
+        <TextView
+            android:id="@+id/genresTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:textColor="?attr/colorOnBackground"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="@id/directorsLabelTextView"
+            app:layout_constraintStart_toStartOf="@id/directorsLabelTextView"
+            app:layout_constraintTop_toBottomOf="@+id/genresLabelTextView"
+            tools:text="Family, Animation, Science Fiction, Fantasy, Adventure" />
+
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/posterGenresBarrier"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:barrierDirection="bottom"
+            app:constraint_referenced_ids="posterImageView,genresTextView" />
+
+        <TextView
+            android:id="@+id/taglineTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:textColor="?attr/colorOnBackground"
+            android:textSize="24sp"
+            android:textStyle="italic"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/posterGenresBarrier"
+            app:lineHeight="32sp"
+            tools:text="It came from outer space!" />
+
+        <TextView
+            android:id="@+id/descriptionTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:textColor="?attr/colorOnBackground"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/taglineTextView"
+            app:lineHeight="36sp"
+            tools:text="In the small town of Rockwell, Maine in October 1957, a giant metal machine befriends a nine-year-old boy and ultimately finds its humanity by unselfishly saving people from their own fears and prejudices." />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:orientation="vertical"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/descriptionTextView">
+
+            <CheckBox
+                android:id="@+id/watchedCheckBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Watched"
+                android:textColor="?attr/colorOnBackground"
+                android:visibility="gone" />
+
+            <CheckBox
+                android:id="@+id/likeCheckBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Like"
+                android:textColor="?attr/colorOnBackground"
+                android:visibility="gone" />
+
+            <RatingBar
+                android:id="@+id/ratingBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:max="5"
+                android:stepSize="0.5"
+                android:visibility="gone" />
+
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>

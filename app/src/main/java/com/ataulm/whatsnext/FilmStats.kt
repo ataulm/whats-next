@@ -12,7 +12,7 @@ data class FilmStats(
 ) : Parcelable {
 
     @Parcelize
-    data class Counts(val watches: Int, val likes: Int) : Parcelable
+    data class Counts(val watches: Int, val likes: Int, val ratings: Int) : Parcelable
 
     @Parcelize
     data class RatingsHistogramBar(val rating: Float, val weight: Float, val count: Int) : Parcelable
