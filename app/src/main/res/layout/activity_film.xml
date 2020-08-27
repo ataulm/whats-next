@@ -211,6 +211,14 @@
             app:layout_constraintTop_toBottomOf="@id/descriptionTextView">
 
             <CheckBox
+                android:id="@+id/inWatchlistCheckBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="In Watchlist"
+                android:textColor="?attr/colorOnBackground"
+                android:visibility="gone" />
+
+            <CheckBox
                 android:id="@+id/watchedCheckBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
