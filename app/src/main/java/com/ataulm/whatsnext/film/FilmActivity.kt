@@ -100,14 +100,17 @@ class FilmActivity : BaseActivity() {
 
         if (film.filmRelationship != null) {
             likeCheckBox.setOnCheckedChangeListener(null)
+            inWatchlistCheckBox.setOnCheckedChangeListener(null)
             watchedCheckBox.setOnCheckedChangeListener(null)
             ratingBar.onRatingBarChangeListener = null
 
             likeCheckBox.isChecked = film.filmRelationship.liked
+            inWatchlistCheckBox.isChecked = film.filmRelationship.inWatchlist
             watchedCheckBox.isChecked = film.filmRelationship.watched
             ratingBar.rating = film.filmRelationship.rating.toFloat()
 
             likeCheckBox.setOnCheckedChangeListener { _, liked -> viewModel.onClickLiked(liked) }
+            inWatchlistCheckBox.setOnCheckedChangeListener { _, inWatchlist -> viewModel.onClickInWatchlist(inWatchlist) }
             watchedCheckBox.setOnCheckedChangeListener { _, watched -> viewModel.onClickWatched(watched) }
             ratingBar.setOnRatingBarChangeListener { _, rating, fromUser ->
                 if (fromUser) {
@@ -116,10 +119,12 @@ class FilmActivity : BaseActivity() {
             }
 
             likeCheckBox.visibility = View.VISIBLE
+            inWatchlistCheckBox.visibility = View.VISIBLE
             watchedCheckBox.visibility = View.VISIBLE
             ratingBar.visibility = View.VISIBLE
         } else {
             likeCheckBox.visibility = View.GONE
+            inWatchlistCheckBox.visibility = View.GONE
             watchedCheckBox.visibility = View.GONE
             ratingBar.visibility = View.GONE
         }
