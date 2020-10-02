@@ -23,6 +23,10 @@ interface LetterboxdApi {
             @Field("grant_type") grantType: String = "password"
     ): AuthTokenApiResponse
 
+    @RequiresAuthenticatedUser
+    @GET("me")
+    suspend fun me(): ApiMeResponse
+
     @GET("search")
     suspend fun search(@Query("input") searchTerm: String): ApiSearchResponse
 
@@ -31,6 +35,15 @@ interface LetterboxdApi {
 
     @GET("film/{id}/statistics")
     suspend fun filmStats(@Path("id") letterboxdId: String): ApiFilmStatistics
+
+    @RequiresAuthenticatedUser
+    @GET("member/{id}/watchlist")
+    suspend fun watchList(
+            @Path("id") memberId: String,
+            @Query("cursor") cursor: String?,
+            @Query("perPage") perPage: Int,
+            @Query("sort") sort: String = "Added" // sort by most-recently added first
+    ): ApiWatchListResponse
 
     @RequiresAuthenticatedUser
     @GET("film/{id}/me")
@@ -44,12 +57,26 @@ interface LetterboxdApi {
     ): ApiFilmRelationshipUpdateResponse
 }
 
+data class ApiMeResponse(
+        @SerializedName("member") val member: ApiMember
+)
+
+data class ApiMember(
+        @SerializedName("id") val letterboxdId: String,
+        @SerializedName("avatar") val avatar: ApiImage
+)
+
 data class AuthTokenApiResponse(
         @SerializedName("access_token") val accessToken: String,
         @SerializedName("refresh_token") val refreshToken: String
 )
 
 data class ApiPopularFilmsThisWeekResponse(
+        @SerializedName("next") val cursor: String? = null,
+        @SerializedName("items") val items: List<ApiFilmSummary>
+)
+
+data class ApiWatchListResponse(
         @SerializedName("next") val cursor: String? = null,
         @SerializedName("items") val items: List<ApiFilmSummary>
 )

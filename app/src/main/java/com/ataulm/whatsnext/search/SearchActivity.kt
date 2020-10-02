@@ -39,9 +39,15 @@ class SearchActivity : BaseActivity() {
         setContentView(R.layout.activity_search)
 
         searchToolbar.setOnMenuItemClickListener {
-            if (it.itemId == R.id.searchLetterboxdAccount) {
-                navigator.navigateToSignIn()
-                return@setOnMenuItemClickListener true
+            when (it.itemId) {
+                R.id.searchWatchList -> {
+                    navigator.navigateToWatchList()
+                    return@setOnMenuItemClickListener true
+                }
+                R.id.searchLetterboxdAccount -> {
+                    navigator.navigateToSignIn()
+                    return@setOnMenuItemClickListener true
+                }
             }
             return@setOnMenuItemClickListener false
         }
