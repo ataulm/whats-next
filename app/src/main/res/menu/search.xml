@@ -2,6 +2,12 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
+        android:id="@+id/searchWatchList"
+        android:icon="@drawable/ic_baseline_queue_play_next_24"
+        android:title="@string/menu_search_watch_list"
+        app:iconTint="?attr/colorOnBackground"
+        app:showAsAction="ifRoom" />
+    <item
         android:id="@+id/searchLetterboxdAccount"
         android:icon="@drawable/ic_baseline_person_24"
         android:title="@string/menu_search_letterboxd_account"

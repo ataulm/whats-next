@@ -2,12 +2,12 @@ package com.ataulm.whatsnext.api
 
 import com.google.gson.annotations.SerializedName
 
-internal class ApiImage {
+class ApiImage {
 
     @SerializedName("sizes")
     lateinit var sizes: List<Size>
 
-    internal class Size {
+    class Size {
 
         @SerializedName("width")
         var width: Int = 0

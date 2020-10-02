@@ -22,6 +22,12 @@ internal class WhatsNextRepository(
         Token(authTokenApiResponse.accessToken, authTokenApiResponse.refreshToken)
     }
 
+    fun watchList(memberId: String): PagingSource<String, FilmSummary> = WatchListPagingSource(
+            memberId = memberId,
+            letterboxdApi = letterboxdApi,
+            filmSummaryConverter = filmSummaryConverter
+    )
+
     fun popularFilmsThisWeek(): PagingSource<String, FilmSummary> {
         return PopularFilmsThisWeekPagingSource(letterboxdApi, filmSummaryConverter)
     }
@@ -102,6 +108,27 @@ private class PopularFilmsThisWeekPagingSource(
 
     override suspend fun load(params: LoadParams<String>): LoadResult<String, FilmSummary> {
         val response = letterboxdApi.popularFilmsThisWeek(
+                cursor = params.key,
+                perPage = params.loadSize
+        )
+        return LoadResult.Page(
+                data = response.items.map { filmSummaryConverter.convert(it) },
+                prevKey = null, // API only allows paging forwards
+                nextKey = response.cursor
+        )
+    }
+}
+
+private class WatchListPagingSource(
+        private val memberId: String,
+        private val letterboxdApi: LetterboxdApi,
+        private val filmSummaryConverter: FilmSummaryConverter
+) : PagingSource<String, FilmSummary>() {
+
+    override suspend fun load(params: LoadParams<String>): LoadResult<String, FilmSummary> {
+        val memberId = letterboxdApi.me().member.letterboxdId // TODO: don't leave this here
+        val response = letterboxdApi.watchList(
+                memberId = memberId,
                 cursor = params.key,
                 perPage = params.loadSize
         )
