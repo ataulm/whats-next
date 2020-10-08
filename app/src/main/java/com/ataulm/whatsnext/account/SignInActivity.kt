@@ -10,7 +10,8 @@ import javax.inject.Inject
 class SignInActivity : BaseActivity() {
 
     @Inject
-    internal lateinit var whatsNextRepository: WhatsNextRepository
+    internal lateinit var signInUseCase: SignInUseCase
+
     private lateinit var presenter: SignInPresenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,12 +30,11 @@ class SignInActivity : BaseActivity() {
             screen.setCredentials(BuildConfig.LETTERBOXD_USERNAME, BuildConfig.LETTERBOXD_PASSWORD)
         }
 
-        presenter = SignInPresenter(whatsNextRepository, screen, callback)
+        presenter = SignInPresenter(signInUseCase, screen, callback)
     }
 
     private val callback = object : SignInPresenter.Callback {
-        override fun onTokenReceieved(username: String, token: Token) {
-            TokensStore.create(this@SignInActivity).store(token)
+        override fun onSignInCompleted() {
             finish()
         }
     }

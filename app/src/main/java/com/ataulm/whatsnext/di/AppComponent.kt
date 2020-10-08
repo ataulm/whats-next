@@ -5,6 +5,7 @@ import com.ataulm.support.Clock
 import com.ataulm.whatsnext.BuildConfig
 import com.ataulm.whatsnext.TokensStore
 import com.ataulm.whatsnext.WhatsNextRepository
+import com.ataulm.whatsnext.account.SignInUseCase
 import com.ataulm.whatsnext.api.*
 import com.ataulm.whatsnext.api.FilmConverter
 import com.ataulm.whatsnext.api.FilmRelationshipConverter
@@ -25,6 +26,7 @@ internal interface AppComponent {
 
     fun whatsNextService(): WhatsNextRepository
     fun tokensStore(): TokensStore
+    fun signInUseCase(): SignInUseCase
 
     @Component.Builder
     interface Builder {
@@ -65,4 +67,9 @@ internal object AppModule {
     @JvmStatic
     @Provides
     fun tokensStore(application: Application) = TokensStore.create(application)
+
+    @JvmStatic
+    @Provides
+    fun signInUseCase(whatsNextRepository: WhatsNextRepository, tokensStore: TokensStore) =
+            SignInUseCase(whatsNextRepository, tokensStore)
 }
