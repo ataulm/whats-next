@@ -5,25 +5,28 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <LinearLayout
+    <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="wrap_content">
 
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/searchToolbar"
+        <com.ataulm.whatsnext.search.SignInHeaderView
+            android:id="@+id/signInHeaderView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:menu="@menu/search" />
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="12dp"
+            app:layout_scrollFlags="scroll|enterAlways" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/popularFilmsThisWeekRecyclerView"
-            android:layout_width="match_parent"
-            android:clipChildren="false"
-            android:layout_height="match_parent"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+    </com.google.android.material.appbar.AppBarLayout>
 
-    </LinearLayout>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/popularFilmsThisWeekRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipChildren="false"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
     <LinearLayout
         android:id="@+id/searchBottomSheet"

@@ -14,11 +14,11 @@ class SignInHeaderView(context: Context, attrs: AttributeSet) : ConstraintLayout
     override fun onFinishInflate() {
         super.onFinishInflate()
         View.inflate(context, R.layout.merge_sign_in_header, this)
-        signInHeaderUsernameEditText.addTextChangedListener { updateButtonEnabled() }
-        signInHeaderPasswordEditText.addTextChangedListener { updateButtonEnabled() }
+        signInHeaderUsernameEditText.addTextChangedListener { updateSignInButtonEnabled() }
+        signInHeaderPasswordEditText.addTextChangedListener { updateSignInButtonEnabled() }
     }
 
-    private fun updateButtonEnabled() {
+    private fun updateSignInButtonEnabled() {
         val validUsername = !signInHeaderUsernameEditText.text.isNullOrBlank()
         val validPassword = !signInHeaderPasswordEditText.text.isNullOrBlank()
         signInHeaderButton.isEnabled = validUsername && validPassword
@@ -27,12 +27,18 @@ class SignInHeaderView(context: Context, attrs: AttributeSet) : ConstraintLayout
     fun update(uiModel: UiModel) {
         when (uiModel) {
             UiModel.Loading -> showLoading()
-            is UiModel.Idle -> {
+            is UiModel.RequiresSignIn -> {
+                // TODO: show error message
+
+                updateSignInButtonEnabled()
                 signInHeaderButton.setOnClickListener {
                     val username = signInHeaderUsernameEditText.text.toString()
                     val password = signInHeaderPasswordEditText.text.toString()
                     uiModel.onClickSignIn(username, password)
                 }
+
+                signInHeaderRegisterButton.isEnabled = true
+                signInHeaderRegisterButton.setOnClickListener { uiModel.onClickRegister() }
             }
         }.exhaustive
     }
@@ -44,11 +50,14 @@ class SignInHeaderView(context: Context, attrs: AttributeSet) : ConstraintLayout
         //  signInHeaderButton.isLoading = true
         //  ```
         signInHeaderButton.isEnabled = false
+
+        // we're only disabling this because the click listener is not part of the Loading class
+        signInHeaderRegisterButton.isEnabled = false
     }
 
     sealed class UiModel {
         object Loading : UiModel()
-        data class Idle(
+        data class RequiresSignIn(
                 val onClickSignIn: (String, String) -> Unit,
                 val onClickRegister: () -> Unit,
                 val errorMessage: String?

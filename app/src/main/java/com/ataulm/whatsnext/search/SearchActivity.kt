@@ -9,6 +9,7 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import com.ataulm.support.DataObserver
 import com.ataulm.support.EventObserver
+import com.ataulm.support.exhaustive
 import com.ataulm.whatsnext.*
 import com.ataulm.whatsnext.di.DaggerSearchComponent
 import com.ataulm.whatsnext.di.appComponent
@@ -38,20 +39,6 @@ class SearchActivity : BaseActivity() {
         injectDependencies()
         setContentView(R.layout.activity_search)
 
-        searchToolbar.setOnMenuItemClickListener {
-            when (it.itemId) {
-                R.id.searchWatchList -> {
-                    navigator.navigateToWatchList()
-                    return@setOnMenuItemClickListener true
-                }
-                R.id.searchLetterboxdAccount -> {
-                    navigator.navigateToSignIn()
-                    return@setOnMenuItemClickListener true
-                }
-            }
-            return@setOnMenuItemClickListener false
-        }
-
         bottomSheetBehavior = BottomSheetBehavior.from(searchBottomSheet)
         bottomSheetBehavior.isDraggable = false
         searchFieldContainer.doOnLayout { bottomSheetBehavior.peekHeight = searchFieldContainer.height }
@@ -65,6 +52,27 @@ class SearchActivity : BaseActivity() {
             }
             true
         }
+
+        viewModel.signInUiModel.observe(this, DataObserver<SignInUiModel> { signInUiModel ->
+            when (signInUiModel) {
+                SignInUiModel.SignedIn -> {
+                    signInHeaderView.visibility = View.GONE
+                }
+                SignInUiModel.TryingToSignIn -> {
+                    signInHeaderView.update(SignInHeaderView.UiModel.Loading)
+                    signInHeaderView.visibility = View.VISIBLE
+                }
+                is SignInUiModel.RequiresSignIn -> {
+                    signInHeaderView.update(SignInHeaderView.UiModel.RequiresSignIn(
+                            signInUiModel.onClickSignIn,
+                            signInUiModel.onClickRegister,
+                            signInUiModel.errorMessage
+                    ))
+                    signInHeaderView.visibility = View.VISIBLE
+
+                }
+            }.exhaustive
+        })
 
         viewModel.films.observe(this, DataObserver<List<FilmSummary>> { filmSummaries ->
             filmSummariesAdapter.submitList(filmSummaries)

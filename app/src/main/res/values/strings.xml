@@ -6,8 +6,6 @@
     <string name="hours_minutes_format">%1$shr %2$smin</string>
     <string name="cast">Cast</string>
     <string name="crew">Crew</string>
-    <string name="menu_search_watch_list">What’s Next?</string>
-    <string name="menu_search_letterboxd_account">Letterboxd account</string>
     <string name="stars">%s ★</string>
     <plurals name="stars_content_description">
         <item quantity="one">%s star</item>

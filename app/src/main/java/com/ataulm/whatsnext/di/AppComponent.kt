@@ -5,11 +5,9 @@ import com.ataulm.support.Clock
 import com.ataulm.whatsnext.BuildConfig
 import com.ataulm.whatsnext.TokensStore
 import com.ataulm.whatsnext.WhatsNextRepository
+import com.ataulm.whatsnext.account.IsSignedInUseCase
 import com.ataulm.whatsnext.account.SignInUseCase
 import com.ataulm.whatsnext.api.*
-import com.ataulm.whatsnext.api.FilmConverter
-import com.ataulm.whatsnext.api.FilmRelationshipConverter
-import com.ataulm.whatsnext.api.FilmSummaryConverter
 import dagger.BindsInstance
 import dagger.Component
 import dagger.Module
@@ -27,6 +25,7 @@ internal interface AppComponent {
     fun whatsNextService(): WhatsNextRepository
     fun tokensStore(): TokensStore
     fun signInUseCase(): SignInUseCase
+    fun isSignedInUseCase(): IsSignedInUseCase
 
     @Component.Builder
     interface Builder {
@@ -72,4 +71,8 @@ internal object AppModule {
     @Provides
     fun signInUseCase(whatsNextRepository: WhatsNextRepository, tokensStore: TokensStore) =
             SignInUseCase(whatsNextRepository, tokensStore)
+
+    @JvmStatic
+    @Provides
+    fun isSignedInUseCase(tokensStore: TokensStore) = IsSignedInUseCase(tokensStore)
 }
