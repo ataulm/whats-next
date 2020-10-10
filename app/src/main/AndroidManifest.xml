@@ -17,7 +17,6 @@
       </intent-filter>
     </activity>
 
-    <activity android:name=".account.SignInActivity" />
     <activity android:name=".film.FilmActivity" />
     <activity android:name=".watchlist.WatchListActivity" />
   </application>
