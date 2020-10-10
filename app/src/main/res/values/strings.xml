@@ -17,6 +17,12 @@
     <string name="ratings_content_description">rated by %s people</string>
     <string name="title_and_year">%1$s (%2$s)</string>
 
+    <string name="wn_header_powered_by_letterboxd"><i>What’s next?</i> is an unofficial client for Letterboxd.com. Sign in (or create an account) below for access to your ratings and watch list.</string>
+    <string name="wn_header_hint_username">Username</string>
+    <string name="wn_header_hint_password">Password</string>
+    <string name="wn_header_button_sign_in">Sign in</string>
+    <string name="wn_header_button_register">Create an account</string>
+
     <plurals name="rating_bar_content_description">
         <item quantity="one">%d percent rated %s star</item>
         <item quantity="other">%d percent rated %s stars</item>
