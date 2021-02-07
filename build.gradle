@@ -6,11 +6,11 @@ subprojects {
     buildscript {
         repositories {
             google()
-            jcenter()
+            mavenCentral()
         }
     }
     repositories {
         google()
-        jcenter()
+        mavenCentral()
     }
 }
