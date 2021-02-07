@@ -11,6 +11,22 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
 android {
+    buildFeatures {
+        compose true
+    }
+    composeOptions {
+        kotlinCompilerVersion versions.kotlin
+        kotlinCompilerExtensionVersion versions.kotlinCompose
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+        // kotlin intermediate representation
+        useIR = true
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
     compileSdkVersion versions.androidSdk.compile
     defaultConfig {
         applicationId 'com.ataulm.whatsnext'
@@ -33,11 +49,6 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-    kotlinOptions { jvmTarget = "1.8" }
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
 }
 
 dependencies {
@@ -56,6 +67,9 @@ dependencies {
     implementation libraries.dagger
     kapt libraries.daggerCompiler
     implementation libraries.gson
+    implementation libraries.kotlinComposeFoundation
+    implementation libraries.kotlinComposeUi
+    implementation libraries.kotlinComposeUiTooling
     implementation libraries.kotlinCoroutinesAndroid
     implementation libraries.kotlinCoroutinesCore
     implementation libraries.kotlinStdLib
