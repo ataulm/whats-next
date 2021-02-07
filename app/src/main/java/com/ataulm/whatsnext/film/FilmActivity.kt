@@ -2,8 +2,9 @@ package com.ataulm.whatsnext.film
 
 import android.os.Bundle
 import android.view.View
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.setContent
+import androidx.compose.ui.tooling.preview.Preview
 import coil.api.load
 import com.ataulm.support.DataObserver
 import com.ataulm.whatsnext.*
@@ -32,20 +33,44 @@ class FilmActivity : BaseActivity() {
         setContentView(R.layout.activity_film)
 
         viewModel.filmDetails.observe(this, DataObserver<FilmDetailsUiModel> {
+            // TODO: ditch this when we have everything in compose
             display(it)
+
+            composeView.setContent {
+                Film(it)
+            }
         })
     }
 
     @Composable
-    private fun Film() {
+    private fun Film(film: FilmDetailsUiModel) {
+        Text(film.titleText())
+    }
+
+    @Preview
+    @Composable
+    private fun FilmPreview() {
+        val summary = FilmSummary(
+                ids = Ids(letterboxd = "foo", imdb = null, tmdb = null),
+                name = "Soul",
+                year = "2020",
+                poster = Images(emptyList()),
+                directors = listOf(Person(id = "foo", name = "Pete Docter"))
+        )
+        val film = null // TODO: there's more bits
+        val uiModel = FilmDetailsUiModel(
+                title = summary.name,
+                releaseYear = summary.year,
+                poster = summary.poster,
+                directors = summary.directors.map { it.name },
+                filmSummary = summary,
+                film = film
+        )
+        Film(uiModel)
     }
 
     private fun display(film: FilmDetailsUiModel) {
-        titleTextView.text = if (film.releaseYear != null) {
-            getString(R.string.title_and_year, film.title, film.releaseYear)
-        } else {
-            film.title
-        }
+        titleTextView.text = film.titleText()
 
         val directors = film.directors()
         if (directors != null) {
@@ -140,6 +165,12 @@ class FilmActivity : BaseActivity() {
             watchedCheckBox.visibility = View.GONE
             ratingBar.visibility = View.GONE
         }
+    }
+
+    private fun FilmDetailsUiModel.titleText() = if (releaseYear != null) {
+        getString(R.string.title_and_year, title, releaseYear)
+    } else {
+        title
     }
 
     private fun FilmDetailsUiModel.directors(): String? {

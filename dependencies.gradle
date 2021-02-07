@@ -1,19 +1,18 @@
 ext {
     versions = [
-            androidSdk          : [
+            androidSdk       : [
                     compile: 29,
                     min    : 23,
                     target : 29
             ],
-            androidArchLifecycle: '1.1.1',
-            androidxLifecycle   : '2.3.0-alpha06',
-            chucker             : '3.2.0',
-            dagger              : '2.28.3',
-            kotlin              : '1.4.30',
-            kotlinCompose       : '1.0.0-alpha11',
-            kotlinCoroutines    : '1.4.2',
-            okhttp              : '4.8.0',
-            retrofit            : '2.9.0'
+            androidxCompose  : '1.0.0-alpha11',
+            androidxLifecycle: '2.3.0-alpha06',
+            chucker          : '3.2.0',
+            dagger           : '2.28.3',
+            kotlin           : '1.4.21-2',
+            kotlinCoroutines : '1.4.2',
+            okhttp           : '4.8.0',
+            retrofit         : '2.9.0'
     ]
 
     libraries = [
@@ -43,9 +42,10 @@ ext {
             gson                         : 'com.google.code.gson:gson:2.3.1',
             jUnit                        : 'junit:junit:4.12',
             jsr305                       : 'com.google.code.findbugs:jsr305:2.0.1',
-            kotlinComposeFoundation      : "androidx.compose.foundation:foundation:${versions.kotlinCompose}",
-            kotlinComposeUi              : "androidx.compose.ui:ui:${versions.kotlinCompose}",
-            kotlinComposeUiTooling       : "androidx.compose.ui:ui-tooling:${versions.kotlinCompose}",
+            androidxComposeFoundation    : "androidx.compose.foundation:foundation:${versions.androidxCompose}",
+            androidxComposeUi            : "androidx.compose.ui:ui:${versions.androidxCompose}",
+            androidxComposeMaterial      : "androidx.compose.material:material:${versions.androidxCompose}",
+            androidxComposeUiTooling     : "androidx.compose.ui:ui-tooling:${versions.androidxCompose}",
             kotlinCoroutinesCore         : "org.jetbrains.kotlinx:kotlinx-coroutines-core:${versions.kotlinCoroutines}",
             kotlinCoroutinesAndroid      : "org.jetbrains.kotlinx:kotlinx-coroutines-android:${versions.kotlinCoroutines}",
             kotlinStdLib                 : "org.jetbrains.kotlin:kotlin-stdlib:${versions.kotlin}",

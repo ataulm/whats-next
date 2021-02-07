@@ -16,7 +16,7 @@ android {
     }
     composeOptions {
         kotlinCompilerVersion versions.kotlin
-        kotlinCompilerExtensionVersion versions.kotlinCompose
+        kotlinCompilerExtensionVersion versions.androidxCompose
     }
     kotlinOptions {
         jvmTarget = '1.8'
@@ -37,8 +37,6 @@ android {
 
         buildConfigField 'String', 'LETTERBOXD_KEY', "\"${letterboxd_api_key}\""
         buildConfigField 'String', 'LETTERBOXD_SECRET', "\"${letterboxd_api_secret}\""
-        buildConfigField 'String', 'LETTERBOXD_USERNAME', "\"${letterboxd_username}\""
-        buildConfigField 'String', 'LETTERBOXD_PASSWORD', "\"${letterboxd_password}\""
         buildConfigField 'boolean', 'OFFLINE', "false"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -67,9 +65,10 @@ dependencies {
     implementation libraries.dagger
     kapt libraries.daggerCompiler
     implementation libraries.gson
-    implementation libraries.kotlinComposeFoundation
-    implementation libraries.kotlinComposeUi
-    implementation libraries.kotlinComposeUiTooling
+    implementation libraries.androidxComposeFoundation
+    implementation libraries.androidxComposeMaterial
+    implementation libraries.androidxComposeUi
+    implementation libraries.androidxComposeUiTooling
     implementation libraries.kotlinCoroutinesAndroid
     implementation libraries.kotlinCoroutinesCore
     implementation libraries.kotlinStdLib
