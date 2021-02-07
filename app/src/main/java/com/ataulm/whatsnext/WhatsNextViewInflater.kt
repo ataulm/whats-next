@@ -128,7 +128,7 @@ class WhatsNextViewInflater : MaterialComponentsViewInflater() {
                         context.classLoader).asSubclass(View::class.java)
 
                 constructor = clazz.getConstructor(*sConstructorSignature)
-                sConstructorMap[name] = constructor!!
+                sConstructorMap[name] = constructor
             }
             constructor.isAccessible = true
             return constructor.newInstance(*mConstructorArgs)
