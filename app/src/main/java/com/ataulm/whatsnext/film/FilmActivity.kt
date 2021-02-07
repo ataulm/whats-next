@@ -2,6 +2,8 @@ package com.ataulm.whatsnext.film
 
 import android.os.Bundle
 import android.view.View
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.setContent
 import coil.api.load
 import com.ataulm.support.DataObserver
 import com.ataulm.whatsnext.*
@@ -21,11 +23,21 @@ class FilmActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         injectDependencies()
+
+// TODO: start to migrate. There's a codelab here:
+//  https://developer.android.com/codelabs/jetpack-compose-migration?continue=https%3A%2F%2Fdeveloper.android.com%2Fcourses%2Fpathways%2Fcompose%23codelab-https%3A%2F%2Fdeveloper.android.com%2Fcodelabs%2Fjetpack-compose-migration#4
+//        setContent {
+//            Film()
+//        }
         setContentView(R.layout.activity_film)
 
         viewModel.filmDetails.observe(this, DataObserver<FilmDetailsUiModel> {
             display(it)
         })
+    }
+
+    @Composable
+    private fun Film() {
     }
 
     private fun display(film: FilmDetailsUiModel) {
