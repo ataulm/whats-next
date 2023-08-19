@@ -3,10 +3,12 @@ package com.ataulm.whatsnext.search
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import androidx.core.view.doOnLayout
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.RecyclerView
 import com.ataulm.support.DataObserver
 import com.ataulm.support.EventObserver
 import com.ataulm.support.exhaustive
@@ -14,7 +16,6 @@ import com.ataulm.whatsnext.*
 import com.ataulm.whatsnext.di.DaggerSearchComponent
 import com.ataulm.whatsnext.di.appComponent
 import com.google.android.material.bottomsheet.BottomSheetBehavior
-import kotlinx.android.synthetic.main.activity_search.*
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -23,7 +24,14 @@ class SearchActivity : BaseActivity() {
 
     @Inject
     internal lateinit var viewModel: SearchViewModel
+    private lateinit var signInHeaderView: SignInHeaderView
+    private lateinit var popularFilmsThisWeekRecyclerView: RecyclerView
+    private lateinit var searchBottomSheet: View
+    private lateinit var searchFieldContainer: View
+    private lateinit var searchEditText: EditText
+    private lateinit var searchRecyclerView: RecyclerView
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<View>
+
 
     private val navigator = navigator()
     private val filmSummaryCallback = object : FilmSummaryViewHolder.Callback {
@@ -39,9 +47,18 @@ class SearchActivity : BaseActivity() {
         injectDependencies()
         setContentView(R.layout.activity_search)
 
+        signInHeaderView = findViewById(R.id.signInHeaderView)
+        popularFilmsThisWeekRecyclerView = findViewById(R.id.popularFilmsThisWeekRecyclerView)
+        searchBottomSheet = findViewById(R.id.searchBottomSheet)
+        searchFieldContainer = findViewById(R.id.searchFieldContainer)
+        searchEditText = findViewById(R.id.searchEditText)
+        searchRecyclerView = findViewById(R.id.searchRecyclerView)
+
         bottomSheetBehavior = BottomSheetBehavior.from(searchBottomSheet)
         bottomSheetBehavior.isDraggable = false
-        searchFieldContainer.doOnLayout { bottomSheetBehavior.peekHeight = searchFieldContainer.height }
+        searchFieldContainer.doOnLayout {
+            bottomSheetBehavior.peekHeight = searchFieldContainer.height
+        }
 
         searchRecyclerView.adapter = filmSummariesAdapter
         popularFilmsThisWeekRecyclerView.adapter = popularFilmsAdapter
@@ -58,16 +75,20 @@ class SearchActivity : BaseActivity() {
                 SignInUiModel.SignedIn -> {
                     signInHeaderView.visibility = View.GONE
                 }
+
                 SignInUiModel.TryingToSignIn -> {
                     signInHeaderView.update(SignInHeaderView.UiModel.Loading)
                     signInHeaderView.visibility = View.VISIBLE
                 }
+
                 is SignInUiModel.RequiresSignIn -> {
-                    signInHeaderView.update(SignInHeaderView.UiModel.RequiresSignIn(
+                    signInHeaderView.update(
+                        SignInHeaderView.UiModel.RequiresSignIn(
                             signInUiModel.onClickSignIn,
                             signInUiModel.onClickRegister,
                             signInUiModel.errorMessage
-                    ))
+                        )
+                    )
                     signInHeaderView.visibility = View.VISIBLE
 
                 }
@@ -89,6 +110,7 @@ class SearchActivity : BaseActivity() {
         })
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
         if (bottomSheetBehavior.state == BottomSheetBehavior.STATE_EXPANDED) {
             bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
@@ -101,14 +123,14 @@ class SearchActivity : BaseActivity() {
 
 private fun SearchActivity.injectDependencies() {
     DaggerSearchComponent.builder()
-            .activity(this)
-            .appComponent(appComponent())
-            .build()
-            .inject(this)
+        .activity(this)
+        .appComponent(appComponent())
+        .build()
+        .inject(this)
 }
 
 private class PopularFilmsThisWeekAdapter(
-        private val callback: FilmSummaryViewHolder.Callback
+    private val callback: FilmSummaryViewHolder.Callback
 ) : PagingDataAdapter<FilmSummary, FilmSummaryViewHolder>(FilmDiffer) {
 
     init {

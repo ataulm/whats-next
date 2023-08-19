@@ -2,6 +2,7 @@ package com.ataulm.whatsnext.api
 
 import android.app.Application
 import com.ataulm.support.Clock
+import com.ataulm.whatsnext.BuildConfig
 import com.ataulm.whatsnext.Token
 import com.ataulm.whatsnext.TokensStore
 import com.chuckerteam.chucker.api.ChuckerInterceptor
@@ -22,35 +23,42 @@ import java.util.concurrent.TimeUnit
 private const val LETTERBOXD_BASE_URL = "https://api.letterboxd.com/api/v0/"
 
 class LetterboxdApiFactory(
-        private val apiKey: String,
-        private val apiSecret: String,
-        private val tokensStore: TokensStore,
-        private val application: Application,
-        private val clock: Clock,
-        private val enableHttpLogging: Boolean
+    private val apiKey: String,
+    private val apiSecret: String,
+    private val tokensStore: TokensStore,
+    private val application: Application,
+    private val clock: Clock,
+    private val enableHttpLogging: Boolean
 ) {
 
     fun createRemote(): LetterboxdApi {
         val gsonConverterFactory = GsonConverterFactory.create()
 
         val refreshAccessTokenApi = Retrofit.Builder()
-                .client(OkHttpClient.Builder().addCommonInterceptors().build())
-                .addConverterFactory(gsonConverterFactory)
-                .baseUrl(LETTERBOXD_BASE_URL)
-                .build()
-                .create(RefreshAccessTokenApi::class.java)
+            .client(OkHttpClient.Builder().addCommonInterceptors().build())
+            .addConverterFactory(gsonConverterFactory)
+            .baseUrl(LETTERBOXD_BASE_URL)
+            .build()
+            .create(RefreshAccessTokenApi::class.java)
 
         return Retrofit.Builder()
-                .client(OkHttpClient.Builder()
-                        // it's important that this one is set first, since it relies on the other to set the Auth header when a request is retried (after refreshing access token)
-                        .addInterceptor(RefreshAccessTokenInterceptor(refreshAccessTokenApi, tokensStore))
-                        .addCommonInterceptors()
-                        .build())
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .addConverterFactory(gsonConverterFactory)
-                .baseUrl(LETTERBOXD_BASE_URL)
-                .build()
-                .create(LetterboxdApi::class.java)
+            .client(
+                OkHttpClient.Builder()
+                    // it's important that this one is set first, since it relies on the other to set the Auth header when a request is retried (after refreshing access token)
+                    .addInterceptor(
+                        RefreshAccessTokenInterceptor(
+                            refreshAccessTokenApi,
+                            tokensStore
+                        )
+                    )
+                    .addCommonInterceptors()
+                    .build()
+            )
+            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+            .addConverterFactory(gsonConverterFactory)
+            .baseUrl(LETTERBOXD_BASE_URL)
+            .build()
+            .create(LetterboxdApi::class.java)
     }
 
     private fun OkHttpClient.Builder.addCommonInterceptors(): OkHttpClient.Builder {
@@ -69,7 +77,10 @@ class LetterboxdApiFactory(
 /**
  * If API key is invalid (or other parts of the signature) -> 401 {"message":"Signature invalid","type":"signature"}
  */
-private class AddApiKeyQueryParameterInterceptor(private val apiKey: String, private val clock: Clock) : Interceptor {
+private class AddApiKeyQueryParameterInterceptor(
+    private val apiKey: String,
+    private val clock: Clock
+) : Interceptor {
 
     override fun intercept(chain: Interceptor.Chain): Response {
         val url = chain.request().url.newBuilder()
@@ -84,17 +95,30 @@ private class AddApiKeyQueryParameterInterceptor(private val apiKey: String, pri
 
 private const val HEADER_AUTH = "Authorization"
 
-private class AddAuthorizationHeaderInterceptor(private val apiSecret: String, private val tokensStore: TokensStore) : Interceptor {
+// TODO: The docs and Ruby client (and this client) all have different implementations
+//  re: when/where to add the signature. Revisit this, using the Ruby client to test,
+//  then ping Letterboxd to update the API when it's verified
+//  Upgrade GenerateSignatureTest into a test for this class.
+private class AddAuthorizationHeaderInterceptor(
+    private val apiSecret: String,
+    private val tokensStore: TokensStore
+) : Interceptor {
 
     override fun intercept(chain: Interceptor.Chain): Response {
-        val amendedRequest = chain.request().newBuilder()
-        val signature = chain.request().generateHashedSignature()
+        val request = chain.request()
+        val signature = generateSignature(
+            request.body,
+            request.method,
+            request.url,
+            apiSecret
+        )
 
+        val amendedRequest = chain.request().newBuilder()
         if (chain.request().requiresAuthenticatedUser()) {
             amendedRequest.addHeader(HEADER_AUTH, "Bearer ${requireNotNull(tokensStore.token).accessToken}")
             val url = chain.request().url.newBuilder()
-                    .addQueryParameter("signature", signature)
-                    .build()
+                .addQueryParameter("signature", signature)
+                .build()
             amendedRequest.url(url)
         } else {
             amendedRequest.addHeader(HEADER_AUTH, "Signature $signature")
@@ -102,15 +126,15 @@ private class AddAuthorizationHeaderInterceptor(private val apiSecret: String, p
 
         return chain.proceed(amendedRequest.build())
     }
-
-    private fun Request.generateHashedSignature(): String {
-        val urlEncodedBody = body?.toUrlEncodedString() ?: ""
-        val preHashedSignature = "${method.toUpperCase(Locale.US)}\u0000$url\u0000$urlEncodedBody"
-        return HmacSha256.generateHash(apiSecret, preHashedSignature).toLowerCase(Locale.US)
-    }
-
-    private fun RequestBody.toUrlEncodedString() = Buffer().apply { writeTo(this) }.readUtf8()
 }
+
+fun generateSignature(body: RequestBody?, method: String, url: HttpUrl, apiSecret: String): String {
+    val urlEncodedBody = body?.toUrlEncodedString() ?: ""
+    val preHashedSignature = "${method.uppercase(Locale.US)}\u0000$url\u0000$urlEncodedBody"
+    return HmacSha256.generateHash(apiSecret, preHashedSignature).lowercase(Locale.US)
+}
+
+private fun RequestBody.toUrlEncodedString() = Buffer().apply { writeTo(this) }.readUtf8()
 
 /**
  * Fetches/stores new access token if:
@@ -118,9 +142,10 @@ private class AddAuthorizationHeaderInterceptor(private val apiSecret: String, p
  * - && user is signed in (token store is not null)
  * - && request requires an authenticated user
  */
+// TODO: I'm not sure this works at all, needs testing.
 private class RefreshAccessTokenInterceptor(
-        private val refreshAccessTokenApi: RefreshAccessTokenApi,
-        private val tokensStore: TokensStore
+    private val refreshAccessTokenApi: RefreshAccessTokenApi,
+    private val tokensStore: TokensStore
 ) : Interceptor {
 
     private var alreadyRetriedRequest = false
@@ -128,7 +153,9 @@ private class RefreshAccessTokenInterceptor(
     override fun intercept(chain: Interceptor.Chain): Response {
         val response = chain.proceed(chain.request())
         val token = tokensStore.token
-        if (alreadyRetriedRequest || response.code != 401 || token == null || !chain.request().requiresAuthenticatedUser()) {
+        if (alreadyRetriedRequest || response.code != 401 || token == null || !chain.request()
+                .requiresAuthenticatedUser()
+        ) {
             return response
         }
 
@@ -148,18 +175,18 @@ private class RefreshAccessTokenInterceptor(
 
     private fun refreshAccessToken(refreshToken: String): Token? {
         return refreshAccessTokenApi.refreshAuthToken(refreshToken).execute()
-                .let { response ->
-                    response.body()?.let {
-                        Token(it.accessToken, it.refreshToken)
-                    }
+            .let { response ->
+                response.body()?.let {
+                    Token(it.accessToken, it.refreshToken)
                 }
+            }
     }
 }
 
 private fun Request.requiresAuthenticatedUser(): Boolean {
     return tag(Invocation::class.java)
-            ?.method()
-            ?.getAnnotation(RequiresAuthenticatedUser::class.java) != null
+        ?.method()
+        ?.getAnnotation(RequiresAuthenticatedUser::class.java) != null
 }
 
 private interface RefreshAccessTokenApi {
@@ -167,7 +194,7 @@ private interface RefreshAccessTokenApi {
     @FormUrlEncoded
     @POST("auth/token")
     fun refreshAuthToken(
-            @Field("refresh_token") refreshToken: String,
-            @Field("grant_type") grantType: String = "refresh_token"
+        @Field("refresh_token") refreshToken: String,
+        @Field("grant_type") grantType: String = "refresh_token"
     ): Call<AuthTokenApiResponse>
 }

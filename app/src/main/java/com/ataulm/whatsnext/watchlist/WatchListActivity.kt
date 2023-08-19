@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.RecyclerView
 import com.ataulm.support.EventObserver
 import com.ataulm.whatsnext.BaseActivity
 import com.ataulm.whatsnext.FilmSummary
@@ -12,7 +13,6 @@ import com.ataulm.whatsnext.FilmSummaryViewHolder
 import com.ataulm.whatsnext.R
 import com.ataulm.whatsnext.di.DaggerWatchListComponent
 import com.ataulm.whatsnext.di.appComponent
-import kotlinx.android.synthetic.main.activity_watch_list.*
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -29,11 +29,13 @@ class WatchListActivity : BaseActivity() {
         }
     }
     private val watchListAdapter = WatchListAdapter(filmSummaryCallback)
+    private lateinit var recyclerView: RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         injectDependencies()
         setContentView(R.layout.activity_watch_list)
+        recyclerView = findViewById(R.id.recyclerView)
         recyclerView.adapter = watchListAdapter
         lifecycleScope.launch {
             viewModel.pagedWatchList().collectLatest { watchListAdapter.submitData(it) }

@@ -3,17 +3,27 @@ package com.ataulm.whatsnext.search
 import android.content.Context
 import android.util.AttributeSet
 import android.view.View
+import android.widget.Button
+import android.widget.EditText
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.widget.addTextChangedListener
 import com.ataulm.support.exhaustive
 import com.ataulm.whatsnext.R
-import kotlinx.android.synthetic.main.merge_sign_in_header.view.*
 
 class SignInHeaderView(context: Context, attrs: AttributeSet) : ConstraintLayout(context, attrs) {
+
+    private lateinit var signInHeaderUsernameEditText: EditText
+    private lateinit var signInHeaderPasswordEditText: EditText
+    private lateinit var signInHeaderButton: Button
+    private lateinit var signInHeaderRegisterButton: Button
 
     override fun onFinishInflate() {
         super.onFinishInflate()
         View.inflate(context, R.layout.merge_sign_in_header, this)
+        signInHeaderUsernameEditText = findViewById(R.id.signInHeaderUsernameEditText)
+        signInHeaderPasswordEditText = findViewById(R.id.signInHeaderPasswordEditText)
+        signInHeaderButton = findViewById(R.id.signInHeaderButton)
+        signInHeaderRegisterButton = findViewById(R.id.signInHeaderRegisterButton)
         signInHeaderUsernameEditText.addTextChangedListener { updateSignInButtonEnabled() }
         signInHeaderPasswordEditText.addTextChangedListener { updateSignInButtonEnabled() }
     }
@@ -58,9 +68,9 @@ class SignInHeaderView(context: Context, attrs: AttributeSet) : ConstraintLayout
     sealed class UiModel {
         object Loading : UiModel()
         data class RequiresSignIn(
-                val onClickSignIn: (String, String) -> Unit,
-                val onClickRegister: () -> Unit,
-                val errorMessage: String?
+            val onClickSignIn: (String, String) -> Unit,
+            val onClickRegister: () -> Unit,
+            val errorMessage: String?
         ) : UiModel()
     }
 }

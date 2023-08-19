@@ -6,15 +6,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.core.view.ViewCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.Adapter
 import com.ataulm.whatsnext.R
-import kotlinx.android.synthetic.main.merge_people_widget.view.*
-import kotlinx.android.synthetic.main.view_item_people.view.*
 
-class PeopleWidget constructor(context: Context, attrs: AttributeSet) : LinearLayout(context, attrs) {
+class PeopleWidget constructor(context: Context, attrs: AttributeSet) :
+    LinearLayout(context, attrs) {
 
     private val label: String
 
@@ -32,19 +32,25 @@ class PeopleWidget constructor(context: Context, attrs: AttributeSet) : LinearLa
         }
     }
 
+    private lateinit var peopleWidgetLabel: TextView
+    private lateinit var peopleWidgetList: RecyclerView
+
     override fun onFinishInflate() {
         super.onFinishInflate()
         View.inflate(context, R.layout.merge_people_widget, this)
-        people_widget_label.text = label
-        people_widget_list.layoutManager = LinearLayoutManager(context)
-        ViewCompat.setNestedScrollingEnabled(people_widget_list, false);
+        peopleWidgetLabel = findViewById(R.id.people_widget_label)
+        peopleWidgetList = findViewById(R.id.people_widget_list)
+        peopleWidgetLabel.text = label
+        peopleWidgetList.layoutManager = LinearLayoutManager(context)
+        ViewCompat.setNestedScrollingEnabled(peopleWidgetList, false);
     }
 
     fun bind(people: List<PersonViewModel>) {
-        people_widget_list.adapter = PeopleAdapter(people)
+        peopleWidgetList.adapter = PeopleAdapter(people)
     }
 
-    private class PeopleAdapter(private val people: List<PersonViewModel>) : Adapter<PersonViewHolder>() {
+    private class PeopleAdapter(private val people: List<PersonViewModel>) :
+        Adapter<PersonViewHolder>() {
 
         init {
             stateRestorationPolicy = StateRestorationPolicy.PREVENT_WHEN_EMPTY
@@ -68,14 +74,18 @@ class PeopleWidget constructor(context: Context, attrs: AttributeSet) : LinearLa
         companion object {
 
             fun create(parent: ViewGroup): PersonViewHolder {
-                val view = LayoutInflater.from(parent.context).inflate(R.layout.view_item_people, parent, false)
+                val view = LayoutInflater.from(parent.context)
+                    .inflate(R.layout.view_item_people, parent, false)
                 return PersonViewHolder(view)
             }
         }
 
+        private val primaryText: TextView = itemView.findViewById(R.id.item_people_text_primary)
+        private val secondaryText: TextView = itemView.findViewById(R.id.item_people_text_secondary)
+
         fun bind(person: PersonViewModel) {
-            itemView.item_people_text_primary.text = person.primaryLabel
-            itemView.item_people_text_secondary.text = person.secondaryLabel
+            primaryText.text = person.primaryLabel
+            secondaryText.text = person.secondaryLabel
         }
     }
 
