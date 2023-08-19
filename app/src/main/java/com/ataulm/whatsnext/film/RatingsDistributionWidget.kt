@@ -21,7 +21,7 @@ class RatingsDistributionWidget(context: Context, attrs: AttributeSet) : View(co
 
     private val accessHelper = AccessHelper()
     private val paint = Paint().apply {
-        color = context.resolveColorAttribute(R.attr.colorOnBackground)
+        color = context.resolveColorAttribute(com.google.android.material.R.attr.colorOnBackground)
     }
 
     private var ratingsHistogram: List<RatingsHistogramBar>? = null
@@ -42,11 +42,11 @@ class RatingsDistributionWidget(context: Context, attrs: AttributeSet) : View(co
             it.forEachIndexed { index, interval ->
                 val left = index * intervalWidth
                 canvas.drawRect(
-                        left + 2,
-                        height - (interval.weight * height),
-                        left + intervalWidth - 2,
-                        height.toFloat(),
-                        paint
+                    left + 2,
+                    height - (interval.weight * height),
+                    left + intervalWidth - 2,
+                    height.toFloat(),
+                    paint
                 )
             }
         }
@@ -65,11 +65,15 @@ class RatingsDistributionWidget(context: Context, attrs: AttributeSet) : View(co
         private val intervalBounds = Rect()
 
         @Suppress("DEPRECATION") // setBoundsInParent is required by [ExploreByTouchHelper]
-        override fun onPopulateNodeForVirtualView(virtualViewId: Int, node: AccessibilityNodeInfoCompat) {
+        override fun onPopulateNodeForVirtualView(
+            virtualViewId: Int,
+            node: AccessibilityNodeInfoCompat
+        ) {
             node.className = RatingsDistributionWidget::class.simpleName
             val histogram = this@RatingsDistributionWidget.ratingsHistogram ?: return
 
-            node.contentDescription = histogram.createContentDescriptionFor(histogram[virtualViewId])
+            node.contentDescription =
+                histogram.createContentDescriptionFor(histogram[virtualViewId])
 
             updateBoundsForInterval(virtualViewId, histogram)
             node.setBoundsInParent(intervalBounds)
@@ -80,10 +84,10 @@ class RatingsDistributionWidget(context: Context, attrs: AttributeSet) : View(co
             val frequency = frequency(bar)
             val rating = bar.rating.toNumberStars()
             return resources.getQuantityString(
-                    R.plurals.rating_bar_content_description,
-                    quantity,
-                    frequency,
-                    rating
+                R.plurals.rating_bar_content_description,
+                quantity,
+                frequency,
+                rating
             )
         }
 
@@ -130,7 +134,11 @@ class RatingsDistributionWidget(context: Context, attrs: AttributeSet) : View(co
             }
         }
 
-        override fun onPerformActionForVirtualView(virtualViewId: Int, action: Int, arguments: Bundle?): Boolean {
+        override fun onPerformActionForVirtualView(
+            virtualViewId: Int,
+            action: Int,
+            arguments: Bundle?
+        ): Boolean {
             return false
         }
     }

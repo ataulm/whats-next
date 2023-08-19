@@ -130,8 +130,8 @@ class WhatsNextViewInflater : MaterialComponentsViewInflater() {
                 constructor = clazz.getConstructor(*sConstructorSignature)
                 sConstructorMap[name] = constructor
             }
-            constructor.isAccessible = true
-            return constructor.newInstance(*mConstructorArgs)
+            constructor?.isAccessible = true
+            return constructor?.newInstance(*mConstructorArgs)
         } catch (e: Exception) {
             // We do not want to catch these, lets return null and let the actual LayoutInflater
             // try

@@ -13,9 +13,9 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
 internal class SearchViewModel(
-        isSignedIn: IsSignedInUseCase,
-        private val signIn: SignInUseCase,
-        private val repository: WhatsNextRepository
+    isSignedIn: IsSignedInUseCase,
+    private val signIn: SignInUseCase,
+    private val repository: WhatsNextRepository
 ) : ViewModel() {
 
     private val _films = MutableLiveData<List<FilmSummary>>()
@@ -32,9 +32,9 @@ internal class SearchViewModel(
             _signInUiModel.value = SignInUiModel.SignedIn
         } else {
             _signInUiModel.value = SignInUiModel.RequiresSignIn(
-                    onClickSignIn = { username, password -> onClickSignIn(username, password) },
-                    onClickRegister = { onClickRegister() },
-                    errorMessage = null
+                onClickSignIn = { username, password -> onClickSignIn(username, password) },
+                onClickRegister = { onClickRegister() },
+                errorMessage = null
             )
         }
     }
@@ -47,10 +47,10 @@ internal class SearchViewModel(
                 _signInUiModel.value = SignInUiModel.SignedIn
             } catch (e: Exception) {
                 _signInUiModel.value = SignInUiModel.RequiresSignIn(
-                        onClickSignIn = { username, password -> onClickSignIn(username, password) },
-                        onClickRegister = { onClickRegister() },
-                        // TODO: we can give a better error message based on the exception
-                        errorMessage = "oh, something went wrong."
+                    onClickSignIn = { username, password -> onClickSignIn(username, password) },
+                    onClickRegister = { onClickRegister() },
+                    // TODO: we can give a better error message based on the exception
+                    errorMessage = "oh, something went wrong."
                 )
             }
         }
@@ -79,15 +79,15 @@ internal class SearchViewModel(
 }
 
 internal class SearchViewModelFactory(
-        private val isSignedInUseCase: IsSignedInUseCase,
-        private val signInUseCase: SignInUseCase,
-        private val repository: WhatsNextRepository
+    private val isSignedInUseCase: IsSignedInUseCase,
+    private val signInUseCase: SignInUseCase,
+    private val repository: WhatsNextRepository
 ) : ViewModelProvider.Factory {
 
     @Suppress("UNCHECKED_CAST")
-    override fun <T : ViewModel?> create(modelClass: Class<T>) = SearchViewModel(
-            isSignedInUseCase,
-            signInUseCase,
-            repository
+    override fun <T : ViewModel> create(modelClass: Class<T>) = SearchViewModel(
+        isSignedInUseCase,
+        signInUseCase,
+        repository
     ) as T
 }

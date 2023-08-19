@@ -1,20 +1,22 @@
 package com.ataulm.whatsnext
 
 import androidx.paging.PagingSource
-import com.ataulm.whatsnext.api.*
+import androidx.paging.PagingState
+import com.ataulm.whatsnext.api.ApiFilmRelationshipUpdateRequest
 import com.ataulm.whatsnext.api.FilmConverter
 import com.ataulm.whatsnext.api.FilmRelationshipConverter
+import com.ataulm.whatsnext.api.FilmStatsConverter
 import com.ataulm.whatsnext.api.FilmSummaryConverter
+import com.ataulm.whatsnext.api.LetterboxdApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import java.util.*
 
 internal class WhatsNextRepository(
-        private val letterboxdApi: LetterboxdApi,
-        private val filmSummaryConverter: FilmSummaryConverter,
-        private val filmConverter: FilmConverter,
-        private val filmRelationshipConverter: FilmRelationshipConverter,
-        private val filmStatsConverter: FilmStatsConverter
+    private val letterboxdApi: LetterboxdApi,
+    private val filmSummaryConverter: FilmSummaryConverter,
+    private val filmConverter: FilmConverter,
+    private val filmRelationshipConverter: FilmRelationshipConverter,
+    private val filmStatsConverter: FilmStatsConverter
 ) {
 
     suspend fun login(username: String, password: String) = withContext(Dispatchers.IO) {
@@ -23,9 +25,9 @@ internal class WhatsNextRepository(
     }
 
     fun watchList(memberId: String): PagingSource<String, FilmSummary> = WatchListPagingSource(
-            memberId = memberId,
-            letterboxdApi = letterboxdApi,
-            filmSummaryConverter = filmSummaryConverter
+        memberId = memberId,
+        letterboxdApi = letterboxdApi,
+        filmSummaryConverter = filmSummaryConverter
     )
 
     fun popularFilmsThisWeek(): PagingSource<String, FilmSummary> {
@@ -61,20 +63,20 @@ internal class WhatsNextRepository(
     }
 
     suspend fun updateFilmRelationship(
-            letterboxdId: String,
-            watched: Boolean,
-            liked: Boolean,
-            inWatchlist: Boolean,
-            rating: FilmRating
+        letterboxdId: String,
+        watched: Boolean,
+        liked: Boolean,
+        inWatchlist: Boolean,
+        rating: FilmRating
     ) = withContext(Dispatchers.IO) {
         val apiFilmRelationshipUpdateResponse = letterboxdApi.updateFilmRelationship(
-                letterboxdId,
-                request = ApiFilmRelationshipUpdateRequest(
-                        watched = watched,
-                        liked = liked,
-                        inWatchlist = inWatchlist,
-                        rating = rating.toApiValue()
-                )
+            letterboxdId,
+            request = ApiFilmRelationshipUpdateRequest(
+                watched = watched,
+                liked = liked,
+                inWatchlist = inWatchlist,
+                rating = rating.toApiValue()
+            )
         )
         val apiFilmRelationship = apiFilmRelationshipUpdateResponse.data
         filmRelationshipConverter.convert(apiFilmRelationship)
@@ -102,40 +104,50 @@ private fun FilmRating.toApiValue(): String {
 }
 
 private class PopularFilmsThisWeekPagingSource(
-        private val letterboxdApi: LetterboxdApi,
-        private val filmSummaryConverter: FilmSummaryConverter
+    private val letterboxdApi: LetterboxdApi,
+    private val filmSummaryConverter: FilmSummaryConverter
 ) : PagingSource<String, FilmSummary>() {
 
     override suspend fun load(params: LoadParams<String>): LoadResult<String, FilmSummary> {
         val response = letterboxdApi.popularFilmsThisWeek(
-                cursor = params.key,
-                perPage = params.loadSize
+            cursor = params.key,
+            perPage = params.loadSize
         )
         return LoadResult.Page(
-                data = response.items.map { filmSummaryConverter.convert(it) },
-                prevKey = null, // API only allows paging forwards
-                nextKey = response.cursor
+            data = response.items.map { filmSummaryConverter.convert(it) },
+            prevKey = null, // API only allows paging forwards
+            nextKey = response.cursor
         )
+    }
+
+    override fun getRefreshKey(state: PagingState<String, FilmSummary>): String? {
+        // TODO: this method was from an update, but havent looked into it yet
+        return null
     }
 }
 
 private class WatchListPagingSource(
-        private val memberId: String,
-        private val letterboxdApi: LetterboxdApi,
-        private val filmSummaryConverter: FilmSummaryConverter
+    private val memberId: String,
+    private val letterboxdApi: LetterboxdApi,
+    private val filmSummaryConverter: FilmSummaryConverter
 ) : PagingSource<String, FilmSummary>() {
 
     override suspend fun load(params: LoadParams<String>): LoadResult<String, FilmSummary> {
         val memberId = letterboxdApi.me().member.letterboxdId // TODO: don't leave this here
         val response = letterboxdApi.watchList(
-                memberId = memberId,
-                cursor = params.key,
-                perPage = params.loadSize
+            memberId = memberId,
+            cursor = params.key,
+            perPage = params.loadSize
         )
         return LoadResult.Page(
-                data = response.items.map { filmSummaryConverter.convert(it) },
-                prevKey = null, // API only allows paging forwards
-                nextKey = response.cursor
+            data = response.items.map { filmSummaryConverter.convert(it) },
+            prevKey = null, // API only allows paging forwards
+            nextKey = response.cursor
         )
+    }
+
+    override fun getRefreshKey(state: PagingState<String, FilmSummary>): String? {
+        // TODO: this method was from an update, but havent looked into it yet
+        return null
     }
 }
