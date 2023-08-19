@@ -32,7 +32,7 @@ class FilmActivity : BaseActivity() {
     private lateinit var ratingTextView: TextView
     private lateinit var ratingsCountTextView: TextView
     private lateinit var ratingsDistributionWidget: RatingsDistributionWidget
-    private lateinit var ratingsTextGroup: TextView
+    private lateinit var ratingsTextGroup: View
     private lateinit var posterImageView: ImageView
     private lateinit var durationTextView: TextView
     private lateinit var durationLabelTextView: TextView
