@@ -53,18 +53,6 @@ android {
             "\"${project.properties["letterboxd_api_secret"] as String}\""
         )
 
-        buildConfigField(
-            "String",
-            "LETTERBOXD_USERNAME",
-            "\"${project.properties["letterboxd_username"] as String}\""
-        )
-
-        buildConfigField(
-            "String",
-            "LETTERBOXD_PASSWORD",
-            "\"${project.properties["letterboxd_password"] as String}\""
-        )
-
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {

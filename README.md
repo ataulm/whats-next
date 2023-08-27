@@ -10,6 +10,4 @@ You'll need to add these properties somewhere that Gradle can read them (e.g. in
 # Letterboxd
 letterboxd_api_key=12345678
 letterboxd_api_secret=12345678
-letterboxd_username=ataulm
-letterboxd_password=12345678
 ```
