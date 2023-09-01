@@ -101,4 +101,5 @@ dependencies {
     testImplementation(libs.assertj.core)
     testImplementation(libs.junit)
     testImplementation(libs.mockito.core)
+    testImplementation(libs.okhttp)
 }

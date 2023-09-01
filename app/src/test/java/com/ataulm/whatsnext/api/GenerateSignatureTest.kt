@@ -1,6 +1,8 @@
 package com.ataulm.whatsnext.api
 
+import okhttp3.FormBody
 import okhttp3.HttpUrl.Companion.toHttpUrl
+import okhttp3.RequestBody
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 
@@ -27,6 +29,26 @@ class GenerateSignatureTest {
 
         val expectedSignatureFromRubyClientExample =
             "ed37678b209de1abafe6d966b421c8b92d325645a12b16e2cb5535fe5b92f503"
+
+        assertThat(signature)
+            .isEqualTo(expectedSignatureFromRubyClientExample)
+    }
+
+    @Test
+    fun `generates same signature as ruby client for POST method`() {
+        val signature = generateSignature(
+            body = FormBody.Builder()
+                .add("username", "ataulm")
+                .add("password", "W3lcome@&lB")
+                .add("grant_type", "password")
+                .build(),
+            method = "POST",
+            url = REQUEST_URL.toHttpUrl(),
+            apiSecret = API_SECRET
+        )
+
+        val expectedSignatureFromRubyClientExample =
+            "53202605107ec945f880d603580faff7d220bdd87e61d4dd78535014ee8b6c2c"
 
         assertThat(signature)
             .isEqualTo(expectedSignatureFromRubyClientExample)

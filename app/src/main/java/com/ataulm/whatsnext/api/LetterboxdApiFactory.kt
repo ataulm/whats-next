@@ -2,7 +2,6 @@ package com.ataulm.whatsnext.api
 
 import android.app.Application
 import com.ataulm.support.Clock
-import com.ataulm.whatsnext.BuildConfig
 import com.ataulm.whatsnext.Token
 import com.ataulm.whatsnext.TokensStore
 import com.chuckerteam.chucker.api.ChuckerInterceptor
@@ -93,43 +92,10 @@ private class AddApiKeyQueryParameterInterceptor(
     }
 }
 
-private const val HEADER_AUTH = "Authorization"
-
-// TODO: The docs and Ruby client (and this client) all have different implementations
-//  re: when/where to add the signature. Revisit this, using the Ruby client to test,
-//  then ping Letterboxd to update the API when it's verified
-//  Upgrade GenerateSignatureTest into a test for this class.
-private class AddAuthorizationHeaderInterceptor(
-    private val apiSecret: String,
-    private val tokensStore: TokensStore
-) : Interceptor {
-
-    override fun intercept(chain: Interceptor.Chain): Response {
-        val request = chain.request()
-        val signature = generateSignature(
-            request.body,
-            request.method,
-            request.url,
-            apiSecret
-        )
-
-        val amendedRequest = chain.request().newBuilder()
-        if (chain.request().requiresAuthenticatedUser()) {
-            amendedRequest.addHeader(HEADER_AUTH, "Bearer ${requireNotNull(tokensStore.token).accessToken}")
-            val url = chain.request().url.newBuilder()
-                .addQueryParameter("signature", signature)
-                .build()
-            amendedRequest.url(url)
-        } else {
-            amendedRequest.addHeader(HEADER_AUTH, "Signature $signature")
-        }
-
-        return chain.proceed(amendedRequest.build())
-    }
-}
-
 fun generateSignature(body: RequestBody?, method: String, url: HttpUrl, apiSecret: String): String {
     val urlEncodedBody = body?.toUrlEncodedString() ?: ""
+    println("!!! body: " + body.toString())
+    println("!!! urlEncodedBody: " + urlEncodedBody)
     val preHashedSignature = "${method.uppercase(Locale.US)}\u0000$url\u0000$urlEncodedBody"
     return HmacSha256.generateHash(apiSecret, preHashedSignature).lowercase(Locale.US)
 }
@@ -183,10 +149,16 @@ private class RefreshAccessTokenInterceptor(
     }
 }
 
-private fun Request.requiresAuthenticatedUser(): Boolean {
+internal fun Request.requiresAuthenticatedUser(): Boolean {
     return tag(Invocation::class.java)
         ?.method()
         ?.getAnnotation(RequiresAuthenticatedUser::class.java) != null
+}
+
+internal fun Request.isFormUrlEncoded(): Boolean {
+    return tag(Invocation::class.java)
+        ?.method()
+        ?.getAnnotation(FormUrlEncoded::class.java) != null
 }
 
 private interface RefreshAccessTokenApi {

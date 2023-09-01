@@ -4,14 +4,21 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.ataulm.whatsnext.*
+import com.ataulm.whatsnext.Film
+import com.ataulm.whatsnext.FilmRating
+import com.ataulm.whatsnext.FilmRelationship
+import com.ataulm.whatsnext.FilmStats
+import com.ataulm.whatsnext.FilmSummary
+import com.ataulm.whatsnext.Images
+import com.ataulm.whatsnext.TokensStore
+import com.ataulm.whatsnext.WhatsNextRepository
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 internal class FilmViewModel(
-        private val filmSummary: FilmSummary,
-        private val whatsNextRepository: WhatsNextRepository,
-        private val tokensStore: TokensStore
+    private val filmSummary: FilmSummary,
+    private val whatsNextRepository: WhatsNextRepository,
+    private val tokensStore: TokensStore
 ) : ViewModel() {
 
     private val _filmDetails = MutableLiveData<FilmDetailsUiModel>()
@@ -86,14 +93,14 @@ internal class FilmViewModel(
     }
 
     data class FilmDetailsUiModel(
-            val title: String,
-            val releaseYear: String?,
-            val poster: Images,
-            val directors: List<String>,
-            val filmSummary: FilmSummary,
-            val film: Film? = null,
-            val filmRelationship: FilmRelationship? = null,
-            val filmStats: FilmStats? = null
+        val title: String,
+        val releaseYear: String?,
+        val poster: Images,
+        val directors: List<String>,
+        val filmSummary: FilmSummary,
+        val film: Film? = null,
+        val filmRelationship: FilmRelationship? = null,
+        val filmStats: FilmStats? = null
     ) {
         companion object {
             operator fun invoke(filmSummary: FilmSummary) = FilmDetailsUiModel(

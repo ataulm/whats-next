@@ -3,6 +3,7 @@ package com.ataulm.whatsnext.di;
 import android.app.Application
 import com.ataulm.support.Clock
 import com.ataulm.whatsnext.BuildConfig
+import com.ataulm.whatsnext.SharedPrefsTokensStore
 import com.ataulm.whatsnext.TokensStore
 import com.ataulm.whatsnext.WhatsNextRepository
 import com.ataulm.whatsnext.account.IsSignedInUseCase
@@ -15,9 +16,9 @@ import dagger.Provides
 import javax.inject.Singleton
 
 @Component(
-        modules = [
-            AppModule::class
-        ]
+    modules = [
+        AppModule::class
+    ]
 )
 @Singleton
 internal interface AppComponent {
@@ -42,35 +43,45 @@ internal object AppModule {
 
     @JvmStatic
     @Provides
-    fun whatsNextService(tokensStore: TokensStore, application: Application): WhatsNextRepository {
+    fun whatsNextService(
+        tokensStore: TokensStore,
+        application: Application
+    ): WhatsNextRepository {
         return WhatsNextRepository(
-                letterboxdApi = letterboxdApi(application, tokensStore),
-                filmSummaryConverter = FilmSummaryConverter(),
-                filmConverter = FilmConverter(),
-                filmRelationshipConverter = FilmRelationshipConverter(),
-                filmStatsConverter = FilmStatsConverter()
+            letterboxdApi = letterboxdApi(application, tokensStore),
+            filmSummaryConverter = FilmSummaryConverter(),
+            filmConverter = FilmConverter(),
+            filmRelationshipConverter = FilmRelationshipConverter(),
+            filmStatsConverter = FilmStatsConverter()
         )
     }
 
-    private fun letterboxdApi(application: Application, tokensStore: TokensStore): LetterboxdApi {
+    private fun letterboxdApi(
+        application: Application,
+        tokensStore: TokensStore
+    ): LetterboxdApi {
         return LetterboxdApiFactory(
-                apiKey = BuildConfig.LETTERBOXD_KEY,
-                apiSecret = BuildConfig.LETTERBOXD_SECRET,
-                tokensStore = tokensStore,
-                application = application,
-                clock = Clock(),
-                enableHttpLogging = BuildConfig.DEBUG
+            apiKey = BuildConfig.LETTERBOXD_KEY,
+            apiSecret = BuildConfig.LETTERBOXD_SECRET,
+            tokensStore = tokensStore,
+            application = application,
+            clock = Clock(),
+            enableHttpLogging = BuildConfig.DEBUG
         ).createRemote()
     }
 
     @JvmStatic
     @Provides
-    fun tokensStore(application: Application) = TokensStore.create(application)
+    fun tokensStore(application: Application): TokensStore =
+        SharedPrefsTokensStore.create(application)
 
     @JvmStatic
     @Provides
-    fun signInUseCase(whatsNextRepository: WhatsNextRepository, tokensStore: TokensStore) =
-            SignInUseCase(whatsNextRepository, tokensStore)
+    fun signInUseCase(
+        whatsNextRepository: WhatsNextRepository,
+        tokensStore: TokensStore
+    ) =
+        SignInUseCase(whatsNextRepository, tokensStore)
 
     @JvmStatic
     @Provides
