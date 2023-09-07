@@ -66,11 +66,6 @@ data class ApiMember(
         @SerializedName("avatar") val avatar: ApiImage
 )
 
-data class AuthTokenApiResponse(
-        @SerializedName("access_token") val accessToken: String,
-        @SerializedName("refresh_token") val refreshToken: String
-)
-
 data class ApiPopularFilmsThisWeekResponse(
         @SerializedName("next") val cursor: String? = null,
         @SerializedName("items") val items: List<ApiFilmSummary>

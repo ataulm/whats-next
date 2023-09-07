@@ -53,7 +53,7 @@ internal class SearchViewModel(
                     errorMessage = "oh, something went wrong."
                 )
             }
-        }
+        }.start()
     }
 
     private fun onClickRegister() {

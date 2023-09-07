@@ -7,7 +7,6 @@ import com.ataulm.whatsnext.TokensStore
 import com.chuckerteam.chucker.api.ChuckerInterceptor
 import okhttp3.*
 import okhttp3.logging.HttpLoggingInterceptor
-import okio.Buffer
 import retrofit2.Call
 import retrofit2.Invocation
 import retrofit2.Retrofit
@@ -29,10 +28,29 @@ class LetterboxdApiFactory(
     private val clock: Clock,
     private val enableHttpLogging: Boolean
 ) {
+    private val gsonConverterFactory = GsonConverterFactory.create()
+
+    fun createAuthApi(): LetterboxdAuthApi {
+        return Retrofit.Builder()
+            .client(
+                OkHttpClient.Builder()
+                    .apply {
+                        addInterceptor(ChuckerInterceptor(application))
+                        if (enableHttpLogging) {
+                            val httpLoggingInterceptor = HttpLoggingInterceptor()
+                            httpLoggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
+                            addNetworkInterceptor(httpLoggingInterceptor)
+                        }
+                    }
+                    .build()
+            )
+            .addConverterFactory(gsonConverterFactory)
+            .baseUrl(LETTERBOXD_BASE_URL)
+            .build()
+            .create(LetterboxdAuthApi::class.java)
+    }
 
     fun createRemote(): LetterboxdApi {
-        val gsonConverterFactory = GsonConverterFactory.create()
-
         val refreshAccessTokenApi = Retrofit.Builder()
             .client(OkHttpClient.Builder().addCommonInterceptors().build())
             .addConverterFactory(gsonConverterFactory)
@@ -62,7 +80,7 @@ class LetterboxdApiFactory(
 
     private fun OkHttpClient.Builder.addCommonInterceptors(): OkHttpClient.Builder {
         addNetworkInterceptor(AddApiKeyQueryParameterInterceptor(apiKey, clock))
-        addNetworkInterceptor(AddAuthorizationHeaderInterceptor(apiSecret, tokensStore))
+        addNetworkInterceptor(AddAuthorizationInterceptor(apiSecret, tokensStore))
         if (enableHttpLogging) {
             val httpLoggingInterceptor = HttpLoggingInterceptor()
             httpLoggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
@@ -83,24 +101,17 @@ private class AddApiKeyQueryParameterInterceptor(
 
     override fun intercept(chain: Interceptor.Chain): Response {
         val url = chain.request().url.newBuilder()
-                .addQueryParameter("apikey", apiKey)
-                .addQueryParameter("nonce", UUID.randomUUID().toString())
-                .addQueryParameter("timestamp", TimeUnit.MILLISECONDS.toSeconds(clock.currentTimeMillis).toString())
-                .build()
+            .addQueryParameter("apikey", apiKey)
+            .addQueryParameter("nonce", UUID.randomUUID().toString())
+            .addQueryParameter(
+                "timestamp",
+                TimeUnit.MILLISECONDS.toSeconds(clock.currentTimeMillis).toString()
+            )
+            .build()
         val amendedRequest = chain.request().newBuilder().url(url).build()
         return chain.proceed(amendedRequest)
     }
 }
-
-fun generateSignature(body: RequestBody?, method: String, url: HttpUrl, apiSecret: String): String {
-    val urlEncodedBody = body?.toUrlEncodedString() ?: ""
-    println("!!! body: " + body.toString())
-    println("!!! urlEncodedBody: " + urlEncodedBody)
-    val preHashedSignature = "${method.uppercase(Locale.US)}\u0000$url\u0000$urlEncodedBody"
-    return HmacSha256.generateHash(apiSecret, preHashedSignature).lowercase(Locale.US)
-}
-
-private fun RequestBody.toUrlEncodedString() = Buffer().apply { writeTo(this) }.readUtf8()
 
 /**
  * Fetches/stores new access token if:

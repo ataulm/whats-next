@@ -49,11 +49,27 @@ internal object AppModule {
     ): WhatsNextRepository {
         return WhatsNextRepository(
             letterboxdApi = letterboxdApi(application, tokensStore),
+            letterboxdAuthApi = letterboxdAuthApi(application, tokensStore),
             filmSummaryConverter = FilmSummaryConverter(),
             filmConverter = FilmConverter(),
             filmRelationshipConverter = FilmRelationshipConverter(),
             filmStatsConverter = FilmStatsConverter()
         )
+    }
+
+    // TODO: creating multiple Api Factories, nicer way to structure this
+    private fun letterboxdAuthApi(
+        application: Application,
+        tokensStore: TokensStore
+    ): LetterboxdAuthApi {
+        return LetterboxdApiFactory(
+            apiKey = BuildConfig.LETTERBOXD_KEY,
+            apiSecret = BuildConfig.LETTERBOXD_SECRET,
+            tokensStore = tokensStore,
+            application = application,
+            clock = Clock(),
+            enableHttpLogging = BuildConfig.DEBUG
+        ).createAuthApi()
     }
 
     private fun letterboxdApi(

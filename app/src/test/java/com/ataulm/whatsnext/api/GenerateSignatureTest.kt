@@ -5,6 +5,7 @@ import okhttp3.HttpUrl.Companion.toHttpUrl
 import okhttp3.RequestBody
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
+import java.nio.charset.StandardCharsets
 
 private const val API_KEY = "test_api_key_do_not_change"
 private const val API_SECRET = "test_api_secret_do_not_change"
@@ -39,7 +40,7 @@ class GenerateSignatureTest {
         val signature = generateSignature(
             body = FormBody.Builder()
                 .add("username", "ataulm")
-                .add("password", "W3lcome@&lB")
+                .add("password", "1=2345@6")
                 .add("grant_type", "password")
                 .build(),
             method = "POST",
@@ -48,7 +49,7 @@ class GenerateSignatureTest {
         )
 
         val expectedSignatureFromRubyClientExample =
-            "53202605107ec945f880d603580faff7d220bdd87e61d4dd78535014ee8b6c2c"
+            "9b49eaeb5f111ed402444bdd3c433bb0366da79ce65aa449377ef04fbc0e2a1c"
 
         assertThat(signature)
             .isEqualTo(expectedSignatureFromRubyClientExample)
