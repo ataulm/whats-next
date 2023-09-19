@@ -1,6 +1,7 @@
 package com.ataulm.whatsnext.api.auth
 
 import androidx.annotation.WorkerThread
+import com.ataulm.letterboxd.auth.LetterboxdAuthApi
 import com.ataulm.whatsnext.Token
 import com.ataulm.whatsnext.TokensStore
 import kotlinx.coroutines.Dispatchers

@@ -35,24 +35,6 @@ android {
         versionCode = 1
         versionName = "1.0"
 
-        buildConfigField(
-            "Boolean",
-            "OFFLINE",
-            "false"
-        )
-
-        buildConfigField(
-            "String",
-            "LETTERBOXD_KEY",
-            "\"${project.properties["letterboxd_api_key"] as String}\""
-        )
-
-        buildConfigField(
-            "String",
-            "LETTERBOXD_SECRET",
-            "\"${project.properties["letterboxd_api_secret"] as String}\""
-        )
-
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -67,8 +49,14 @@ android {
 }
 
 dependencies {
-    implementation(libs.androidx.lifecycle.viewmodel.ktx)
     kapt(libs.androidx.lifecycle.compiler)
+    kapt(libs.dagger.compiler)
+
+    debugImplementation(libs.chucker)
+    releaseImplementation(libs.chucker.no.op)
+
+    implementation(project(":letterboxd"))
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.appcompat)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.foundation)
@@ -80,11 +68,8 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.paging.runtime)
     implementation(libs.androidx.recyclerview)
-    debugImplementation(libs.chucker)
-    releaseImplementation(libs.chucker.no.op)
     implementation(libs.coil)
     implementation(libs.dagger)
-    kapt(libs.dagger.compiler)
     implementation(libs.gson)
     implementation(libs.kotlin.coroutines.android)
     implementation(libs.kotlin.coroutines.core)

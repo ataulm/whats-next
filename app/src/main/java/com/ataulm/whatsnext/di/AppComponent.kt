@@ -1,6 +1,7 @@
 package com.ataulm.whatsnext.di;
 
 import android.app.Application
+import com.ataulm.letterboxd.auth.LetterboxdAuthApi
 import com.ataulm.whatsnext.BuildConfig
 import com.ataulm.whatsnext.SharedPrefsTokensStore
 import com.ataulm.whatsnext.TokensStore
@@ -13,7 +14,6 @@ import com.ataulm.whatsnext.api.FilmStatsConverter
 import com.ataulm.whatsnext.api.FilmSummaryConverter
 import com.ataulm.whatsnext.api.LetterboxdApi
 import com.ataulm.whatsnext.api.auth.AddAuthorizationInterceptor
-import com.ataulm.whatsnext.api.auth.LetterboxdAuthApi
 import com.ataulm.whatsnext.api.auth.LetterboxdAuthenticator
 import com.chuckerteam.chucker.api.ChuckerInterceptor
 import dagger.BindsInstance

@@ -1,15 +1,18 @@
 [versions]
 androidGradlePlugin = '8.1.0'
+build-config = '3.1.0'
 chucker = '4.0.0'
+compose = '2023.08.00'
 dagger = '2.47'
 kotlin = '1.9.0'
 kotlinCoroutines = '1.7.1'
 okhttp = '4.11.0'
+org-jetbrains-kotlin-jvm = "1.9.0"
 retrofit = '2.9.0'
-compose = '2023.08.00'
 timber = "5.0.1"
 
 [libraries]
+androidx-annotation-jvm = { group = "androidx.annotation", name = "annotation-jvm", version = "1.7.0" }
 androidx-appcompat = 'androidx.appcompat:appcompat:1.6.1'
 androidx-compose-bom = { module = 'androidx.compose:compose-bom', version.ref = 'compose' }
 androidx-compose-foundation = { module = 'androidx.compose.foundation:foundation' }
@@ -50,5 +53,7 @@ timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
 
 [plugins]
 android = { id = 'com.android.application', version.ref = 'androidGradlePlugin' }
+build-config = { id = 'com.github.gmazzo.buildconfig', version.ref = 'build-config' }
 kotlin-android = { id = 'org.jetbrains.kotlin.android', version.ref = 'kotlin' }
 kotlin-parcelize = { id = 'org.jetbrains.kotlin.plugin.parcelize', version.ref = 'kotlin' }
+org-jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "org-jetbrains-kotlin-jvm" }

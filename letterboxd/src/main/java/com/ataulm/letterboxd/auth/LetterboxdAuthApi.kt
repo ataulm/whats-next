@@ -1,6 +1,6 @@
-package com.ataulm.whatsnext.api.auth
+package com.ataulm.letterboxd.auth
 
-import com.ataulm.whatsnext.BuildConfig
+import com.ataulm.letterboxd.BuildConfig
 import com.google.gson.annotations.SerializedName
 import retrofit2.Call
 import retrofit2.http.Field
