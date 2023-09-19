@@ -2,7 +2,7 @@ package com.ataulm.whatsnext.api
 
 import com.ataulm.whatsnext.*
 
-internal class FilmSummaryConverter {
+class FilmSummaryConverter {
 
     fun convert(apiFilmSummary: ApiFilmSummary): FilmSummary {
         return FilmSummary(

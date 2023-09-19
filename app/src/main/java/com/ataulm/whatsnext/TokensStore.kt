@@ -2,9 +2,14 @@ package com.ataulm.whatsnext
 
 interface TokensStore {
 
-    fun store(token: Token)
+    fun storeUserToken(token: Token)
 
-    val token: Token?
+    val userToken: Token?
     fun userIsSignedIn(): Boolean
-    fun clear()
+
+    fun clearUserToken()
+
+    fun storeClientToken(accessToken: String)
+
+    val clientToken: String?
 }

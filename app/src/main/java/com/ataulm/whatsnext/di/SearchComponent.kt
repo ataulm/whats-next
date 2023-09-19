@@ -19,7 +19,7 @@ import dagger.Provides
         ]
 )
 @FeatureScope
-internal interface SearchComponent {
+interface SearchComponent {
 
     fun inject(activity: SearchActivity)
 
@@ -36,7 +36,7 @@ internal interface SearchComponent {
 }
 
 @Module
-internal object SearchModule {
+object SearchModule {
 
     @JvmStatic
     @Provides

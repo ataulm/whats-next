@@ -6,23 +6,23 @@ import android.content.SharedPreferences
 class SharedPrefsTokensStore private constructor(private val preferences: SharedPreferences) :
     TokensStore {
 
-    override fun store(token: Token) {
+    override fun storeUserToken(token: Token) {
         preferences.edit()
             .putString(KEY_ACCESS_TOKEN_VALUE, token.accessToken)
             .putString(KEY_REFRESH_TOKEN_VALUE, token.refreshToken)
             .apply()
     }
 
-    override fun clear() {
+    override fun clearUserToken() {
         preferences.edit()
             .remove(KEY_ACCESS_TOKEN_VALUE)
             .remove(KEY_REFRESH_TOKEN_VALUE)
             .apply()
     }
 
-    override fun userIsSignedIn() = token != null
+    override fun userIsSignedIn() = userToken != null
 
-    override val token: Token?
+    override val userToken: Token?
         get() {
             if (preferences.contains(KEY_ACCESS_TOKEN_VALUE) && preferences.contains(
                     KEY_REFRESH_TOKEN_VALUE
@@ -35,6 +35,16 @@ class SharedPrefsTokensStore private constructor(private val preferences: Shared
             return null
         }
 
+    override fun storeClientToken(accessToken: String) {
+        preferences.edit()
+            .putString(KEY_CLIENT_TOKEN_VALUE, accessToken)
+            .apply()
+    }
+
+    override val clientToken: String?
+        get() = preferences.getString(KEY_CLIENT_TOKEN_VALUE, null)
+
+
     companion object {
 
         @JvmStatic
@@ -45,6 +55,9 @@ class SharedPrefsTokensStore private constructor(private val preferences: Shared
 
         @JvmStatic
         private val KEY_REFRESH_TOKEN_VALUE = "refresh.value"
+
+        @JvmStatic
+        private val KEY_CLIENT_TOKEN_VALUE = "client.value"
 
         @JvmStatic
         fun create(context: Context): SharedPrefsTokensStore {

@@ -10,18 +10,10 @@ interface LetterboxdApi {
 
     @GET("films")
     suspend fun popularFilmsThisWeek(
-            @Query("cursor") cursor: String?,
-            @Query("perPage") perPage: Int,
-            @Query("sort") sort: String = "FilmPopularityThisWeek"
+        @Query("cursor") cursor: String?,
+        @Query("perPage") perPage: Int,
+        @Query("sort") sort: String = "FilmPopularityThisWeek"
     ): ApiPopularFilmsThisWeekResponse
-
-    @FormUrlEncoded
-    @POST("auth/token")
-    suspend fun fetchAuthToken(
-            @Field("username") username: String,
-            @Field("password") password: String,
-            @Field("grant_type") grantType: String = "password"
-    ): AuthTokenApiResponse
 
     @RequiresAuthenticatedUser
     @GET("me")
@@ -39,10 +31,10 @@ interface LetterboxdApi {
     @RequiresAuthenticatedUser
     @GET("member/{id}/watchlist")
     suspend fun watchList(
-            @Path("id") memberId: String,
-            @Query("cursor") cursor: String?,
-            @Query("perPage") perPage: Int,
-            @Query("sort") sort: String = "Added" // sort by most-recently added first
+        @Path("id") memberId: String,
+        @Query("cursor") cursor: String?,
+        @Query("perPage") perPage: Int,
+        @Query("sort") sort: String = "Added" // sort by most-recently added first
     ): ApiWatchListResponse
 
     @RequiresAuthenticatedUser
@@ -52,59 +44,59 @@ interface LetterboxdApi {
     @RequiresAuthenticatedUser
     @PATCH("film/{id}/me")
     suspend fun updateFilmRelationship(
-            @Path("id") letterboxdId: String,
-            @Body request: ApiFilmRelationshipUpdateRequest
+        @Path("id") letterboxdId: String,
+        @Body request: ApiFilmRelationshipUpdateRequest
     ): ApiFilmRelationshipUpdateResponse
 }
 
 data class ApiMeResponse(
-        @SerializedName("member") val member: ApiMember
+    @SerializedName("member") val member: ApiMember
 )
 
 data class ApiMember(
-        @SerializedName("id") val letterboxdId: String,
-        @SerializedName("avatar") val avatar: ApiImage
+    @SerializedName("id") val letterboxdId: String,
+    @SerializedName("avatar") val avatar: ApiImage
 )
 
 data class ApiPopularFilmsThisWeekResponse(
-        @SerializedName("next") val cursor: String? = null,
-        @SerializedName("items") val items: List<ApiFilmSummary>
+    @SerializedName("next") val cursor: String? = null,
+    @SerializedName("items") val items: List<ApiFilmSummary>
 )
 
 data class ApiWatchListResponse(
-        @SerializedName("next") val cursor: String? = null,
-        @SerializedName("items") val items: List<ApiFilmSummary>
+    @SerializedName("next") val cursor: String? = null,
+    @SerializedName("items") val items: List<ApiFilmSummary>
 )
 
 data class ApiFilmStatistics(
-        @SerializedName("rating") val rating: Float? = null,
-        @SerializedName("counts") val counts: ApiFilmStatisticsCounts,
-        @SerializedName("ratingsHistogram") val ratingsHistogram: List<ApiRatingsHistogramBar>
+    @SerializedName("rating") val rating: Float? = null,
+    @SerializedName("counts") val counts: ApiFilmStatisticsCounts,
+    @SerializedName("ratingsHistogram") val ratingsHistogram: List<ApiRatingsHistogramBar>
 )
 
 data class ApiFilmStatisticsCounts(
-        @SerializedName("watches") val watches: Int,
-        @SerializedName("likes") val likes: Int,
-        @SerializedName("ratings") val ratings: Int
+    @SerializedName("watches") val watches: Int,
+    @SerializedName("likes") val likes: Int,
+    @SerializedName("ratings") val ratings: Int
 )
 
 data class ApiRatingsHistogramBar(
-        @SerializedName("rating") val rating: Float,
-        @SerializedName("normalizedWeight") val weight: Float,
-        @SerializedName("count") val count: Int
+    @SerializedName("rating") val rating: Float,
+    @SerializedName("normalizedWeight") val weight: Float,
+    @SerializedName("count") val count: Int
 )
 
 data class ApiFilmRelationshipUpdateRequest(
-        @SerializedName("watched") val watched: Boolean,
-        @SerializedName("liked") val liked: Boolean,
-        @SerializedName("inWatchlist") val inWatchlist: Boolean,
-        /**
-         * Accepts values between 0.5 and 5.0, with increments of 0.5, or null (to remove the
-         * rating). If set, [watched] is assumed to be true.
-         */
-        @SerializedName("rating") val rating: String
+    @SerializedName("watched") val watched: Boolean,
+    @SerializedName("liked") val liked: Boolean,
+    @SerializedName("inWatchlist") val inWatchlist: Boolean,
+    /**
+     * Accepts values between 0.5 and 5.0, with increments of 0.5, or null (to remove the
+     * rating). If set, [watched] is assumed to be true.
+     */
+    @SerializedName("rating") val rating: String
 )
 
 data class ApiFilmRelationshipUpdateResponse(
-        @SerializedName("data") val data: ApiFilmRelationship
+    @SerializedName("data") val data: ApiFilmRelationship
 )

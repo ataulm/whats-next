@@ -1,15 +1,13 @@
 package com.ataulm.whatsnext.account
 
-import com.ataulm.whatsnext.TokensStore
-import com.ataulm.whatsnext.WhatsNextRepository
+import com.ataulm.whatsnext.api.auth.AuthRepository
+import javax.inject.Inject
 
-internal class SignInUseCase(
-        private val repository: WhatsNextRepository,
-        private val tokensStore: TokensStore
+class SignInUseCase @Inject constructor(
+    private val repository: AuthRepository
 ) {
 
     suspend operator fun invoke(username: String, password: String) {
-        val token = repository.login(username, password)
-        tokensStore.store(token)
+        repository.login(username, password)
     }
 }

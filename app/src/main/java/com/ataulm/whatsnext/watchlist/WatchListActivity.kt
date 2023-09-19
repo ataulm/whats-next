@@ -20,7 +20,7 @@ import javax.inject.Inject
 class WatchListActivity : BaseActivity() {
 
     @Inject
-    internal lateinit var viewModel: WatchListViewModel
+    lateinit var viewModel: WatchListViewModel
 
     private val navigator = navigator()
     private val filmSummaryCallback = object : FilmSummaryViewHolder.Callback {

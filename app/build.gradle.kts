@@ -97,6 +97,7 @@ dependencies {
     implementation(libs.retrofit.rxjava2)
     implementation(libs.rxandroid)
     implementation(libs.rxjava)
+    implementation(libs.timber)
 
     testImplementation(libs.assertj.core)
     testImplementation(libs.junit)

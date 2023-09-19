@@ -12,7 +12,7 @@ import com.ataulm.whatsnext.FilmSummary
 import com.ataulm.whatsnext.WhatsNextRepository
 import kotlinx.coroutines.flow.Flow
 
-internal class WatchListViewModel(private val repository: WhatsNextRepository) : ViewModel() {
+class WatchListViewModel(private val repository: WhatsNextRepository) : ViewModel() {
 
     private val _films = MutableLiveData<List<FilmSummary>>()
     val films: LiveData<List<FilmSummary>> = _films
@@ -31,7 +31,7 @@ internal class WatchListViewModel(private val repository: WhatsNextRepository) :
     }
 }
 
-internal class WatchListViewModelFactory(private val repository: WhatsNextRepository) : ViewModelProvider.Factory {
+class WatchListViewModelFactory(private val repository: WhatsNextRepository) : ViewModelProvider.Factory {
 
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>) = WatchListViewModel(repository) as T

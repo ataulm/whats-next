@@ -3,7 +3,7 @@ package com.ataulm.whatsnext.api
 import com.ataulm.whatsnext.FilmRating
 import com.ataulm.whatsnext.FilmRelationship
 
-internal class FilmRelationshipConverter {
+class FilmRelationshipConverter {
 
     fun convert(apiFilmRelationship: ApiFilmRelationship) = FilmRelationship(
             apiFilmRelationship.watched,

@@ -17,7 +17,7 @@ import dagger.Provides
         dependencies = [AppComponent::class]
 )
 @FeatureScope
-internal interface FilmComponent {
+interface FilmComponent {
 
     fun inject(activity: FilmActivity)
 
@@ -36,7 +36,7 @@ internal interface FilmComponent {
 }
 
 @Module
-internal object FilmModule {
+object FilmModule {
 
     @JvmStatic
     @Provides

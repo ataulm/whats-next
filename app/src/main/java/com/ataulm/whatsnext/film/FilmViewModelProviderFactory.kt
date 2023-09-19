@@ -7,7 +7,7 @@ import com.ataulm.whatsnext.TokensStore
 import com.ataulm.whatsnext.WhatsNextRepository
 import javax.inject.Inject
 
-internal class FilmViewModelProviderFactory @Inject constructor(
+class FilmViewModelProviderFactory @Inject constructor(
     private val filmSummary: FilmSummary,
     private val repository: WhatsNextRepository,
     private val tokensStore: TokensStore

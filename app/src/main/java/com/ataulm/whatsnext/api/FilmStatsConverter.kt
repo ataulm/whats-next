@@ -2,7 +2,7 @@ package com.ataulm.whatsnext.api
 
 import com.ataulm.whatsnext.FilmStats
 
-internal class FilmStatsConverter {
+class FilmStatsConverter {
 
     fun convert(apiFilmStatistics: ApiFilmStatistics): FilmStats? {
         if (apiFilmStatistics.rating == null) {

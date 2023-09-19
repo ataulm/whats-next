@@ -15,7 +15,7 @@ import com.ataulm.whatsnext.WhatsNextRepository
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
-internal class FilmViewModel(
+class FilmViewModel(
     private val filmSummary: FilmSummary,
     private val whatsNextRepository: WhatsNextRepository,
     private val tokensStore: TokensStore
