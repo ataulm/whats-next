@@ -18,3 +18,4 @@ plugins {
 
 rootProject.name = "what's next"
 include(":app")
+include(":letterboxd")
