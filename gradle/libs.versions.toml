@@ -7,6 +7,7 @@ kotlinCoroutines = '1.7.1'
 okhttp = '4.11.0'
 retrofit = '2.9.0'
 compose = '2023.08.00'
+timber = "5.0.1"
 
 [libraries]
 androidx-appcompat = 'androidx.appcompat:appcompat:1.6.1'
@@ -45,6 +46,7 @@ retrofit-converter-gson = { module = 'com.squareup.retrofit2:converter-gson', ve
 retrofit-rxjava2 = { module = 'com.squareup.retrofit2:adapter-rxjava2', version.ref = 'retrofit' }
 rxandroid = 'io.reactivex.rxjava2:rxandroid:2.1.1'
 rxjava = 'io.reactivex.rxjava2:rxjava:2.2.19'
+timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
 
 [plugins]
 android = { id = 'com.android.application', version.ref = 'androidGradlePlugin' }

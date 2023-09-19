@@ -12,7 +12,7 @@ import com.ataulm.whatsnext.account.SignInUseCase
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
-internal class SearchViewModel(
+class SearchViewModel(
     isSignedIn: IsSignedInUseCase,
     private val signIn: SignInUseCase,
     private val repository: WhatsNextRepository
@@ -78,7 +78,7 @@ internal class SearchViewModel(
     }
 }
 
-internal class SearchViewModelFactory(
+class SearchViewModelFactory(
     private val isSignedInUseCase: IsSignedInUseCase,
     private val signInUseCase: SignInUseCase,
     private val repository: WhatsNextRepository

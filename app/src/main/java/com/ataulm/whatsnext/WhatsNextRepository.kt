@@ -8,23 +8,16 @@ import com.ataulm.whatsnext.api.FilmRelationshipConverter
 import com.ataulm.whatsnext.api.FilmStatsConverter
 import com.ataulm.whatsnext.api.FilmSummaryConverter
 import com.ataulm.whatsnext.api.LetterboxdApi
-import com.ataulm.whatsnext.api.LetterboxdAuthApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-internal class WhatsNextRepository(
+class WhatsNextRepository(
     private val letterboxdApi: LetterboxdApi,
-    private val letterboxdAuthApi: LetterboxdAuthApi,
     private val filmSummaryConverter: FilmSummaryConverter,
     private val filmConverter: FilmConverter,
     private val filmRelationshipConverter: FilmRelationshipConverter,
     private val filmStatsConverter: FilmStatsConverter
 ) {
-
-    suspend fun login(username: String, password: String) = withContext(Dispatchers.IO) {
-        val authTokenApiResponse = letterboxdAuthApi.fetchAuthTokens(username, password)
-        Token(authTokenApiResponse.accessToken, authTokenApiResponse.refreshToken)
-    }
 
     fun watchList(memberId: String): PagingSource<String, FilmSummary> = WatchListPagingSource(
         memberId = memberId,

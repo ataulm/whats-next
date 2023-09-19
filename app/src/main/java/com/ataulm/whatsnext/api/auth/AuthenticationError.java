@@ -1,4 +1,4 @@
-package com.ataulm.whatsnext.api;
+package com.ataulm.whatsnext.api.auth;
 
 public class AuthenticationError extends RuntimeException {
 
@@ -16,7 +16,6 @@ public class AuthenticationError extends RuntimeException {
 
     public enum Type {
 
-        REQUIRES_USER_SIGN_IN,
         EXCHANGING_REFRESH_TOKEN_FOR_FRESH_TOKEN,
         EXCHANGING_CREDENTIALS_FOR_TOKEN
     }

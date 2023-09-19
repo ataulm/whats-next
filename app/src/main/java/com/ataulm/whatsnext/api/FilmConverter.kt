@@ -2,7 +2,7 @@ package com.ataulm.whatsnext.api
 
 import com.ataulm.whatsnext.*
 
-internal class FilmConverter {
+class FilmConverter {
 
     fun convert(apiFilm: ApiFilm): Film {
         return Film(

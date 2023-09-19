@@ -1,10 +1,11 @@
 package com.ataulm.whatsnext.account
 
-import com.ataulm.whatsnext.TokensStore
+import com.ataulm.whatsnext.api.auth.AuthRepository
+import javax.inject.Inject
 
-internal class IsSignedInUseCase(private val tokensStore: TokensStore) {
+class IsSignedInUseCase @Inject constructor(private val authRepository: AuthRepository) {
 
     operator fun invoke(): Boolean {
-        return tokensStore.userIsSignedIn()
+        return authRepository.getUserAccessToken() != null
     }
 }

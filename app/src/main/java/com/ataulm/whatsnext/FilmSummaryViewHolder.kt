@@ -8,7 +8,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 
-class FilmSummaryViewHolder internal constructor(itemView: View) :
+class FilmSummaryViewHolder constructor(itemView: View) :
     RecyclerView.ViewHolder(itemView) {
 
     private val titleView = itemView.findViewById<TextView>(R.id.titleView)

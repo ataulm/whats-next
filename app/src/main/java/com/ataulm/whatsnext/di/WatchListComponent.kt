@@ -17,7 +17,7 @@ import dagger.Provides
         ]
 )
 @FeatureScope
-internal interface WatchListComponent {
+interface WatchListComponent {
 
     fun inject(activity: WatchListActivity)
 
@@ -34,7 +34,7 @@ internal interface WatchListComponent {
 }
 
 @Module
-internal object WatchListModule {
+object WatchListModule {
 
     @JvmStatic
     @Provides

@@ -1,4 +1,4 @@
-package com.ataulm.whatsnext.api;
+package com.ataulm.whatsnext.api.auth;
 
 import com.google.gson.annotations.SerializedName;
 

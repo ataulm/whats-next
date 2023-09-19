@@ -24,7 +24,7 @@ import javax.inject.Inject
 class FilmActivity : BaseActivity() {
 
     @Inject
-    internal lateinit var viewModel: FilmViewModel
+    lateinit var viewModel: FilmViewModel
 
     private lateinit var titleTextView: TextView
     private lateinit var directorsTextView: TextView

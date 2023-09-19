@@ -23,7 +23,7 @@ import javax.inject.Inject
 class SearchActivity : BaseActivity() {
 
     @Inject
-    internal lateinit var viewModel: SearchViewModel
+    lateinit var viewModel: SearchViewModel
     private lateinit var signInHeaderView: SignInHeaderView
     private lateinit var popularFilmsThisWeekRecyclerView: RecyclerView
     private lateinit var searchBottomSheet: View
