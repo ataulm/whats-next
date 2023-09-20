@@ -4,21 +4,21 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.ataulm.whatsnext.WhatsNextRepository
+import com.ataulm.whatsnext.account.UserIsSignedInUseCase
 import com.ataulm.whatsnext.model.Film
 import com.ataulm.whatsnext.model.FilmRating
 import com.ataulm.whatsnext.model.FilmRelationship
 import com.ataulm.whatsnext.model.FilmStats
 import com.ataulm.whatsnext.model.FilmSummary
 import com.ataulm.whatsnext.model.Images
-import com.ataulm.whatsnext.TokensStore
-import com.ataulm.whatsnext.WhatsNextRepository
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 class FilmViewModel(
     private val filmSummary: FilmSummary,
     private val whatsNextRepository: WhatsNextRepository,
-    private val tokensStore: TokensStore
+    private val isSignedIn: UserIsSignedInUseCase
 ) : ViewModel() {
 
     private val _filmDetails = MutableLiveData<FilmDetailsUiModel>()
@@ -34,9 +34,11 @@ class FilmViewModel(
         viewModelScope.launch {
             _filmDetails.value = FilmDetailsUiModel(filmSummary)
             val filmId = filmSummary.ids.letterboxd
-            _filmDetails.value = whatsNextRepository.film(filmId).let { _filmDetails.value!!.copy(film = it) }
-            _filmDetails.value = whatsNextRepository.filmStats(filmId).let { _filmDetails.value!!.copy(filmStats = it) }
-            if (tokensStore.userIsSignedIn()) {
+            _filmDetails.value =
+                whatsNextRepository.film(filmId).let { _filmDetails.value!!.copy(film = it) }
+            _filmDetails.value = whatsNextRepository.filmStats(filmId)
+                .let { _filmDetails.value!!.copy(filmStats = it) }
+            if (isSignedIn()) {
                 val filmRelationship = whatsNextRepository.filmRelationship(filmId)
                 cacheUpdatedRelationshipThenEmit(filmRelationship)
             }
@@ -82,11 +84,11 @@ class FilmViewModel(
 
         latestFilmRelationshipJob = viewModelScope.launch {
             val updatedFilmRelationship = whatsNextRepository.updateFilmRelationship(
-                    letterboxdId = filmSummary.ids.letterboxd,
-                    watched = watched,
-                    liked = liked,
-                    inWatchlist = inWatchlist,
-                    rating = rating
+                letterboxdId = filmSummary.ids.letterboxd,
+                watched = watched,
+                liked = liked,
+                inWatchlist = inWatchlist,
+                rating = rating
             )
             cacheUpdatedRelationshipThenEmit(updatedFilmRelationship)
         }
@@ -104,11 +106,11 @@ class FilmViewModel(
     ) {
         companion object {
             operator fun invoke(filmSummary: FilmSummary) = FilmDetailsUiModel(
-                    title = filmSummary.name,
-                    releaseYear = filmSummary.year,
-                    poster = filmSummary.poster,
-                    directors = filmSummary.directors.map { it.name },
-                    filmSummary = filmSummary
+                title = filmSummary.name,
+                releaseYear = filmSummary.year,
+                poster = filmSummary.poster,
+                directors = filmSummary.directors.map { it.name },
+                filmSummary = filmSummary
             )
         }
     }

@@ -2,7 +2,7 @@ package com.ataulm.whatsnext.di
 
 import androidx.lifecycle.ViewModelProvider
 import com.ataulm.whatsnext.WhatsNextRepository
-import com.ataulm.whatsnext.account.IsSignedInUseCase
+import com.ataulm.whatsnext.account.UserIsSignedInUseCase
 import com.ataulm.whatsnext.account.SignInUseCase
 import com.ataulm.whatsnext.search.SearchActivity
 import com.ataulm.whatsnext.search.SearchViewModel
@@ -41,13 +41,13 @@ object SearchModule {
     @JvmStatic
     @Provides
     fun viewModel(
-            activity: SearchActivity,
-            isSignedInUseCase: IsSignedInUseCase,
-            signInUseCase: SignInUseCase,
-            whatsNextRepository: WhatsNextRepository
+        activity: SearchActivity,
+        userIsSignedInUseCase: UserIsSignedInUseCase,
+        signInUseCase: SignInUseCase,
+        whatsNextRepository: WhatsNextRepository
     ): SearchViewModel {
         val viewModelFactory = SearchViewModelFactory(
-                isSignedInUseCase,
+                userIsSignedInUseCase,
                 signInUseCase,
                 whatsNextRepository
         )

@@ -8,6 +8,3 @@ private val projectJvmTarget = JavaVersion.VERSION_11
 kotlin {
     jvmToolchain(projectJvmTarget.majorVersion.toInt())
 }
-
-dependencies {
-}

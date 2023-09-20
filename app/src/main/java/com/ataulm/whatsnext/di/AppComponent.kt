@@ -3,17 +3,18 @@ package com.ataulm.whatsnext.di;
 import android.app.Application
 import com.ataulm.letterboxd.LetterboxdApi
 import com.ataulm.letterboxd.auth.LetterboxdAuthApi
+import com.ataulm.whatsnext.AuthRepository
 import com.ataulm.whatsnext.BuildConfig
-import com.ataulm.whatsnext.SharedPrefsTokensStore
-import com.ataulm.whatsnext.TokensStore
+import com.ataulm.whatsnext.LocalTokensStorage
 import com.ataulm.whatsnext.WhatsNextRepository
-import com.ataulm.whatsnext.account.IsSignedInUseCase
 import com.ataulm.whatsnext.account.SignInUseCase
+import com.ataulm.whatsnext.account.UserIsSignedInUseCase
 import com.ataulm.whatsnext.api.FilmConverter
 import com.ataulm.whatsnext.api.FilmRelationshipConverter
 import com.ataulm.whatsnext.api.FilmStatsConverter
 import com.ataulm.whatsnext.api.FilmSummaryConverter
 import com.ataulm.whatsnext.api.auth.AddAuthorizationInterceptor
+import com.ataulm.whatsnext.api.auth.LetterboxdAuthRepository
 import com.ataulm.whatsnext.api.auth.LetterboxdAuthenticator
 import com.chuckerteam.chucker.api.ChuckerInterceptor
 import dagger.BindsInstance
@@ -37,9 +38,8 @@ private const val LETTERBOXD_BASE_URL = "https://api.letterboxd.com/api/v0/"
 interface AppComponent {
 
     fun whatsNextService(): WhatsNextRepository
-    fun tokensStore(): TokensStore
     fun signInUseCase(): SignInUseCase
-    fun isSignedInUseCase(): IsSignedInUseCase
+    fun isSignedInUseCase(): UserIsSignedInUseCase
 
     @Component.Builder
     interface Builder {
@@ -123,6 +123,11 @@ object AppModule {
 
     @JvmStatic
     @Provides
-    fun tokensStore(application: Application): TokensStore =
-        SharedPrefsTokensStore.create(application)
+    fun localTokensStorage(application: Application): LocalTokensStorage =
+        LocalTokensStorage.create(application)
+
+    @JvmStatic
+    @Provides // TODO: this should use @Binds; consider when adding Hilt
+    fun authRepository(letterboxdAuthRepository: LetterboxdAuthRepository): AuthRepository =
+        letterboxdAuthRepository
 }
