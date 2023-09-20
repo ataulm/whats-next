@@ -1,7 +1,6 @@
 package com.ataulm.letterboxd.auth
 
 import com.ataulm.letterboxd.BuildConfig
-import com.google.gson.annotations.SerializedName
 import retrofit2.Call
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
@@ -41,12 +40,3 @@ interface LetterboxdAuthApi {
         @Field("client_secret") clientSecret: String = BuildConfig.LETTERBOXD_SECRET
     ): Call<AuthTokenApiResponse>
 }
-
-data class AuthTokenApiResponse(
-    @SerializedName("access_token") val accessToken: String,
-    @SerializedName("refresh_token") val refreshToken: String
-)
-
-data class AnonymousAuthTokenApiResponse(
-    @SerializedName("access_token") val accessToken: String
-)

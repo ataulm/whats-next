@@ -1,5 +1,8 @@
 package com.ataulm.whatsnext.api
 
+import com.ataulm.letterboxd.ApiContributor
+import com.ataulm.letterboxd.ApiFilm
+import com.ataulm.letterboxd.ApiImage
 import com.ataulm.whatsnext.*
 
 class FilmConverter {

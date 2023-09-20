@@ -2,12 +2,12 @@ package com.ataulm.whatsnext
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.ataulm.whatsnext.api.ApiFilmRelationshipUpdateRequest
+import com.ataulm.letterboxd.ApiFilmRelationshipUpdateRequest
 import com.ataulm.whatsnext.api.FilmConverter
 import com.ataulm.whatsnext.api.FilmRelationshipConverter
 import com.ataulm.whatsnext.api.FilmStatsConverter
 import com.ataulm.whatsnext.api.FilmSummaryConverter
-import com.ataulm.whatsnext.api.LetterboxdApi
+import com.ataulm.letterboxd.LetterboxdApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
