@@ -2,7 +2,7 @@ package com.ataulm.whatsnext.film
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.ataulm.whatsnext.FilmSummary
+import com.ataulm.whatsnext.model.FilmSummary
 import com.ataulm.whatsnext.TokensStore
 import com.ataulm.whatsnext.WhatsNextRepository
 import javax.inject.Inject

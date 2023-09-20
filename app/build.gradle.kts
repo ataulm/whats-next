@@ -55,6 +55,7 @@ dependencies {
     debugImplementation(libs.chucker)
     releaseImplementation(libs.chucker.no.op)
 
+    implementation(project(":core"))
     implementation(project(":letterboxd"))
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.appcompat)

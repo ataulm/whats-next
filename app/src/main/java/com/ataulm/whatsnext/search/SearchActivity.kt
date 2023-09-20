@@ -9,6 +9,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.ataulm.whatsnext.model.FilmSummary
 import com.ataulm.support.DataObserver
 import com.ataulm.support.EventObserver
 import com.ataulm.support.exhaustive

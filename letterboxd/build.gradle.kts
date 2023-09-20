@@ -29,6 +29,7 @@ kotlin {
 }
 
 dependencies {
+    implementation(project(":core"))
     implementation(libs.moshi.kotlin)
     implementation(libs.retrofit)
     ksp(libs.moshi)

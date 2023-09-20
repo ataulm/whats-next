@@ -1,7 +1,7 @@
 package com.ataulm.whatsnext.di;
 
 import androidx.lifecycle.ViewModelProvider
-import com.ataulm.whatsnext.FilmSummary
+import com.ataulm.whatsnext.model.FilmSummary
 import com.ataulm.whatsnext.film.FilmActivity
 import com.ataulm.whatsnext.film.FilmViewModel
 import com.ataulm.whatsnext.film.FilmViewModelProviderFactory

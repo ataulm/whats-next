@@ -8,7 +8,7 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.ataulm.support.Event
-import com.ataulm.whatsnext.FilmSummary
+import com.ataulm.whatsnext.model.FilmSummary
 import com.ataulm.whatsnext.WhatsNextRepository
 import kotlinx.coroutines.flow.Flow
 

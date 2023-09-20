@@ -8,6 +8,8 @@ import com.ataulm.whatsnext.api.FilmRelationshipConverter
 import com.ataulm.whatsnext.api.FilmStatsConverter
 import com.ataulm.whatsnext.api.FilmSummaryConverter
 import com.ataulm.letterboxd.LetterboxdApi
+import com.ataulm.whatsnext.model.FilmRating
+import com.ataulm.whatsnext.model.FilmSummary
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 
 import com.ataulm.whatsnext.film.FilmActivity;
+import com.ataulm.whatsnext.model.FilmSummary;
 import com.ataulm.whatsnext.watchlist.WatchListActivity;
 
 public class Navigator {
