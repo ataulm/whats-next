@@ -1,6 +1,7 @@
 package com.ataulm.whatsnext.di;
 
 import android.app.Application
+import com.ataulm.letterboxd.LetterboxdApi
 import com.ataulm.letterboxd.auth.LetterboxdAuthApi
 import com.ataulm.whatsnext.BuildConfig
 import com.ataulm.whatsnext.SharedPrefsTokensStore
@@ -12,7 +13,6 @@ import com.ataulm.whatsnext.api.FilmConverter
 import com.ataulm.whatsnext.api.FilmRelationshipConverter
 import com.ataulm.whatsnext.api.FilmStatsConverter
 import com.ataulm.whatsnext.api.FilmSummaryConverter
-import com.ataulm.whatsnext.api.LetterboxdApi
 import com.ataulm.whatsnext.api.auth.AddAuthorizationInterceptor
 import com.ataulm.whatsnext.api.auth.LetterboxdAuthenticator
 import com.chuckerteam.chucker.api.ChuckerInterceptor
@@ -23,8 +23,7 @@ import dagger.Provides
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
-import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.converter.moshi.MoshiConverterFactory
 import javax.inject.Singleton
 
 private const val LETTERBOXD_BASE_URL = "https://api.letterboxd.com/api/v0/"
@@ -57,13 +56,13 @@ object AppModule {
 
     @JvmStatic
     @Provides
-    fun gsonConverterFactory(): GsonConverterFactory = GsonConverterFactory.create()
+    fun moshiConverterFactory(): MoshiConverterFactory = MoshiConverterFactory.create()
 
     @JvmStatic
     @Provides
     fun letterboxdAuthApi(
         application: Application,
-        gsonConverterFactory: GsonConverterFactory
+        moshiConverterFactory: MoshiConverterFactory
     ): LetterboxdAuthApi {
         return Retrofit.Builder()
             .client(
@@ -72,7 +71,7 @@ object AppModule {
                     .addHttpLoggingInterceptor()
                     .build()
             )
-            .addConverterFactory(gsonConverterFactory)
+            .addConverterFactory(moshiConverterFactory)
             .baseUrl(LETTERBOXD_BASE_URL)
             .build()
             .create(LetterboxdAuthApi::class.java)
@@ -93,7 +92,7 @@ object AppModule {
         application: Application,
         authorizationInterceptor: AddAuthorizationInterceptor,
         authenticator: LetterboxdAuthenticator,
-        gsonConverterFactory: GsonConverterFactory
+        moshiConverterFactory: MoshiConverterFactory
     ): LetterboxdApi {
         return Retrofit.Builder()
             .client(
@@ -104,8 +103,7 @@ object AppModule {
                     .authenticator(authenticator)
                     .build()
             )
-            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-            .addConverterFactory(gsonConverterFactory)
+            .addConverterFactory(moshiConverterFactory)
             .baseUrl(LETTERBOXD_BASE_URL)
             .build()
             .create(LetterboxdApi::class.java)

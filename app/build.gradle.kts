@@ -78,10 +78,7 @@ dependencies {
     implementation(libs.okhttp)
     implementation(libs.okhttp.logging.interceptor)
     implementation(libs.retrofit)
-    implementation(libs.retrofit.converter.gson)
-    implementation(libs.retrofit.rxjava2)
-    implementation(libs.rxandroid)
-    implementation(libs.rxjava)
+    implementation(libs.retrofit.converter.moshi)
     implementation(libs.timber)
 
     testImplementation(libs.assertj.core)

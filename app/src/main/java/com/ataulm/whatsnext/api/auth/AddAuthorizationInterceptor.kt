@@ -1,6 +1,6 @@
 package com.ataulm.whatsnext.api.auth
 
-import com.ataulm.whatsnext.api.RequiresAuthenticatedUser
+import com.ataulm.letterboxd.RequiresAuthenticatedUser
 import okhttp3.Authenticator
 import okhttp3.Interceptor
 import okhttp3.Interceptor.Chain
@@ -8,7 +8,6 @@ import okhttp3.Request
 import okhttp3.Response
 import okhttp3.Route
 import retrofit2.Invocation
-import timber.log.Timber
 import javax.inject.Inject
 
 private const val HEADER_AUTH = "Authorization"

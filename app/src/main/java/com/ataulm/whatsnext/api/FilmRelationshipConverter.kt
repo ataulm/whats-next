@@ -1,5 +1,6 @@
 package com.ataulm.whatsnext.api
 
+import com.ataulm.letterboxd.ApiFilmRelationship
 import com.ataulm.whatsnext.FilmRating
 import com.ataulm.whatsnext.FilmRelationship
 

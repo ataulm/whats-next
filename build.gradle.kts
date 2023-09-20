@@ -9,4 +9,6 @@ plugins {
     alias(libs.plugins.kotlin.parcelize) apply (false)
     @Suppress("DSL_SCOPE_VIOLATION")
     alias(libs.plugins.org.jetbrains.kotlin.jvm) apply false
+    @Suppress("DSL_SCOPE_VIOLATION")
+    alias(libs.plugins.ksp) apply (false)
 }

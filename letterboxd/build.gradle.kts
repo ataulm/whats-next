@@ -1,8 +1,9 @@
 @Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once KTIJ-19369 is fixed
 plugins {
-    id("java-library")
     alias(libs.plugins.build.config)
     alias(libs.plugins.org.jetbrains.kotlin.jvm)
+    alias(libs.plugins.ksp)
+    id("java-library")
     kotlin("kapt")
 }
 
@@ -28,6 +29,7 @@ kotlin {
 }
 
 dependencies {
+    implementation(libs.moshi.kotlin)
     implementation(libs.retrofit)
-    implementation(libs.gson)
+    ksp(libs.moshi)
 }
