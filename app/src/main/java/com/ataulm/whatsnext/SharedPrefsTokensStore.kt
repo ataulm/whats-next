@@ -1,10 +1,12 @@
 package com.ataulm.whatsnext
 
 import android.content.Context
-import android.content.SharedPreferences
+import androidx.security.crypto.EncryptedSharedPreferences
+import androidx.security.crypto.MasterKeys
 
-class SharedPrefsTokensStore private constructor(private val preferences: SharedPreferences) :
-    TokensStore {
+class SharedPrefsTokensStore private constructor(
+    private val preferences: EncryptedSharedPreferences
+) : TokensStore {
 
     override fun storeUserToken(token: Token) {
         preferences.edit()
@@ -61,8 +63,14 @@ class SharedPrefsTokensStore private constructor(private val preferences: Shared
 
         @JvmStatic
         fun create(context: Context): SharedPrefsTokensStore {
-            val preferences = context.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE)
-            return SharedPrefsTokensStore(preferences)
+            val encryptedSharedPrefs = EncryptedSharedPreferences.create(
+                "tokens_store",
+                MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC),
+                context,
+                EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+                EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
+            ) as EncryptedSharedPreferences
+            return SharedPrefsTokensStore(encryptedSharedPrefs)
         }
     }
 }

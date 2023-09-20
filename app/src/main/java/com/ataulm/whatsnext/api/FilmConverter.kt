@@ -8,7 +8,6 @@ import com.ataulm.whatsnext.model.Contributor
 import com.ataulm.whatsnext.model.Film
 import com.ataulm.whatsnext.model.Ids
 import com.ataulm.whatsnext.model.Image
-import com.ataulm.whatsnext.*
 import com.ataulm.whatsnext.model.Images
 import com.ataulm.whatsnext.model.Person
 
