@@ -1,8 +1,9 @@
+@Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once KTIJ-19369 is fixed
 plugins {
-    id("com.android.application")
-    id("kotlin-parcelize")
-    id("org.jetbrains.kotlin.android")
     kotlin("kapt")
+    alias(libs.plugins.android)
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.parcelize)
 }
 
 private val projectJvmTarget = JavaVersion.VERSION_11
@@ -18,20 +19,20 @@ android {
     }
 
     namespace = "com.ataulm.whatsnext"
-    compileSdk = 34
+    compileSdk = libs.versions.sdk.compile.get().toInt()
     android.buildFeatures.buildConfig = true
     buildFeatures {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.1"
+        kotlinCompilerExtensionVersion = libs.versions.kotlinCompilerExtension.get()
     }
 
 
     defaultConfig {
         applicationId = "com.ataulm.whatsnext"
-        minSdk = 23
-        targetSdk = 33
+        minSdk = libs.versions.sdk.min.get().toInt()
+        targetSdk = libs.versions.sdk.target.get().toInt()
         versionCode = 1
         versionName = "1.0"
 
