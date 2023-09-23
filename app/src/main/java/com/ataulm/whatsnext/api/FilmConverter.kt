@@ -1,9 +1,15 @@
 package com.ataulm.whatsnext.api
 
+import com.ataulm.whatsnext.model.Actor
 import com.ataulm.letterboxd.ApiContributor
 import com.ataulm.letterboxd.ApiFilm
 import com.ataulm.letterboxd.ApiImage
-import com.ataulm.whatsnext.*
+import com.ataulm.whatsnext.model.Contributor
+import com.ataulm.whatsnext.model.Film
+import com.ataulm.whatsnext.model.Ids
+import com.ataulm.whatsnext.model.Image
+import com.ataulm.whatsnext.model.Images
+import com.ataulm.whatsnext.model.Person
 
 class FilmConverter {
 

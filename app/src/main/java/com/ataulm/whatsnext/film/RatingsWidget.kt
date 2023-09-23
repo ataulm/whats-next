@@ -5,7 +5,7 @@ import android.util.AttributeSet
 import android.view.View
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
-import com.ataulm.whatsnext.FilmStats
+import com.ataulm.whatsnext.model.FilmStats
 import com.ataulm.whatsnext.R
 
 class RatingsWidget(context: Context, attrs: AttributeSet) : ConstraintLayout(context, attrs) {

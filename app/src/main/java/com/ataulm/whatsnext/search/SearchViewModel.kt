@@ -5,15 +5,15 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.ataulm.support.Event
-import com.ataulm.whatsnext.FilmSummary
+import com.ataulm.whatsnext.model.FilmSummary
 import com.ataulm.whatsnext.WhatsNextRepository
-import com.ataulm.whatsnext.account.IsSignedInUseCase
+import com.ataulm.whatsnext.account.UserIsSignedInUseCase
 import com.ataulm.whatsnext.account.SignInUseCase
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
 class SearchViewModel(
-    isSignedIn: IsSignedInUseCase,
+    isSignedIn: UserIsSignedInUseCase,
     private val signIn: SignInUseCase,
     private val repository: WhatsNextRepository
 ) : ViewModel() {
@@ -79,14 +79,14 @@ class SearchViewModel(
 }
 
 class SearchViewModelFactory(
-    private val isSignedInUseCase: IsSignedInUseCase,
+    private val userIsSignedInUseCase: UserIsSignedInUseCase,
     private val signInUseCase: SignInUseCase,
     private val repository: WhatsNextRepository
 ) : ViewModelProvider.Factory {
 
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>) = SearchViewModel(
-        isSignedInUseCase,
+        userIsSignedInUseCase,
         signInUseCase,
         repository
     ) as T

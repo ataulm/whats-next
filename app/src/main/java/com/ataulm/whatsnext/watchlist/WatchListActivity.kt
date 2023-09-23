@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.ataulm.support.EventObserver
 import com.ataulm.whatsnext.BaseActivity
-import com.ataulm.whatsnext.FilmSummary
+import com.ataulm.whatsnext.model.FilmSummary
 import com.ataulm.whatsnext.FilmSummaryViewHolder
 import com.ataulm.whatsnext.R
 import com.ataulm.whatsnext.di.DaggerWatchListComponent

@@ -1,6 +1,6 @@
 package com.ataulm.whatsnext.account
 
-import com.ataulm.whatsnext.api.auth.AuthRepository
+import com.ataulm.whatsnext.AuthRepository
 import javax.inject.Inject
 
 class SignInUseCase @Inject constructor(

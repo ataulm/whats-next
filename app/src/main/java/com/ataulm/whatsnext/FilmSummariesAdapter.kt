@@ -4,6 +4,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.ataulm.whatsnext.FilmSummaryViewHolder.Companion.inflateView
+import com.ataulm.whatsnext.model.FilmSummary
 
 class FilmSummariesAdapter(
         private val callback: FilmSummaryViewHolder.Callback

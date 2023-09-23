@@ -3,7 +3,6 @@ plugins {
     alias(libs.plugins.build.config)
     alias(libs.plugins.org.jetbrains.kotlin.jvm)
     alias(libs.plugins.ksp)
-    id("java-library")
     kotlin("kapt")
 }
 
@@ -29,6 +28,7 @@ kotlin {
 }
 
 dependencies {
+    implementation(project(":core"))
     implementation(libs.moshi.kotlin)
     implementation(libs.retrofit)
     ksp(libs.moshi)

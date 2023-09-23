@@ -1,4 +1,4 @@
-package com.ataulm.whatsnext
+package com.ataulm.whatsnext.model
 
 enum class FilmRating(private val value: Float) {
 

@@ -12,7 +12,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.accessibility.AccessibilityNodeInfoCompat
 import androidx.customview.widget.ExploreByTouchHelper
 import com.ataulm.support.resolveColorAttribute
-import com.ataulm.whatsnext.FilmStats.RatingsHistogramBar
+import com.ataulm.whatsnext.model.FilmStats.RatingsHistogramBar
 import com.ataulm.whatsnext.R
 import kotlin.math.min
 import kotlin.math.roundToInt

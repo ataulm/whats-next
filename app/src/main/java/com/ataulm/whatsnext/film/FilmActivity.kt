@@ -1,5 +1,6 @@
 package com.ataulm.whatsnext.film
 
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.CheckBox
@@ -11,9 +12,10 @@ import coil.load
 import com.ataulm.support.DataObserver
 import com.ataulm.whatsnext.BaseActivity
 import com.ataulm.whatsnext.BuildConfig
-import com.ataulm.whatsnext.Film
-import com.ataulm.whatsnext.FilmSummary
+import com.ataulm.whatsnext.model.Film
+import com.ataulm.whatsnext.model.FilmSummary
 import com.ataulm.whatsnext.R
+import com.ataulm.whatsnext.bestFor
 import com.ataulm.whatsnext.di.DaggerFilmComponent
 import com.ataulm.whatsnext.di.appComponent
 import com.ataulm.whatsnext.film.FilmViewModel.FilmDetailsUiModel
@@ -259,10 +261,17 @@ class FilmActivity : BaseActivity() {
 }
 
 private fun FilmActivity.injectDependencies() {
-    val filmSummary =
-        checkNotNull(intent.getParcelableExtra(FilmActivity.EXTRA_FILM_SUMMARY) as? FilmSummary) {
+    val filmSummary = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        checkNotNull(intent.getSerializableExtra(FilmActivity.EXTRA_FILM_SUMMARY, FilmSummary::class.java)) {
             "how you open FilmActivity without a film id?"
         }
+    } else {
+        @Suppress("DEPRECATION")
+        checkNotNull(intent.getSerializableExtra(FilmActivity.EXTRA_FILM_SUMMARY) as? FilmSummary) {
+            "how you open FilmActivity without a film id?"
+        }
+    }
+
     DaggerFilmComponent.builder()
         .activity(this)
         .with(filmSummary)

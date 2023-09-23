@@ -1,6 +1,7 @@
 package com.ataulm.whatsnext.api.auth
 
 import com.ataulm.letterboxd.RequiresAuthenticatedUser
+import com.ataulm.whatsnext.AuthRepository
 import okhttp3.Authenticator
 import okhttp3.Interceptor
 import okhttp3.Interceptor.Chain
@@ -31,7 +32,7 @@ class AddAuthorizationInterceptor @Inject constructor(
 
     private fun addUserTokenToRequest(chain: Chain): Response {
         // can't refresh/recover if we don't even have the token(s) to begin with
-        val accessToken = authRepository.getUserAccessToken() ?:  throw AuthError.MissingUserToken
+        val accessToken = authRepository.getUserAccessToken() ?: throw AuthError.MissingUserToken
         val requestWithAuth = chain.request().newBuilder()
             .header(HEADER_AUTH, "$HEADER_AUTH_PREFIX $accessToken")
             .build()
@@ -66,7 +67,7 @@ class LetterboxdAuthenticator @Inject constructor(
                 if (requestToken != authRepository.getUserAccessToken()) {  // token is already updated by another request
                     authRepository.getUserAccessToken()
                 } else {
-                    authRepository.refreshUserToken().accessToken
+                    authRepository.refreshUserAccessToken()
                 }
             }
         } else {
@@ -76,7 +77,7 @@ class LetterboxdAuthenticator @Inject constructor(
                 if (requestToken != authRepository.getClientAccessToken()) {  // token is already updated by another request
                     authRepository.getClientAccessToken()
                 } else {
-                    authRepository.refreshClientToken()
+                    authRepository.refreshClientAccessToken()
                 }
             }
         }

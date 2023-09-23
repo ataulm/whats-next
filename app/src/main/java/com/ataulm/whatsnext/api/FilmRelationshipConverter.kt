@@ -1,8 +1,8 @@
 package com.ataulm.whatsnext.api
 
 import com.ataulm.letterboxd.ApiFilmRelationship
-import com.ataulm.whatsnext.FilmRating
-import com.ataulm.whatsnext.FilmRelationship
+import com.ataulm.whatsnext.model.FilmRating
+import com.ataulm.whatsnext.model.FilmRelationship
 
 class FilmRelationshipConverter {
 

@@ -3,7 +3,7 @@ package com.ataulm.whatsnext.api
 import com.ataulm.letterboxd.ApiFilmStatistics
 import com.ataulm.letterboxd.ApiFilmStatisticsCounts
 import com.ataulm.letterboxd.ApiRatingsHistogramBar
-import com.ataulm.whatsnext.FilmStats
+import com.ataulm.whatsnext.model.FilmStats
 
 class FilmStatsConverter {
 

@@ -7,6 +7,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
+import com.ataulm.whatsnext.model.FilmSummary
 
 class FilmSummaryViewHolder constructor(itemView: View) :
     RecyclerView.ViewHolder(itemView) {
