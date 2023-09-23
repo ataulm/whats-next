@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.ksp)
+    kotlin("kapt")
 }
 
 private val projectJvmTarget = JavaVersion.VERSION_11
@@ -14,6 +15,7 @@ android {
     compileSdk = libs.versions.sdk.compile.get().toInt()
     buildFeatures.buildConfig = true
     defaultConfig {
+        minSdk = libs.versions.sdk.min.get().toInt()
         buildConfigField(
             "String",
             "LETTERBOXD_KEY",
@@ -29,8 +31,20 @@ android {
 }
 
 dependencies {
-    implementation(project(":core"))
+    debugImplementation(libs.chucker)
+    releaseImplementation(libs.chucker.no.op)
+
+    implementation(project(":domain"))
+    implementation(libs.androidx.security.crypto)
+    implementation(libs.dagger)
+    implementation(libs.kotlin.coroutines.android)
+    implementation(libs.kotlin.coroutines.core)
     implementation(libs.moshi.kotlin)
+    implementation(libs.okhttp.logging.interceptor)
     implementation(libs.retrofit)
+    implementation(libs.retrofit.converter.moshi)
+
+    kapt(libs.dagger.compiler)
+
     ksp(libs.moshi)
 }

@@ -55,8 +55,7 @@ dependencies {
 
     debugImplementation(libs.chucker)
     releaseImplementation(libs.chucker.no.op)
-
-    implementation(project(":core"))
+    implementation(project(":domain"))
     implementation(project(":letterboxd"))
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.appcompat)
@@ -70,7 +69,6 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.paging.runtime)
     implementation(libs.androidx.recyclerview)
-    implementation(libs.androidx.security.crypto)
     implementation(libs.coil)
     implementation(libs.dagger)
     implementation(libs.gson)

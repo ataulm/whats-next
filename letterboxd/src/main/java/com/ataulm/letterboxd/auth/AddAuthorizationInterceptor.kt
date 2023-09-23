@@ -1,7 +1,7 @@
-package com.ataulm.whatsnext.api.auth
+package com.ataulm.letterboxd.auth
 
+import com.ataulm.letterboxd.AuthRepository
 import com.ataulm.letterboxd.RequiresAuthenticatedUser
-import com.ataulm.whatsnext.AuthRepository
 import okhttp3.Authenticator
 import okhttp3.Interceptor
 import okhttp3.Interceptor.Chain
@@ -20,7 +20,7 @@ private const val HEADER_AUTH_PREFIX = "Bearer"
  *
  * Don't apply this to [LetterboxdAuthApi] because those don't require `Authorization` header.
  */
-class AddAuthorizationInterceptor @Inject constructor(
+internal class AddAuthorizationInterceptor @Inject constructor(
     private val authRepository: AuthRepository
 ) : Interceptor {
 
@@ -49,7 +49,7 @@ class AddAuthorizationInterceptor @Inject constructor(
     }
 }
 
-class LetterboxdAuthenticator @Inject constructor(
+internal class LetterboxdAuthenticator @Inject constructor(
     private val authRepository: AuthRepository
 ) : Authenticator {
 

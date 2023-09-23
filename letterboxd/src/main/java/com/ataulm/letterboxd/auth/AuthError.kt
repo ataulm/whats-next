@@ -1,4 +1,4 @@
-package com.ataulm.whatsnext.api.auth
+package com.ataulm.letterboxd.auth
 
 import java.io.IOException
 
