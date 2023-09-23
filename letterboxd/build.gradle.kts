@@ -3,7 +3,6 @@ plugins {
     alias(libs.plugins.build.config)
     alias(libs.plugins.org.jetbrains.kotlin.jvm)
     alias(libs.plugins.ksp)
-    id("java-library")
     kotlin("kapt")
 }
 
