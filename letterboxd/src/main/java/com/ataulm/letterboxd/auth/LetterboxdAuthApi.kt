@@ -21,7 +21,7 @@ interface LetterboxdAuthApi {
         @Field("scope") scope: String = "content:modify",
         @Field("client_id") clientId: String = BuildConfig.LETTERBOXD_KEY,
         @Field("client_secret") clientSecret: String = BuildConfig.LETTERBOXD_SECRET
-    ): UserTokensApiResponse
+    ): ApiUserTokens
 
     @FormUrlEncoded
     @POST("auth/token")
@@ -29,7 +29,7 @@ interface LetterboxdAuthApi {
         @Field("grant_type") grantType: String = "client_credentials",
         @Field("client_id") clientId: String = BuildConfig.LETTERBOXD_KEY,
         @Field("client_secret") clientSecret: String = BuildConfig.LETTERBOXD_SECRET
-    ): Call<ClientAccessTokenApiResponse>
+    ): Call<ApiClientAccessToken>
 
     @FormUrlEncoded
     @POST("auth/token")
@@ -38,5 +38,5 @@ interface LetterboxdAuthApi {
         @Field("grant_type") grantType: String = "refresh_token",
         @Field("client_id") clientId: String = BuildConfig.LETTERBOXD_KEY,
         @Field("client_secret") clientSecret: String = BuildConfig.LETTERBOXD_SECRET
-    ): Call<UserTokensApiResponse>
+    ): Call<ApiUserTokens>
 }
