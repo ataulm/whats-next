@@ -8,6 +8,7 @@ import com.chuckerteam.chucker.api.ChuckerInterceptor
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
+import dagger.Reusable
 import kotlinx.coroutines.Dispatchers
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -26,19 +27,20 @@ internal interface LetterboxdModule {
     companion object {
 
         // TODO: qualifiers so we can provide main dispatcher too
+        @Reusable
         @Provides
         fun providesIoCoroutineContext(): CoroutineContext = Dispatchers.IO
 
-        @LetterboxdScope
+        @Reusable
         @Provides
         fun providesMoshiConverter(): MoshiConverterFactory = MoshiConverterFactory.create()
 
-        @LetterboxdScope
+        @Reusable
         @Provides
         fun providesChuckerInterceptor(application: Application): ChuckerInterceptor =
             ChuckerInterceptor(application)
 
-        @LetterboxdScope
+        @Reusable
         @Provides
         fun providesHttpLoggingInterceptor(): HttpLoggingInterceptor = HttpLoggingInterceptor()
             .apply { level = HttpLoggingInterceptor.Level.BODY }
@@ -48,6 +50,7 @@ internal interface LetterboxdModule {
         fun providesLocalTokensStorage(application: Application): LocalTokensStorage =
             LocalTokensStorage.create(application)
 
+        @Reusable
         @Provides
         fun providesAuthApi(
             moshiConverterFactory: MoshiConverterFactory,
@@ -73,6 +76,7 @@ internal interface LetterboxdModule {
                 .create(LetterboxdAuthApi::class.java)
         }
 
+        @Reusable
         @Provides
         fun providesApi(
             authorizationInterceptor: AddAuthorizationInterceptor,
