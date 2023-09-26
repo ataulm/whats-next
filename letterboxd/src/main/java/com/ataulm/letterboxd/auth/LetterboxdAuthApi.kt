@@ -10,7 +10,7 @@ import retrofit2.http.POST
  * Functions to obtain/refresh user and client tokens, which must be used for all API calls
  * (except these).
  */
-interface LetterboxdAuthApi {
+internal interface LetterboxdAuthApi {
 
     @FormUrlEncoded
     @POST("auth/token")
