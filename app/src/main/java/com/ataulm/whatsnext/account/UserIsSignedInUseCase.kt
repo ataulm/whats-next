@@ -1,11 +1,11 @@
 package com.ataulm.whatsnext.account
 
-import com.ataulm.whatsnext.AuthRepository
+import com.ataulm.letterboxd.LetterboxdRepository
 import javax.inject.Inject
 
-class UserIsSignedInUseCase @Inject constructor(private val authRepository: AuthRepository) {
+class UserIsSignedInUseCase @Inject constructor(private val repository: LetterboxdRepository) {
 
     operator fun invoke(): Boolean {
-        return authRepository.getUserAccessToken() != null
+        return repository.hasUserAccessToken()
     }
 }

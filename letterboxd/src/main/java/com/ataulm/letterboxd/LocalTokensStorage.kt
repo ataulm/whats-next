@@ -1,4 +1,4 @@
-package com.ataulm.whatsnext
+package com.ataulm.letterboxd
 
 import android.content.Context
 import androidx.security.crypto.EncryptedSharedPreferences
@@ -41,7 +41,7 @@ class LocalTokensStorage private constructor(
     companion object {
 
         @JvmStatic
-        private val FILE_NAME = BuildConfig.APPLICATION_ID + ".tokens_store"
+        private val FILE_NAME = BuildConfig.LIBRARY_PACKAGE_NAME + ".tokens_store"
 
         @JvmStatic
         private val KEY_ACCESS_TOKEN_VALUE = "access.value"

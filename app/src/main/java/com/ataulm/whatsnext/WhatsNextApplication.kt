@@ -1,6 +1,7 @@
 package com.ataulm.whatsnext
 
 import android.app.Application
+import com.ataulm.letterboxd.DaggerLetterboxdComponent
 import com.ataulm.support.Toaster
 import com.ataulm.whatsnext.di.AppComponent
 import com.ataulm.whatsnext.di.AppComponentProvider
@@ -11,6 +12,7 @@ class WhatsNextApplication : Application(), AppComponentProvider {
     private var appComponent: AppComponent? = null
     override fun onCreate() {
         super.onCreate()
+
         if (BuildConfig.DEBUG) {
             Timber.plant(object : Timber.DebugTree() {
                 override fun createStackElementTag(element: StackTraceElement): String? {
@@ -18,7 +20,14 @@ class WhatsNextApplication : Application(), AppComponentProvider {
                 }
             })
         }
-        appComponent = DaggerAppComponent.builder().application(this).build()
+        appComponent = DaggerAppComponent.builder()
+            .component(
+                DaggerLetterboxdComponent.builder()
+                    .with(this)
+                    .build()
+            )
+            .application(this)
+            .build()
         Toaster.create(this)
     }
 

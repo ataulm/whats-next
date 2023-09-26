@@ -1,34 +1,35 @@
-package com.ataulm.whatsnext.api.auth
+package com.ataulm.letterboxd
 
 import androidx.annotation.WorkerThread
+import com.ataulm.letterboxd.auth.AuthError
 import com.ataulm.letterboxd.auth.LetterboxdAuthApi
-import com.ataulm.whatsnext.AuthRepository
-import com.ataulm.whatsnext.LocalTokensStorage
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
+import kotlin.coroutines.CoroutineContext
 
-class LetterboxdAuthRepository @Inject constructor(
+@LetterboxdScope
+internal class AuthRepository @Inject constructor(
     private val letterboxdAuthApi: LetterboxdAuthApi,
-    private val localTokensStorage: LocalTokensStorage
-) : AuthRepository {
+    private val localTokensStorage: LocalTokensStorage,
+    private val ioCoroutineContext: CoroutineContext
+) {
 
-    override suspend fun login(username: String, password: String) = withContext(Dispatchers.IO) {
+    suspend fun login(username: String, password: String) = withContext(ioCoroutineContext) {
         val authTokenApiResponse = letterboxdAuthApi.fetchUserTokens(username, password)
         localTokensStorage.storeUserAccessToken(authTokenApiResponse.accessToken)
         localTokensStorage.storeUserRefreshToken(authTokenApiResponse.refreshToken)
     }
 
-    override fun getUserAccessToken(): String? {
+    fun getUserAccessToken(): String? {
         return localTokensStorage.userAccessToken()
     }
 
-    override fun getClientAccessToken(): String? {
+    fun getClientAccessToken(): String? {
         return localTokensStorage.clientAccessToken()
     }
 
     @WorkerThread
-    override fun refreshUserAccessToken(): String {
+    fun refreshUserAccessToken(): String {
         val refreshToken = localTokensStorage.userRefreshToken() ?: throw AuthError.MissingUserToken
         runCatching {
             letterboxdAuthApi.refreshUserTokens(refreshToken).execute().body()
@@ -40,7 +41,7 @@ class LetterboxdAuthRepository @Inject constructor(
     }
 
     @WorkerThread
-    override fun refreshClientAccessToken(): String {
+    fun refreshClientAccessToken(): String {
         runCatching {
             letterboxdAuthApi.fetchClientAccessToken().execute().body()
         }.getOrNull()?.let { apiResponse ->
