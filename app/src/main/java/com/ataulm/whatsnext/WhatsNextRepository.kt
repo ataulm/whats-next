@@ -3,7 +3,6 @@ package com.ataulm.whatsnext
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.ataulm.letterboxd.ApiFilmRelationshipUpdateRequest
-import com.ataulm.letterboxd.LetterboxdApi
 import com.ataulm.letterboxd.LetterboxdRepository
 import com.ataulm.whatsnext.api.FilmConverter
 import com.ataulm.whatsnext.api.FilmRelationshipConverter
@@ -102,12 +101,12 @@ private fun FilmRating.toApiValue(): String {
 }
 
 private class PopularFilmsThisWeekPagingSource(
-    private val letterboxdApi: LetterboxdApi,
+    private val letterboxdRepository: LetterboxdRepository,
     private val filmSummaryConverter: FilmSummaryConverter
 ) : PagingSource<String, FilmSummary>() {
 
     override suspend fun load(params: LoadParams<String>): LoadResult<String, FilmSummary> {
-        val response = letterboxdApi.popularFilmsThisWeek(
+        val response = letterboxdRepository.popularFilmsThisWeek(
             cursor = params.key,
             perPage = params.loadSize
         )
