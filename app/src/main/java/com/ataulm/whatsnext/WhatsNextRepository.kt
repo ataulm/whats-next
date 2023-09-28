@@ -117,10 +117,7 @@ private class PopularFilmsThisWeekPagingSource(
         )
     }
 
-    override fun getRefreshKey(state: PagingState<String, FilmSummary>): String? {
-        // TODO: this method was from an update, but havent looked into it yet
-        return null
-    }
+    override fun getRefreshKey(state: PagingState<String, FilmSummary>): String? = null
 }
 
 private class WatchListPagingSource(
@@ -143,8 +140,5 @@ private class WatchListPagingSource(
         )
     }
 
-    override fun getRefreshKey(state: PagingState<String, FilmSummary>): String? {
-        // TODO: this method was from an update, but havent looked into it yet
-        return null
-    }
+    override fun getRefreshKey(state: PagingState<String, FilmSummary>): String? = null
 }

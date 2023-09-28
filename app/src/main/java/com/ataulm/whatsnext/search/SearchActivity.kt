@@ -6,26 +6,28 @@ import android.view.ViewGroup
 import android.widget.EditText
 import androidx.core.view.doOnLayout
 import androidx.lifecycle.lifecycleScope
+import androidx.paging.PagingData
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.ataulm.whatsnext.model.FilmSummary
 import com.ataulm.support.DataObserver
 import com.ataulm.support.EventObserver
 import com.ataulm.support.exhaustive
 import com.ataulm.whatsnext.*
-import com.ataulm.whatsnext.di.DaggerSearchComponent
-import com.ataulm.whatsnext.di.appComponent
+import com.ataulm.whatsnext.model.FilmSummary
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class SearchActivity : BaseActivity() {
 
     @Inject
     lateinit var viewModel: SearchViewModel
     private lateinit var signInHeaderView: SignInHeaderView
+
     private lateinit var popularFilmsThisWeekRecyclerView: RecyclerView
     private lateinit var searchBottomSheet: View
     private lateinit var searchFieldContainer: View
@@ -45,7 +47,6 @@ class SearchActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        injectDependencies()
         setContentView(R.layout.activity_search)
 
         signInHeaderView = findViewById(R.id.signInHeaderView)
@@ -103,7 +104,9 @@ class SearchActivity : BaseActivity() {
         })
 
         lifecycleScope.launch {
-            viewModel.pagedPopularFilms().collectLatest { popularFilmsAdapter.submitData(it) }
+            viewModel.pagedPopularFilms().collectLatest { pagingData: PagingData<FilmSummary> ->
+                popularFilmsAdapter.submitData(pagingData)
+            }
         }
 
         viewModel.navigationEvents.observe(this, EventObserver { filmSummary ->
@@ -120,14 +123,6 @@ class SearchActivity : BaseActivity() {
             super.onBackPressed()
         }
     }
-}
-
-private fun SearchActivity.injectDependencies() {
-    DaggerSearchComponent.builder()
-        .activity(this)
-        .appComponent(appComponent())
-        .build()
-        .inject(this)
 }
 
 private class PopularFilmsThisWeekAdapter(

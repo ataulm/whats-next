@@ -38,6 +38,13 @@ class LocalTokensStorage private constructor(
             .apply()
     }
 
+    fun clearUserTokens() {
+        preferences.edit()
+            .remove(KEY_ACCESS_TOKEN_VALUE)
+            .remove(KEY_REFRESH_TOKEN_VALUE)
+            .apply()
+    }
+
     companion object {
 
         @JvmStatic

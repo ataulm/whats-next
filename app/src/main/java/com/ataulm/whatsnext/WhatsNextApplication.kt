@@ -1,15 +1,12 @@
 package com.ataulm.whatsnext
 
 import android.app.Application
-import com.ataulm.letterboxd.DaggerLetterboxdComponent
 import com.ataulm.support.Toaster
-import com.ataulm.whatsnext.di.AppComponent
-import com.ataulm.whatsnext.di.AppComponentProvider
-import com.ataulm.whatsnext.di.DaggerAppComponent
+import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
 
-class WhatsNextApplication : Application(), AppComponentProvider {
-    private var appComponent: AppComponent? = null
+@HiltAndroidApp
+class WhatsNextApplication : Application() {
     override fun onCreate() {
         super.onCreate()
 
@@ -20,18 +17,6 @@ class WhatsNextApplication : Application(), AppComponentProvider {
                 }
             })
         }
-        appComponent = DaggerAppComponent.builder()
-            .component(
-                DaggerLetterboxdComponent.builder()
-                    .with(this)
-                    .build()
-            )
-            .application(this)
-            .build()
         Toaster.create(this)
-    }
-
-    override fun provideAppComponent(): AppComponent {
-        return appComponent!!
     }
 }

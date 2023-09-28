@@ -8,15 +8,15 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.ataulm.support.EventObserver
 import com.ataulm.whatsnext.BaseActivity
-import com.ataulm.whatsnext.model.FilmSummary
 import com.ataulm.whatsnext.FilmSummaryViewHolder
 import com.ataulm.whatsnext.R
-import com.ataulm.whatsnext.di.DaggerWatchListComponent
-import com.ataulm.whatsnext.di.appComponent
+import com.ataulm.whatsnext.model.FilmSummary
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class WatchListActivity : BaseActivity() {
 
     @Inject
@@ -33,7 +33,6 @@ class WatchListActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        injectDependencies()
         setContentView(R.layout.activity_watch_list)
         recyclerView = findViewById(R.id.recyclerView)
         recyclerView.adapter = watchListAdapter
@@ -48,7 +47,7 @@ class WatchListActivity : BaseActivity() {
 }
 
 private class WatchListAdapter(
-        private val callback: FilmSummaryViewHolder.Callback
+    private val callback: FilmSummaryViewHolder.Callback
 ) : PagingDataAdapter<FilmSummary, FilmSummaryViewHolder>(FilmDiffer) {
 
     init {
@@ -73,12 +72,4 @@ private class WatchListAdapter(
             return oldItem == newItem
         }
     }
-}
-
-private fun WatchListActivity.injectDependencies() {
-    DaggerWatchListComponent.builder()
-            .activity(this)
-            .appComponent(appComponent())
-            .build()
-            .inject(this)
 }

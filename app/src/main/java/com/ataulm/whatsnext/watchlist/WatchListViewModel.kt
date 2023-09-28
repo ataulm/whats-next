@@ -11,6 +11,7 @@ import com.ataulm.support.Event
 import com.ataulm.whatsnext.model.FilmSummary
 import com.ataulm.whatsnext.WhatsNextRepository
 import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
 
 class WatchListViewModel(private val repository: WhatsNextRepository) : ViewModel() {
 
@@ -31,7 +32,7 @@ class WatchListViewModel(private val repository: WhatsNextRepository) : ViewMode
     }
 }
 
-class WatchListViewModelFactory(private val repository: WhatsNextRepository) : ViewModelProvider.Factory {
+class WatchListViewModelFactory @Inject constructor(private val repository: WhatsNextRepository) : ViewModelProvider.Factory {
 
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>) = WatchListViewModel(repository) as T
