@@ -9,33 +9,36 @@ import dagger.BindsInstance
 import dagger.Component
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ActivityComponent
 
-@Component(
-    modules = [
-        FilmModule::class
-    ],
-    dependencies = [AppComponent::class]
-)
-@FeatureScope
-interface FilmComponent {
-
-    fun inject(activity: FilmActivity)
-
-    @Component.Builder
-    interface Builder {
-        @BindsInstance
-        fun activity(activity: FilmActivity): Builder
-
-        @BindsInstance
-        fun with(filmSummary: FilmSummary): Builder
-
-        fun appComponent(appComponent: AppComponent): Builder
-
-        fun build(): FilmComponent
-    }
-}
+//@Component(
+//    modules = [
+//        FilmModule::class
+//    ],
+//    dependencies = [AppComponent::class]
+//)
+//@FeatureScope
+//interface FilmComponent {
+//
+//    fun inject(activity: FilmActivity)
+//
+//    @Component.Builder
+//    interface Builder {
+//        @BindsInstance
+//        fun activity(activity: FilmActivity): Builder
+//
+//        @BindsInstance
+//        fun with(filmSummary: FilmSummary): Builder
+//
+//        fun appComponent(appComponent: AppComponent): Builder
+//
+//        fun build(): FilmComponent
+//    }
+//}
 
 @Module
+@InstallIn(ActivityComponent::class)
 object FilmModule {
 
     @JvmStatic

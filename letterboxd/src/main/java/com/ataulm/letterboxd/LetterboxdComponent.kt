@@ -4,15 +4,15 @@ import android.app.Application
 import dagger.BindsInstance
 import dagger.Component
 
-@LetterboxdScope
+//@LetterboxdScope
 @Component(
     modules = [
-        LetterboxdModule::class
+//        LetterboxdModule::class
     ]
 )
 interface LetterboxdComponent {
 
-    val letterboxdRepository: LetterboxdRepository
+//    val letterboxdRepository: LetterboxdRepository
 
     @Component.Builder
     interface Builder {

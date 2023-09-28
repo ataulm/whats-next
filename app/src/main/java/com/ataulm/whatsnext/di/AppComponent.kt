@@ -14,36 +14,39 @@ import dagger.BindsInstance
 import dagger.Component
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
 @Component(
     dependencies = [
-        LetterboxdComponent::class
+//        LetterboxdComponent::class
     ],
     modules = [
-        AppModule::class
+//        AppModule::class
     ]
 )
 @AppSingletonScope
 interface AppComponent {
 
-    fun whatsNextService(): WhatsNextRepository
-    fun signInUseCase(): SignInUseCase
-    fun isSignedInUseCase(): UserIsSignedInUseCase
-
-    @Component.Builder
-    interface Builder {
-
-        @BindsInstance
-        fun application(application: Application): Builder
-
-        fun component(letterboxdComponent: LetterboxdComponent): Builder
-
-        fun build(): AppComponent
-    }
+//    fun whatsNextService(): WhatsNextRepository
+//    fun signInUseCase(): SignInUseCase
+//    fun isSignedInUseCase(): UserIsSignedInUseCase
+//
+//    @Component.Builder
+//    interface Builder {
+//
+//        @BindsInstance
+//        fun application(application: Application): Builder
+//
+//        fun component(letterboxdComponent: LetterboxdComponent): Builder
+//
+//        fun build(): AppComponent
+//    }
 }
 
 @Module
+@InstallIn(SingletonComponent::class)
 object AppModule {
 
     @JvmStatic

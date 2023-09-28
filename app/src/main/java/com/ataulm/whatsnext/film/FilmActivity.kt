@@ -16,7 +16,6 @@ import com.ataulm.whatsnext.model.Film
 import com.ataulm.whatsnext.model.FilmSummary
 import com.ataulm.whatsnext.R
 import com.ataulm.whatsnext.bestFor
-import com.ataulm.whatsnext.di.DaggerFilmComponent
 import com.ataulm.whatsnext.di.appComponent
 import com.ataulm.whatsnext.film.FilmViewModel.FilmDetailsUiModel
 import java.text.DecimalFormat
@@ -261,21 +260,21 @@ class FilmActivity : BaseActivity() {
 }
 
 private fun FilmActivity.injectDependencies() {
-    val filmSummary = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-        checkNotNull(intent.getSerializableExtra(FilmActivity.EXTRA_FILM_SUMMARY, FilmSummary::class.java)) {
-            "how you open FilmActivity without a film id?"
-        }
-    } else {
-        @Suppress("DEPRECATION")
-        checkNotNull(intent.getSerializableExtra(FilmActivity.EXTRA_FILM_SUMMARY) as? FilmSummary) {
-            "how you open FilmActivity without a film id?"
-        }
-    }
-
-    DaggerFilmComponent.builder()
-        .activity(this)
-        .with(filmSummary)
-        .appComponent(appComponent())
-        .build()
-        .inject(this)
+//    val filmSummary = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+//        checkNotNull(intent.getSerializableExtra(FilmActivity.EXTRA_FILM_SUMMARY, FilmSummary::class.java)) {
+//            "how you open FilmActivity without a film id?"
+//        }
+//    } else {
+//        @Suppress("DEPRECATION")
+//        checkNotNull(intent.getSerializableExtra(FilmActivity.EXTRA_FILM_SUMMARY) as? FilmSummary) {
+//            "how you open FilmActivity without a film id?"
+//        }
+//    }
+//
+//    DaggerFilmComponent.builder()
+//        .activity(this)
+//        .with(filmSummary)
+//        .appComponent(appComponent())
+//        .build()
+//        .inject(this)
 }

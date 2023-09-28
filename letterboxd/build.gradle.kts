@@ -1,6 +1,7 @@
 @Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once KTIJ-19369 is fixed
 plugins {
     alias(libs.plugins.android.library)
+    alias(libs.plugins.hilt.android)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.ksp)
     kotlin("kapt")
@@ -37,6 +38,7 @@ dependencies {
     implementation(project(":domain"))
     implementation(libs.androidx.security.crypto)
     implementation(libs.dagger)
+    implementation(libs.hilt.android)
     implementation(libs.kotlin.coroutines.android)
     implementation(libs.kotlin.coroutines.core)
     implementation(libs.moshi.kotlin)
@@ -45,6 +47,7 @@ dependencies {
     implementation(libs.retrofit.converter.moshi)
 
     kapt(libs.dagger.compiler)
+    kapt(libs.hilt.compiler)
 
     ksp(libs.moshi)
 }

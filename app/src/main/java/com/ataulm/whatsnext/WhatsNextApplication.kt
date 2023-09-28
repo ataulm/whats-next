@@ -6,8 +6,10 @@ import com.ataulm.support.Toaster
 import com.ataulm.whatsnext.di.AppComponent
 import com.ataulm.whatsnext.di.AppComponentProvider
 import com.ataulm.whatsnext.di.DaggerAppComponent
+import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
 
+@HiltAndroidApp
 class WhatsNextApplication : Application(), AppComponentProvider {
     private var appComponent: AppComponent? = null
     override fun onCreate() {
@@ -20,14 +22,14 @@ class WhatsNextApplication : Application(), AppComponentProvider {
                 }
             })
         }
-        appComponent = DaggerAppComponent.builder()
-            .component(
-                DaggerLetterboxdComponent.builder()
-                    .with(this)
-                    .build()
-            )
-            .application(this)
-            .build()
+//        appComponent = DaggerAppComponent.builder()
+//            .component(
+//                DaggerLetterboxdComponent.builder()
+//                    .with(this)
+//                    .build()
+//            )
+//            .application(this)
+//            .build()
         Toaster.create(this)
     }
 

@@ -9,31 +9,34 @@ import dagger.BindsInstance
 import dagger.Component
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ActivityComponent
 
-@Component(
-        dependencies = [AppComponent::class],
-        modules = [
-            WatchListModule::class
-        ]
-)
-@FeatureScope
-interface WatchListComponent {
-
-    fun inject(activity: WatchListActivity)
-
-    @Component.Builder
-    interface Builder {
-
-        @BindsInstance
-        fun activity(activity: WatchListActivity): Builder
-
-        fun appComponent(appComponent: AppComponent): Builder
-
-        fun build(): WatchListComponent
-    }
-}
+//@Component(
+//        dependencies = [AppComponent::class],
+//        modules = [
+//            WatchListModule::class
+//        ]
+//)
+//@FeatureScope
+//interface WatchListComponent {
+//
+//    fun inject(activity: WatchListActivity)
+//
+//    @Component.Builder
+//    interface Builder {
+//
+//        @BindsInstance
+//        fun activity(activity: WatchListActivity): Builder
+//
+//        fun appComponent(appComponent: AppComponent): Builder
+//
+//        fun build(): WatchListComponent
+//    }
+//}
 
 @Module
+@InstallIn(ActivityComponent::class)
 object WatchListModule {
 
     @JvmStatic

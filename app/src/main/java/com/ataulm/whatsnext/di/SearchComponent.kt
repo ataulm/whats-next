@@ -11,31 +11,34 @@ import dagger.BindsInstance
 import dagger.Component
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ActivityComponent
 
-@Component(
-        dependencies = [AppComponent::class],
-        modules = [
-            SearchModule::class
-        ]
-)
-@FeatureScope
-interface SearchComponent {
-
-    fun inject(activity: SearchActivity)
-
-    @Component.Builder
-    interface Builder {
-
-        @BindsInstance
-        fun activity(activity: SearchActivity): Builder
-
-        fun appComponent(appComponent: AppComponent): Builder
-
-        fun build(): SearchComponent
-    }
-}
+//@Component(
+//        dependencies = [AppComponent::class],
+//        modules = [
+//            SearchModule::class
+//        ]
+//)
+//@FeatureScope
+//interface SearchComponent {
+//
+//    fun inject(activity: SearchActivity)
+//
+//    @Component.Builder
+//    interface Builder {
+//
+//        @BindsInstance
+//        fun activity(activity: SearchActivity): Builder
+//
+//        fun appComponent(appComponent: AppComponent): Builder
+//
+//        fun build(): SearchComponent
+//    }
+//}
 
 @Module
+@InstallIn(ActivityComponent::class)
 object SearchModule {
 
     @JvmStatic

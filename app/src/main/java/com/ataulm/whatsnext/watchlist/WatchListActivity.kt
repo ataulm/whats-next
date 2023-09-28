@@ -11,7 +11,6 @@ import com.ataulm.whatsnext.BaseActivity
 import com.ataulm.whatsnext.model.FilmSummary
 import com.ataulm.whatsnext.FilmSummaryViewHolder
 import com.ataulm.whatsnext.R
-import com.ataulm.whatsnext.di.DaggerWatchListComponent
 import com.ataulm.whatsnext.di.appComponent
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -76,9 +75,9 @@ private class WatchListAdapter(
 }
 
 private fun WatchListActivity.injectDependencies() {
-    DaggerWatchListComponent.builder()
-            .activity(this)
-            .appComponent(appComponent())
-            .build()
-            .inject(this)
+//    DaggerWatchListComponent.builder()
+//            .activity(this)
+//            .appComponent(appComponent())
+//            .build()
+//            .inject(this)
 }

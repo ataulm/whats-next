@@ -5,9 +5,10 @@ import com.ataulm.letterboxd.auth.AuthError
 import com.ataulm.letterboxd.auth.LetterboxdAuthApi
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
+import javax.inject.Singleton
 import kotlin.coroutines.CoroutineContext
 
-@LetterboxdScope
+@Singleton
 internal class AuthRepository @Inject constructor(
     private val letterboxdAuthApi: LetterboxdAuthApi,
     private val localTokensStorage: LocalTokensStorage,
@@ -18,6 +19,10 @@ internal class AuthRepository @Inject constructor(
         val authTokenApiResponse = letterboxdAuthApi.fetchUserTokens(username, password)
         localTokensStorage.storeUserAccessToken(authTokenApiResponse.accessToken)
         localTokensStorage.storeUserRefreshToken(authTokenApiResponse.refreshToken)
+    }
+
+    fun clearUserTokens() {
+        localTokensStorage.clearUserTokens()
     }
 
     fun getUserAccessToken(): String? {
