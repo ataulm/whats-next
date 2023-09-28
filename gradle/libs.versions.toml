@@ -3,7 +3,6 @@ androidGradlePlugin = '8.1.0'
 chucker = '4.0.0'
 compose = '2023.09.00'
 coil = '2.4.0'
-dagger = '2.47'
 hilt = '2.47'
 kotlin = '1.9.0'
 kotlinCoroutines = '1.7.1'
@@ -41,9 +40,6 @@ chucker = { module = 'com.github.chuckerteam.chucker:library', version.ref = 'ch
 chucker-no-op = { module = 'com.github.chuckerteam.chucker:library-no-op', version.ref = 'chucker' }
 coil = { module = 'io.coil-kt:coil', version.ref = 'coil' }
 coil-compose = { module = 'io.coil-kt:coil-compose', version.ref = 'coil' }
-dagger = { module = 'com.google.dagger:dagger', version.ref = 'dagger' }
-dagger-compiler = { module = 'com.google.dagger:dagger-compiler', version.ref = 'dagger' }
-dagger-android-processor = { module = 'com.google.dagger:dagger-android-processor', version.ref = 'dagger' }
 espresso-core = 'com.android.support.test.espresso:espresso-core:3.0.2'
 gson = 'com.google.code.gson:gson:2.10.1'
 hilt-android = { module = 'com.google.dagger:hilt-android', version.ref = 'hilt' }

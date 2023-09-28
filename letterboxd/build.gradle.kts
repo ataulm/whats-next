@@ -37,7 +37,6 @@ dependencies {
 
     implementation(project(":domain"))
     implementation(libs.androidx.security.crypto)
-    implementation(libs.dagger)
     implementation(libs.hilt.android)
     implementation(libs.kotlin.coroutines.android)
     implementation(libs.kotlin.coroutines.core)
@@ -46,7 +45,6 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.retrofit.converter.moshi)
 
-    kapt(libs.dagger.compiler)
     kapt(libs.hilt.compiler)
 
     ksp(libs.moshi)

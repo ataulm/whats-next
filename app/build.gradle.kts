@@ -52,7 +52,6 @@ android {
 
 dependencies {
     kapt(libs.androidx.lifecycle.compiler)
-    kapt(libs.dagger.compiler)
     kapt(libs.hilt.compiler)
 
     debugImplementation(libs.chucker)
@@ -76,7 +75,6 @@ dependencies {
     implementation(libs.androidx.recyclerview)
     implementation(libs.coil)
     implementation(libs.coil.compose)
-    implementation(libs.dagger)
     implementation(libs.gson)
     implementation(libs.hilt.android)
     implementation(libs.hilt.navigation.compose)
