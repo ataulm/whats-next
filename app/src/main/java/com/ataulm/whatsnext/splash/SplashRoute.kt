@@ -1,16 +1,12 @@
 package com.ataulm.whatsnext.splash
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.ataulm.letterboxd.LetterboxdRepository
-import com.ataulm.whatsnext.BuildConfig
 import com.ataulm.whatsnext.nav.NavigateToSearch
 import com.ataulm.whatsnext.nav.NavigateToSignIn
 import com.ataulm.whatsnext.splash.SplashController.UiState
@@ -18,10 +14,8 @@ import com.ataulm.whatsnext.splash.SplashController.UiState.Loading
 import com.ataulm.whatsnext.splash.SplashController.UiState.LoggedIn
 import com.ataulm.whatsnext.splash.SplashController.UiState.NotLoggedIn
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
@@ -30,7 +24,6 @@ import javax.inject.Inject
 fun SplashRoute(
     navigateToSignIn: NavigateToSignIn,
     navigateToSearch: NavigateToSearch,
-    modifier: Modifier = Modifier,
     controller: SplashController = hiltViewModel()
 ) {
     val uiState: UiState by controller.uiState.collectAsStateWithLifecycle()
@@ -41,14 +34,6 @@ fun SplashRoute(
             NotLoggedIn -> navigateToSignIn()
         }
     }
-    SplashScreen(modifier = modifier)
-}
-
-@Composable
-fun SplashScreen(modifier: Modifier = Modifier) {
-    Column(modifier = modifier) {
-        Text("splashysplashy")
-    }
 }
 
 @HiltViewModel
@@ -58,11 +43,6 @@ class SplashController @Inject constructor(
 
     private val _uiState: MutableStateFlow<UiState> = MutableStateFlow(Loading)
     val uiState = _uiState.asStateFlow()
-        .apply {
-            if (BuildConfig.DEBUG) {
-                onEach { delay(750) }
-            }
-        }
 
     init {
         if (letterboxdRepository.hasUserAccessToken()) {
