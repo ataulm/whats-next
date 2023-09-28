@@ -20,3 +20,4 @@ rootProject.name = "what's next"
 include(":app")
 include(":domain")
 include(":letterboxd")
+include(":feature:splash")
