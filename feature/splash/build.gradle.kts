@@ -15,6 +15,12 @@ android {
     namespace = "com.ataulm.whatsnext.splash"
     compileSdk = libs.versions.sdk.compile.get().toInt()
     buildFeatures.buildConfig = true
+    buildFeatures {
+        compose = true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = libs.versions.kotlinCompilerExtension.get()
+    }
     defaultConfig {
         minSdk = libs.versions.sdk.min.get().toInt()
     }
@@ -22,7 +28,11 @@ android {
 
 dependencies {
     implementation(project(":domain"))
+    implementation(project(":letterboxd"))
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.compose.foundation)
+    implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.hilt.android)
+    implementation(libs.hilt.navigation.compose)
     kapt(libs.hilt.compiler)
-    ksp(libs.moshi)
 }
