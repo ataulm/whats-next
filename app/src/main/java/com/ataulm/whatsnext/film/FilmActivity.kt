@@ -1,6 +1,5 @@
 package com.ataulm.whatsnext.film
 
-import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.CheckBox
@@ -13,15 +12,15 @@ import com.ataulm.support.DataObserver
 import com.ataulm.whatsnext.BaseActivity
 import com.ataulm.whatsnext.BuildConfig
 import com.ataulm.whatsnext.model.Film
-import com.ataulm.whatsnext.model.FilmSummary
 import com.ataulm.whatsnext.R
 import com.ataulm.whatsnext.bestFor
-import com.ataulm.whatsnext.di.appComponent
 import com.ataulm.whatsnext.film.FilmViewModel.FilmDetailsUiModel
+import dagger.hilt.android.AndroidEntryPoint
 import java.text.DecimalFormat
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class FilmActivity : BaseActivity() {
 
     @Inject
@@ -48,7 +47,6 @@ class FilmActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        injectDependencies()
 
 // TODO: start to migrate. There's a codelab here:
 //  https://developer.android.com/codelabs/jetpack-compose-migration?continue=https%3A%2F%2Fdeveloper.android.com%2Fcourses%2Fpathways%2Fcompose%23codelab-https%3A%2F%2Fdeveloper.android.com%2Fcodelabs%2Fjetpack-compose-migration#4
@@ -257,24 +255,4 @@ class FilmActivity : BaseActivity() {
 
         const val EXTRA_FILM_SUMMARY = BuildConfig.APPLICATION_ID + ".EXTRA_FILM_SUMMARY"
     }
-}
-
-private fun FilmActivity.injectDependencies() {
-//    val filmSummary = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-//        checkNotNull(intent.getSerializableExtra(FilmActivity.EXTRA_FILM_SUMMARY, FilmSummary::class.java)) {
-//            "how you open FilmActivity without a film id?"
-//        }
-//    } else {
-//        @Suppress("DEPRECATION")
-//        checkNotNull(intent.getSerializableExtra(FilmActivity.EXTRA_FILM_SUMMARY) as? FilmSummary) {
-//            "how you open FilmActivity without a film id?"
-//        }
-//    }
-//
-//    DaggerFilmComponent.builder()
-//        .activity(this)
-//        .with(filmSummary)
-//        .appComponent(appComponent())
-//        .build()
-//        .inject(this)
 }

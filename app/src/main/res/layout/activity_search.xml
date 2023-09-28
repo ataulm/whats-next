@@ -20,18 +20,13 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <androidx.compose.ui.platform.ComposeView
-        android:id="@+id/popularFilmsThisWeekCompose"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/popularFilmsThisWeekRecyclerView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
-<!--    <androidx.recyclerview.widget.RecyclerView-->
-<!--        android:id="@+id/popularFilmsThisWeekRecyclerView"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="match_parent"-->
-<!--        android:clipChildren="false"-->
-<!--        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"-->
-<!--        app:layout_behavior="@string/appbar_scrolling_view_behavior" />-->
+        android:layout_height="match_parent"
+        android:clipChildren="false"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
     <LinearLayout
         android:id="@+id/searchBottomSheet"
