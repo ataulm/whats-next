@@ -35,6 +35,7 @@ dependencies {
     debugImplementation(libs.chucker)
     releaseImplementation(libs.chucker.no.op)
 
+    implementation(project(":core"))
     implementation(project(":domain"))
     implementation(libs.androidx.security.crypto)
     implementation(libs.hilt.android)

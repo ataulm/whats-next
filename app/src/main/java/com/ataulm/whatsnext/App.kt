@@ -13,6 +13,7 @@ import androidx.navigation.compose.rememberNavController
 import com.ataulm.whatsnext.nav.NavRoute
 import com.ataulm.whatsnext.nav.NavigateToSearch
 import com.ataulm.whatsnext.nav.NavigateToSignIn
+import com.ataulm.whatsnext.signin.SignInRoute
 import com.ataulm.whatsnext.splash.SplashRoute
 
 @Composable
@@ -40,7 +41,14 @@ fun App(
                 )
             }
             composable(route = NavRoute.SIGN_IN) {
-                Text("sign in screen")
+                val navOptions = NavOptions.Builder()
+                    .setPopUpTo(route = NavRoute.SIGN_IN, inclusive = true)
+                    .build()
+                SignInRoute(
+                    navigateToSearch = NavigateToSearch {
+                        navController.navigate(NavRoute.SEARCH, navOptions)
+                    }
+                )
             }
             composable(route = NavRoute.SEARCH) {
                 Text("search screen")

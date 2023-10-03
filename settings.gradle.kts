@@ -18,6 +18,8 @@ plugins {
 
 rootProject.name = "what's next"
 include(":app")
+include(":core")
 include(":domain")
 include(":letterboxd")
+include(":feature:sign-in")
 include(":feature:splash")
