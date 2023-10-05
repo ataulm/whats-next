@@ -3,6 +3,7 @@ package com.ataulm.letterboxd
 import androidx.annotation.WorkerThread
 import com.ataulm.letterboxd.auth.AuthError
 import com.ataulm.letterboxd.auth.LetterboxdAuthApi
+import com.ataulm.whatsnext.core.IoContext
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -12,10 +13,10 @@ import kotlin.coroutines.CoroutineContext
 internal class AuthRepository @Inject constructor(
     private val letterboxdAuthApi: LetterboxdAuthApi,
     private val localTokensStorage: LocalTokensStorage,
-    private val ioCoroutineContext: CoroutineContext
+    @IoContext private val ioContext: CoroutineContext
 ) {
 
-    suspend fun login(username: String, password: String) = withContext(ioCoroutineContext) {
+    suspend fun login(username: String, password: String) = withContext(ioContext) {
         val authTokenApiResponse = letterboxdAuthApi.fetchUserTokens(username, password)
         localTokensStorage.storeUserAccessToken(authTokenApiResponse.accessToken)
         localTokensStorage.storeUserRefreshToken(authTokenApiResponse.refreshToken)

@@ -4,6 +4,7 @@ import android.app.Application
 import com.ataulm.letterboxd.auth.AddAuthorizationInterceptor
 import com.ataulm.letterboxd.auth.LetterboxdAuthApi
 import com.ataulm.letterboxd.auth.LetterboxdAuthenticator
+import com.ataulm.whatsnext.core.CoroutineContextsModule
 import com.chuckerteam.chucker.api.ChuckerInterceptor
 import dagger.Binds
 import dagger.Module
@@ -11,17 +12,17 @@ import dagger.Provides
 import dagger.Reusable
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import kotlinx.coroutines.Dispatchers
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import javax.inject.Singleton
-import kotlin.coroutines.CoroutineContext
 
 private const val LETTERBOXD_BASE_URL = "https://api.letterboxd.com/api/v0/"
 
-@Module
+@Module(
+    includes = [CoroutineContextsModule::class]
+)
 @InstallIn(SingletonComponent::class)
 internal interface LetterboxdModule {
 
@@ -29,11 +30,6 @@ internal interface LetterboxdModule {
     fun bindsLetterboxdRepository(impl: LetterboxdRepositoryImpl): LetterboxdRepository
 
     companion object {
-
-        // TODO: qualifiers so we can provide main dispatcher too
-        @Reusable
-        @Provides
-        fun providesIoCoroutineContext(): CoroutineContext = Dispatchers.IO
 
         @Reusable
         @Provides

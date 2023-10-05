@@ -12,28 +12,17 @@ kotlin {
     jvmToolchain(projectJvmTarget.majorVersion.toInt())
 }
 android {
-    namespace = "com.ataulm.whatsnext.splash"
+    namespace = "com.ataulm.whatsnext.core"
     compileSdk = libs.versions.sdk.compile.get().toInt()
-    buildFeatures.buildConfig = true
-    buildFeatures {
-        compose = true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = libs.versions.kotlinCompilerExtension.get()
-    }
     defaultConfig {
         minSdk = libs.versions.sdk.min.get().toInt()
     }
 }
 
 dependencies {
-    implementation(project(":core"))
-    implementation(project(":domain"))
-    implementation(project(":letterboxd"))
-    implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.androidx.compose.foundation)
-    implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.hilt.android)
-    implementation(libs.hilt.navigation.compose)
+    implementation(libs.kotlin.coroutines.android)
+    implementation(libs.kotlin.coroutines.core)
+
     kapt(libs.hilt.compiler)
 }

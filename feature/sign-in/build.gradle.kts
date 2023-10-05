@@ -12,7 +12,7 @@ kotlin {
     jvmToolchain(projectJvmTarget.majorVersion.toInt())
 }
 android {
-    namespace = "com.ataulm.whatsnext.splash"
+    namespace = "com.ataulm.whatsnext.signin"
     compileSdk = libs.versions.sdk.compile.get().toInt()
     buildFeatures.buildConfig = true
     buildFeatures {
@@ -32,6 +32,9 @@ dependencies {
     implementation(project(":letterboxd"))
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.foundation)
+    implementation(libs.androidx.compose.material)
+    implementation(libs.androidx.compose.ui)
+    implementation(libs.androidx.compose.ui.tooling)
     implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.hilt.android)
     implementation(libs.hilt.navigation.compose)
