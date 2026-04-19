@@ -4,7 +4,6 @@ plugins {
     alias(libs.plugins.hilt.android)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.ksp)
-    kotlin("kapt")
 }
 
 private val projectJvmTarget = JavaVersion.VERSION_11
@@ -24,5 +23,5 @@ dependencies {
     implementation(libs.kotlin.coroutines.android)
     implementation(libs.kotlin.coroutines.core)
 
-    kapt(libs.hilt.compiler)
+    ksp(libs.hilt.compiler)
 }

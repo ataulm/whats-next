@@ -6,6 +6,8 @@ plugins {
     @Suppress("DSL_SCOPE_VIOLATION")
     alias(libs.plugins.kotlin.android) apply (false)
     @Suppress("DSL_SCOPE_VIOLATION")
+    alias(libs.plugins.kotlin.compose) apply (false)
+    @Suppress("DSL_SCOPE_VIOLATION")
     alias(libs.plugins.kotlin.parcelize) apply (false)
     @Suppress("DSL_SCOPE_VIOLATION")
     alias(libs.plugins.hilt.android) apply (false)

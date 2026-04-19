@@ -3,8 +3,8 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.hilt.android)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.ksp)
-    kotlin("kapt")
 }
 
 private val projectJvmTarget = JavaVersion.VERSION_11
@@ -17,9 +17,6 @@ android {
     buildFeatures.buildConfig = true
     buildFeatures {
         compose = true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = libs.versions.kotlinCompilerExtension.get()
     }
     defaultConfig {
         minSdk = libs.versions.sdk.min.get().toInt()
@@ -35,5 +32,5 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.hilt.android)
     implementation(libs.hilt.navigation.compose)
-    kapt(libs.hilt.compiler)
+    ksp(libs.hilt.compiler)
 }

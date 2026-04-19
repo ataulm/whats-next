@@ -1,13 +1,14 @@
 @Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once KTIJ-19369 is fixed
 plugins {
-    kotlin("kapt")
     alias(libs.plugins.android)
-    alias(libs.plugins.hilt.android)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.hilt.android)
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.parcelize)
 }
 
-private val projectJvmTarget = JavaVersion.VERSION_11
+private val projectJvmTarget = JavaVersion.VERSION_17
 
 kotlin {
     jvmToolchain(projectJvmTarget.majorVersion.toInt())
@@ -24,9 +25,6 @@ android {
     android.buildFeatures.buildConfig = true
     buildFeatures {
         compose = true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = libs.versions.kotlinCompilerExtension.get()
     }
 
     defaultConfig {
@@ -50,8 +48,7 @@ android {
 }
 
 dependencies {
-    kapt(libs.androidx.lifecycle.compiler)
-    kapt(libs.hilt.compiler)
+    ksp(libs.hilt.compiler)
 
     debugImplementation(libs.chucker)
     releaseImplementation(libs.chucker.no.op)
