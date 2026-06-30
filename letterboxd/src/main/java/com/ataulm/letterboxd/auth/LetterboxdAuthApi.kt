@@ -18,7 +18,6 @@ internal interface LetterboxdAuthApi {
         @Field("username") username: String,
         @Field("password") password: String,
         @Field("grant_type") grantType: String = "password",
-        @Field("scope") scope: String = "content:modify",
         @Field("client_id") clientId: String = BuildConfig.LETTERBOXD_KEY,
         @Field("client_secret") clientSecret: String = BuildConfig.LETTERBOXD_SECRET
     ): ApiUserTokens
