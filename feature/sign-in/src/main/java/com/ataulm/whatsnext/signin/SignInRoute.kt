@@ -1,32 +1,40 @@
 package com.ataulm.whatsnext.signin
 
-import android.widget.Toast
 import androidx.annotation.StringRes
-import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.Text
+import androidx.compose.material.TextField
+import androidx.compose.material.TextFieldDefaults
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.geometry.CornerRadius
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Rect
-import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Path
-import androidx.compose.ui.graphics.StrokeCap
-import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
@@ -121,8 +129,6 @@ fun SignInScreen(
                     .padding(vertical = 12.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                DevicesIcon(modifier = Modifier.size(22.dp))
-                Spacer(modifier = Modifier.width(8.dp))
                 Text(
                     text = "Sign In",
                     color = Color.White,
@@ -133,12 +139,10 @@ fun SignInScreen(
 
             Spacer(modifier = Modifier.height(36.dp))
 
-            // Logo & Title
+            // Title
             Row(
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                TicketLogo(modifier = Modifier.size(36.dp))
-                Spacer(modifier = Modifier.width(12.dp))
                 Text(
                     text = "Film Tracker",
                     color = Color(0xFFFF9F54),
@@ -257,7 +261,13 @@ fun SignInScreen(
                                 onDone = {
                                     focusManager.clearFocus()
                                     if (isFormValid && !uiState.isLoading) {
-                                        uiState.onClickLogin(LoginParams(email, password, navigateToSearch))
+                                        uiState.onClickLogin(
+                                            LoginParams(
+                                                email,
+                                                password,
+                                                navigateToSearch
+                                            )
+                                        )
                                     }
                                 }
                             )
@@ -301,7 +311,9 @@ fun SignInScreen(
                         } else {
                             Text(
                                 text = "Sign In",
-                                color = if (isFormValid) Color(0xFF1C0D02) else Color(0xFF1C0D02).copy(alpha = 0.6f),
+                                color = if (isFormValid) Color(0xFF1C0D02) else Color(0xFF1C0D02).copy(
+                                    alpha = 0.6f
+                                ),
                                 fontSize = 16.sp,
                                 fontWeight = FontWeight.Bold
                             )
@@ -309,381 +321,11 @@ fun SignInScreen(
                     }
 
                     Spacer(modifier = Modifier.height(24.dp))
-
-                    // OR Separator
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Divider(
-                            modifier = Modifier.weight(1f),
-                            color = Color(0xFF2C313C),
-                            thickness = 1.dp
-                        )
-                        Text(
-                            text = "OR",
-                            color = Color(0xFF5D6370),
-                            fontSize = 11.sp,
-                            fontWeight = FontWeight.Bold,
-                            modifier = Modifier.padding(horizontal = 16.dp)
-                        )
-                        Divider(
-                            modifier = Modifier.weight(1f),
-                            color = Color(0xFF2C313C),
-                            thickness = 1.dp
-                        )
-                    }
-
-                    Spacer(modifier = Modifier.height(24.dp))
-
-                    // Social Sign In
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(16.dp)
-                    ) {
-                        // Apple Button
-                        Row(
-                            modifier = Modifier
-                                .weight(1f)
-                                .height(46.dp)
-                                .clip(RoundedCornerShape(12.dp))
-                                .background(Color(0xFF242932))
-                                .clickable {
-                                    Toast.makeText(context, "Apple sign in is not supported", Toast.LENGTH_SHORT).show()
-                                },
-                            horizontalArrangement = Arrangement.Center,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            SpeakerIcon(modifier = Modifier.size(16.dp))
-                            Spacer(modifier = Modifier.width(8.dp))
-                            Text(
-                                text = "Apple",
-                                color = Color.White,
-                                fontSize = 14.sp,
-                                fontWeight = FontWeight.Bold
-                            )
-                        }
-
-                        // Google Button
-                        Row(
-                            modifier = Modifier
-                                .weight(1f)
-                                .height(46.dp)
-                                .clip(RoundedCornerShape(12.dp))
-                                .background(Color(0xFF242932))
-                                .clickable {
-                                    Toast.makeText(context, "Google sign in is not supported", Toast.LENGTH_SHORT).show()
-                                },
-                            horizontalArrangement = Arrangement.Center,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            GlobeIcon(modifier = Modifier.size(16.dp))
-                            Spacer(modifier = Modifier.width(8.dp))
-                            Text(
-                                text = "Google",
-                                color = Color.White,
-                                fontSize = 14.sp,
-                                fontWeight = FontWeight.Bold
-                            )
-                        }
-                    }
-
-                    Spacer(modifier = Modifier.height(28.dp))
-
-                    // Create Account Link
-                    Text(
-                        text = "Create Account",
-                        color = Color(0xFF00D37B),
-                        fontSize = 15.sp,
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier.clickable {
-                            Toast.makeText(context, "Create account is not supported", Toast.LENGTH_SHORT).show()
-                        }
-                    )
                 }
             }
 
             Spacer(modifier = Modifier.height(36.dp))
-
-            // Continue as guest
-            Row(
-                modifier = Modifier
-                    .clickable { navigateToSearch() }
-                    .padding(8.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = "Continue as guest",
-                    color = Color(0xFF8B949E),
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.Medium
-                )
-                Spacer(modifier = Modifier.width(6.dp))
-                Text(
-                    text = "→",
-                    color = Color(0xFF8B949E),
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.Medium
-                )
-            }
-
-            Spacer(modifier = Modifier.height(24.dp))
-
-            // Footer Links
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 16.dp),
-                horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = "PRIVACY",
-                    color = Color(0xFF5D6370),
-                    fontSize = 11.sp,
-                    fontWeight = FontWeight.Bold,
-                    letterSpacing = 0.5.sp,
-                    modifier = Modifier
-                        .clickable {
-                            Toast.makeText(context, "Privacy Policy not available", Toast.LENGTH_SHORT).show()
-                        }
-                        .padding(8.dp)
-                )
-                Spacer(modifier = Modifier.width(16.dp))
-                Text(
-                    text = "TERMS",
-                    color = Color(0xFF5D6370),
-                    fontSize = 11.sp,
-                    fontWeight = FontWeight.Bold,
-                    letterSpacing = 0.5.sp,
-                    modifier = Modifier
-                        .clickable {
-                            Toast.makeText(context, "Terms of Service not available", Toast.LENGTH_SHORT).show()
-                        }
-                        .padding(8.dp)
-                )
-                Spacer(modifier = Modifier.width(16.dp))
-                Text(
-                    text = "SUPPORT",
-                    color = Color(0xFF5D6370),
-                    fontSize = 11.sp,
-                    fontWeight = FontWeight.Bold,
-                    letterSpacing = 0.5.sp,
-                    modifier = Modifier
-                        .clickable {
-                            Toast.makeText(context, "Support not available", Toast.LENGTH_SHORT).show()
-                        }
-                        .padding(8.dp)
-                )
-            }
         }
-    }
-}
-
-@Composable
-fun DevicesIcon(modifier: Modifier = Modifier) {
-    Canvas(modifier = modifier) {
-        val color = Color.White
-        val w = size.width
-        val h = size.height
-        val stroke = 1.5.dp.toPx()
-        
-        // Draw monitor screen outline
-        drawRoundRect(
-            color = color,
-            topLeft = Offset(0f, h * 0.15f),
-            size = Size(w * 0.75f, h * 0.55f),
-            cornerRadius = CornerRadius(2.dp.toPx(), 2.dp.toPx()),
-            style = Stroke(width = stroke)
-        )
-        
-        // Monitor stand
-        drawLine(
-            color = color,
-            start = Offset(w * 0.37f, h * 0.7f),
-            end = Offset(w * 0.37f, h * 0.85f),
-            strokeWidth = stroke
-        )
-        drawLine(
-            color = color,
-            start = Offset(w * 0.2f, h * 0.85f),
-            end = Offset(w * 0.55f, h * 0.85f),
-            strokeWidth = stroke
-        )
-        
-        // Draw mobile phone outline overlapping the screen on bottom right
-        drawRoundRect(
-            color = color,
-            topLeft = Offset(w * 0.6f, h * 0.35f),
-            size = Size(w * 0.35f, h * 0.55f),
-            cornerRadius = CornerRadius(2.dp.toPx(), 2.dp.toPx()),
-            style = Stroke(width = stroke)
-        )
-        // Background fill for the phone to mask monitor
-        drawRoundRect(
-            color = Color(0xFF0C0F12),
-            topLeft = Offset(w * 0.6f + stroke/2, h * 0.35f + stroke/2),
-            size = Size(w * 0.35f - stroke, h * 0.55f - stroke),
-            cornerRadius = CornerRadius(2.dp.toPx(), 2.dp.toPx())
-        )
-        // Redraw phone stroke
-        drawRoundRect(
-            color = color,
-            topLeft = Offset(w * 0.6f, h * 0.35f),
-            size = Size(w * 0.35f, h * 0.55f),
-            cornerRadius = CornerRadius(2.dp.toPx(), 2.dp.toPx()),
-            style = Stroke(width = stroke)
-        )
-    }
-}
-
-@Composable
-fun TicketLogo(modifier: Modifier = Modifier) {
-    Canvas(modifier = modifier) {
-        val width = size.width
-        val height = size.height
-        val ticketColor = Color(0xFFFF9F54)
-        
-        val path = Path().apply {
-            moveTo(8.dp.toPx(), 0f)
-            lineTo(width - 8.dp.toPx(), 0f)
-            quadraticTo(width, 0f, width, 8.dp.toPx())
-            
-            lineTo(width, height * 0.35f)
-            arcTo(
-                rect = Rect(width - 8.dp.toPx(), height * 0.35f, width + 8.dp.toPx(), height * 0.65f),
-                startAngleDegrees = 270f,
-                sweepAngleDegrees = -180f,
-                forceMoveTo = false
-            )
-            lineTo(width, height - 8.dp.toPx())
-            quadraticTo(width, height, width - 8.dp.toPx(), height)
-            
-            lineTo(8.dp.toPx(), height)
-            quadraticTo(0f, height, 0f, height - 8.dp.toPx())
-            
-            lineTo(0f, height * 0.65f)
-            arcTo(
-                rect = Rect(-8.dp.toPx(), height * 0.35f, 8.dp.toPx(), height * 0.65f),
-                startAngleDegrees = 90f,
-                sweepAngleDegrees = -180f,
-                forceMoveTo = false
-            )
-            lineTo(0f, 8.dp.toPx())
-            quadraticTo(0f, 0f, 8.dp.toPx(), 0f)
-            close()
-        }
-        
-        drawPath(path = path, color = ticketColor)
-        
-        val darkColor = Color(0xFF1C0D02)
-        val starPath = Path().apply {
-            val cx = width * 0.62f
-            val cy = height * 0.5f
-            val rOuter = width * 0.22f
-            val rInner = width * 0.08f
-            for (i in 0 until 10) {
-                val angle = i * Math.PI / 5
-                val r = if (i % 2 == 0) rOuter else rInner
-                val x = cx + r * Math.sin(angle).toFloat()
-                val y = cy - r * Math.cos(angle).toFloat()
-                if (i == 0) moveTo(x, y) else lineTo(x, y)
-            }
-            close()
-        }
-        drawPath(path = starPath, color = darkColor)
-        
-        val dotRadius = height * 0.04f
-        val dotX = width * 0.28f
-        val dotSpacing = height * 0.16f
-        var currentY = height * 0.15f
-        while (currentY < height * 0.9f) {
-            drawCircle(color = darkColor, radius = dotRadius, center = Offset(dotX, currentY))
-            currentY += dotSpacing
-        }
-    }
-}
-
-@Composable
-fun SpeakerIcon(modifier: Modifier = Modifier) {
-    Canvas(modifier = modifier) {
-        val color = Color.White
-        val w = size.width
-        val h = size.height
-        
-        val path = Path().apply {
-            moveTo(w * 0.15f, h * 0.38f)
-            lineTo(w * 0.4f, h * 0.38f)
-            lineTo(w * 0.7f, h * 0.18f)
-            lineTo(w * 0.7f, h * 0.82f)
-            lineTo(w * 0.4f, h * 0.62f)
-            lineTo(w * 0.15f, h * 0.62f)
-            close()
-        }
-        drawPath(path = path, color = color)
-        
-        drawArc(
-            color = color,
-            startAngle = -45f,
-            sweepAngle = 90f,
-            useCenter = false,
-            topLeft = Offset(w * 0.5f, h * 0.28f),
-            size = Size(w * 0.35f, h * 0.44f),
-            style = Stroke(width = 1.5.dp.toPx(), cap = StrokeCap.Round)
-        )
-        drawArc(
-            color = color,
-            startAngle = -45f,
-            sweepAngle = 90f,
-            useCenter = false,
-            topLeft = Offset(w * 0.4f, h * 0.18f),
-            size = Size(w * 0.55f, h * 0.64f),
-            style = Stroke(width = 1.5.dp.toPx(), cap = StrokeCap.Round)
-        )
-    }
-}
-
-@Composable
-fun GlobeIcon(modifier: Modifier = Modifier) {
-    Canvas(modifier = modifier) {
-        val color = Color.White
-        val strokeWidth = 1.5.dp.toPx()
-        
-        drawCircle(
-            color = color,
-            radius = size.minDimension / 2 - strokeWidth,
-            style = Stroke(width = strokeWidth)
-        )
-        
-        drawLine(
-            color = color,
-            start = Offset(size.width / 2, strokeWidth),
-            end = Offset(size.width / 2, size.height - strokeWidth),
-            strokeWidth = strokeWidth
-        )
-        
-        drawLine(
-            color = color,
-            start = Offset(strokeWidth, size.height / 2),
-            end = Offset(size.width - strokeWidth, size.height / 2),
-            strokeWidth = strokeWidth
-        )
-        
-        val path = Path().apply {
-            addOval(
-                Rect(
-                    left = size.width * 0.25f,
-                    top = strokeWidth,
-                    right = size.width * 0.75f,
-                    bottom = size.height - strokeWidth
-                )
-            )
-        }
-        drawPath(
-            path = path,
-            color = color,
-            style = Stroke(width = strokeWidth)
-        )
     }
 }
 
