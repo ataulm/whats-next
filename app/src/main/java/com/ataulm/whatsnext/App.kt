@@ -13,6 +13,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.ataulm.whatsnext.nav.NavRoute
 import com.ataulm.whatsnext.nav.NavigateToSearch
+import com.ataulm.whatsnext.search.SearchRoute
 import com.ataulm.whatsnext.signin.SignInRoute
 
 @Composable
@@ -44,7 +45,7 @@ fun App(
                 LaunchedEffect(Unit) {
                     onAppReady()
                 }
-                Text("search screen")
+                SearchRoute()
             }
             composable(route = NavRoute.FILM_DETAIL) {
                 Text("film detail screen")

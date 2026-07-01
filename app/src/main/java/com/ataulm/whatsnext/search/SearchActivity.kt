@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.ataulm.support.DataObserver
 import com.ataulm.support.EventObserver
 import com.ataulm.support.exhaustive
+import com.ataulm.whatsnext.R
 import com.ataulm.whatsnext.*
 import com.ataulm.whatsnext.model.FilmSummary
 import com.google.android.material.bottomsheet.BottomSheetBehavior

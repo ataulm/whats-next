@@ -53,6 +53,7 @@ dependencies {
     debugImplementation(libs.chucker)
     releaseImplementation(libs.chucker.no.op)
     implementation(project(":domain"))
+    implementation(project(":feature:search"))
     implementation(project(":feature:sign-in"))
     implementation(project(":letterboxd"))
     implementation(libs.androidx.appcompat)
