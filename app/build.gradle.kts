@@ -54,7 +54,6 @@ dependencies {
     releaseImplementation(libs.chucker.no.op)
     implementation(project(":domain"))
     implementation(project(":feature:sign-in"))
-    implementation(project(":feature:splash"))
     implementation(project(":letterboxd"))
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.activity.compose)

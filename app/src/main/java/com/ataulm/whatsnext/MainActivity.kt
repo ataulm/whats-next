@@ -7,10 +7,16 @@ import androidx.activity.viewModels
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.getValue
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.ataulm.letterboxd.LetterboxdRepository
 import com.ataulm.whatsnext.nav.NavRoute
-import com.ataulm.whatsnext.splash.SplashController
 import dagger.hilt.android.AndroidEntryPoint
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -19,9 +25,8 @@ class MainActivity : ComponentActivity() {
     private var isAppReady = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        val splashScreen = installSplashScreen()
         super.onCreate(savedInstanceState)
-
+        val splashScreen = installSplashScreen()
         splashScreen.setKeepOnScreenCondition { !isAppReady }
 
         setContent {
@@ -41,5 +46,28 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+    }
+}
+
+@HiltViewModel
+class SplashController @Inject constructor(
+    letterboxdRepository: LetterboxdRepository,
+) : ViewModel() {
+
+    private val _uiState: MutableStateFlow<UiState> = MutableStateFlow(UiState.Loading)
+    val uiState = _uiState.asStateFlow()
+
+    init {
+        if (letterboxdRepository.hasUserAccessToken()) {
+            _uiState.update { UiState.LoggedIn }
+        } else {
+            _uiState.update { UiState.NotLoggedIn }
+        }
+    }
+
+    sealed class UiState {
+        data object Loading : UiState()
+        data object NotLoggedIn : UiState()
+        data object LoggedIn : UiState()
     }
 }
