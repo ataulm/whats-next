@@ -27,6 +27,7 @@ androidx-compose-ui-tooling = { module = 'androidx.compose.ui:ui-tooling' }
 androidx-constraintlayout = 'androidx.constraintlayout:constraintlayout:2.1.4'
 androidx-coordinatorlayout = 'androidx.coordinatorlayout:coordinatorlayout:1.2.0'
 androidx-core-ktx = 'androidx.core:core-ktx:1.10.1'
+androidx-core-splashscreen = 'androidx.core:core-splashscreen:1.0.1'
 androidx-security-crypto = 'androidx.security:security-crypto:1.0.0'
 androidx-lifecycle-runtime-compose = "androidx.lifecycle:lifecycle-runtime-compose:2.6.2"
 androidx-lifecycle-compiler = 'android.arch.lifecycle:compiler:1.1.1'
